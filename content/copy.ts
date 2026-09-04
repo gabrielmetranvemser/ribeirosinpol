@@ -53,6 +53,34 @@ import { campanha, g, nomeComNumero, REGIAO } from './campanha'
 const STORAGE_VIDEO =
   'https://malsmardybvuxvgarhgg.supabase.co/storage/v1/object/public/videos'
 
+/**
+ * ⚠️ OS QUATRO ARQUIVOS JÁ FORAM RECOMPRIMIDOS — não reencode de novo.
+ *
+ *    Vieram do Instagram já compactados (H.264, 720p, 0,9 a 1,5 Mbps).
+ *    Foram passados uma vez em x264 CRF 27, `preset slow`, com o áudio
+ *    COPIADO (nada de reencodar fala de 60 kbps). Resultado medido:
+ *    61 MB → 52 MB, com SSIM de 0,985 a 0,990 contra o original.
+ *
+ *    Testei CRF 24 antes: o arquivo ficou MAIOR que o original. Fonte
+ *    já eficiente não melhora com bitrate maior — só engorda. E cada
+ *    passada nova é uma geração de perda sobre a anterior, então a
+ *    próxima "compressão" custaria qualidade visível para economizar
+ *    pouco. Se um dia precisar de menos peso, o caminho é resolução,
+ *    não bitrate — mas veja a nota abaixo antes.
+ *
+ * ⚠️ NÃO REDUZA A RESOLUÇÃO ACHANDO QUE 720p É EXAGERO. O vídeo em pé
+ *    é desenhado com teto de altura `min(74svh, 34rem)`, ou seja no
+ *    máximo 544 px de altura e 306 px de largura. Numa tela retina de
+ *    2x isso já pede 612 px, e o arquivo tem 720. Não sobra tanto
+ *    quanto parece.
+ *
+ * ⚠️ TODOS COM `-movflags +faststart`, e isso consertou um defeito
+ *    real: o DPHF4xzABP2 vinha com o índice (`moov`) no FIM do
+ *    arquivo, o que obriga o navegador a baixar os 9 MB inteiros antes
+ *    de mostrar o primeiro quadro. Agora os quatro começam a tocar
+ *    enquanto baixam.
+ */
+
 const VIDEO = {
   titulo: '',
   url: '',
