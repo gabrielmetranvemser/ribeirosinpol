@@ -70,3 +70,8 @@ FOTOS/
 #
 # · `.claude/launch.json` — só diz como subir o dev server.
 # ═══════════════════════════════════════════════════════════════
+
+# Os MP4 originais e as fotos reenviadas pela campanha. Mesmo caso de
+# FOTOS/: 60 MB que só passam por aqui uma vez, a caminho do Storage.
+Vídeos/
+Fotos insta/

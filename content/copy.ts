@@ -41,6 +41,18 @@ import { campanha, g, nomeComNumero, REGIAO } from './campanha'
  * link no painel e o bloco aparece. Enquanto não colar, a seção fica
  * exatamente como se o vídeo não existisse no desenho.
  */
+/**
+ * A raiz pública do balde de vídeo.
+ *
+ * ⚠️ NÃO É O MESMO BALDE DAS IMAGENS. `midia` aceita só image/* e tem
+ *    teto de 10 MB; estes arquivos são MP4 de 9 a 24 MB. Separar
+ *    também é o que permite, no dia em que a banda de vídeo estourar a
+ *    cota do plano, desligar SÓ o vídeo sem derrubar junto todas as
+ *    fotos do site.
+ */
+const STORAGE_VIDEO =
+  'https://malsmardybvuxvgarhgg.supabase.co/storage/v1/object/public/videos'
+
 const VIDEO = {
   titulo: '',
   url: '',
@@ -584,15 +596,63 @@ export const provas = {
 // nenhum deles tiver link. Não é preciso desligar nada no painel.
 // ─────────────────────────────────────────────────────────────
 export const trilha = {
-  etiqueta: 'A trilha',
-  titulo: 'Um por um, [[sem edição.]]',
+  etiqueta: 'O esporte',
+  titulo: 'Menino no tatame [[não está na esquina.]]',
   intro:
-    'Um parágrafo dizendo o que os vídeos têm em comum e por que estão nesta ordem.',
+    'O esporte não é discurso: é gente treinando. Estes quatro registros são de quadra, de ' +
+    'tatame e de ginásio, do jeito que foram gravados.',
+  /**
+   * OS QUATRO VÍDEOS DO ESPORTE, na ordem do documento da campanha.
+   *
+   * ⚠️ SÃO ARQUIVOS MP4 NO STORAGE, e não links do Instagram. O
+   *    documento indicava quatro posts do Instagram, e o player não
+   *    aceita Instagram — `lib/video.ts` reconhece YouTube, Vimeo e
+   *    arquivo direto, e o Instagram não entrega o arquivo do vídeo
+   *    sem sessão autenticada (testado: o HTML do post não traz
+   *    nenhuma referência a .mp4). A campanha exportou os quatro e
+   *    eles subiram para um balde `videos` próprio.
+   *
+   * ⚠️ `formato` NÃO É ENFEITE: ele reserva a proporção antes de o
+   *    vídeo carregar. Três destes são verticais de celular (720×1280)
+   *    e o da federação é deitado (1276×720). Errar aqui faz o quadro
+   *    saltar de tamanho quando o vídeo entra.
+   *
+   * ⚠️ OS TÍTULOS SAÍRAM DE VER OS VÍDEOS, um quadro de cada, e não do
+   *    nome do arquivo — que é só o código do post. Já aconteceu nesta
+   *    campanha de o nome herdado do documento não descrever a peça.
+   *
+   * Os quatro espaços restantes ficam vazios: espaço sem endereço não
+   * desenha nada, e a seção se ajusta ao número de vídeos que houver.
+   */
   itens: [
-    { id: 'trilha-01', ...VIDEO },
-    { id: 'trilha-02', ...VIDEO },
-    { id: 'trilha-03', ...VIDEO },
-    { id: 'trilha-04', ...VIDEO },
+    {
+      id: 'trilha-01',
+      ...VIDEO,
+      titulo: 'A ferramenta de transformação é o kimono',
+      url: `${STORAGE_VIDEO}/DPHF4xzABP2.mp4`,
+      formato: 'em-pe',
+    },
+    {
+      id: 'trilha-02',
+      ...VIDEO,
+      titulo: 'Campeonato de jiu-jitsu, com a federação',
+      url: `${STORAGE_VIDEO}/DUlb4dKkQaS.mp4`,
+      formato: 'deitado',
+    },
+    {
+      id: 'trilha-03',
+      ...VIDEO,
+      titulo: 'A Copa Brasil de tênis de mesa em Rondônia',
+      url: `${STORAGE_VIDEO}/DXkBVVPEVda.mp4`,
+      formato: 'em-pe',
+    },
+    {
+      id: 'trilha-04',
+      ...VIDEO,
+      titulo: 'O que o jiu-jitsu de Rondônia tem a dizer',
+      url: `${STORAGE_VIDEO}/DYBARFSByd6.mp4`,
+      formato: 'em-pe',
+    },
     { id: 'trilha-05', ...VIDEO },
     { id: 'trilha-06', ...VIDEO },
     { id: 'trilha-07', ...VIDEO },
