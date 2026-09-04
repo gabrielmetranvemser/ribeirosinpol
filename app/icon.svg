@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-label="Ícone da campanha">
+  <!--
+    O ÍCONE PADRÃO DA ABA.
+
+    É o mesmo desenho do símbolo do cabeçalho (components/ui/Marca.tsx),
+    na estrutura da bandeira: retângulo, losango, círculo. Existe para
+    o site nunca ficar sem ícone — a aba sem favicon lê como página
+    quebrada.
+
+    ⚠️ AS CORES SÃO FIXAS AQUI, e não variáveis. Este arquivo é servido
+       como imagem isolada pelo navegador: ele não enxerga o CSS da
+       página, então `var(--color-azul)` não resolveria. Ao trocar a
+       paleta em content/campanha.ts, troque os três hex abaixo também
+       — ou, melhor, envie o ícone da campanha pelo painel (Identidade
+       ▸ Imagens ▸ Ícone do navegador), que é o caminho certo e não
+       exige deploy.
+  -->
+  <rect width="1000" height="1000" rx="180" fill="#009C3B"/>
+  <path d="M500 120 880 500 500 880 120 500Z" fill="#FFDF00"/>
+  <circle cx="500" cy="500" r="215" fill="#003BB2"/>
+  <path d="M240 452 C 380 440, 450 424, 560 424 C 700 424, 800 470, 780 512 L 780 600 C 800 560, 700 524, 560 524 C 450 524, 380 540, 240 552 Z" fill="#ffffff"/>
+</svg>

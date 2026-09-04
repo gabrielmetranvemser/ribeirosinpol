@@ -1,0 +1,4 @@
+{
+  "_leia": "Coordenadas manuais que VENCEM o centroide calculado por scripts/gerar-uf.mjs. Use quando o centro geométrico do município cair longe da sede — acontece em municípios muito alongados. A chave é o slug, o mesmo de /g/<slug>. Apagar uma linha devolve o cálculo automático.",
+  "_exemplo": { "latitude": -8.761900, "longitude": -63.903900 }
+}

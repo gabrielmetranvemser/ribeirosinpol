@@ -1,0 +1,522 @@
+[
+  {
+    "id": "local-001",
+    "municipio_slug": "alta-floresta-doeste",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-002",
+    "municipio_slug": "alto-alegre-dos-parecis",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-003",
+    "municipio_slug": "alto-paraiso",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-004",
+    "municipio_slug": "alvorada-doeste",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-005",
+    "municipio_slug": "ariquemes",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-006",
+    "municipio_slug": "buritis",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-007",
+    "municipio_slug": "cabixi",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-008",
+    "municipio_slug": "cacaulandia",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-009",
+    "municipio_slug": "cacoal",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-010",
+    "municipio_slug": "campo-novo-de-rondonia",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-011",
+    "municipio_slug": "candeias-do-jamari",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-012",
+    "municipio_slug": "castanheiras",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-013",
+    "municipio_slug": "cerejeiras",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-014",
+    "municipio_slug": "chupinguaia",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-015",
+    "municipio_slug": "colorado-do-oeste",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-016",
+    "municipio_slug": "corumbiara",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-017",
+    "municipio_slug": "costa-marques",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-018",
+    "municipio_slug": "cujubim",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-019",
+    "municipio_slug": "espigao-doeste",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-020",
+    "municipio_slug": "governador-jorge-teixeira",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-021",
+    "municipio_slug": "guajara-mirim",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-022",
+    "municipio_slug": "itapua-do-oeste",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-023",
+    "municipio_slug": "jaru",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-024",
+    "municipio_slug": "ji-parana",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-025",
+    "municipio_slug": "machadinho-doeste",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-026",
+    "municipio_slug": "ministro-andreazza",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-027",
+    "municipio_slug": "mirante-da-serra",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-028",
+    "municipio_slug": "monte-negro",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-029",
+    "municipio_slug": "nova-brasilandia-doeste",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-030",
+    "municipio_slug": "nova-mamore",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-031",
+    "municipio_slug": "nova-uniao",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-032",
+    "municipio_slug": "novo-horizonte-do-oeste",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-033",
+    "municipio_slug": "ouro-preto-do-oeste",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-034",
+    "municipio_slug": "parecis",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-035",
+    "municipio_slug": "pimenta-bueno",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-036",
+    "municipio_slug": "pimenteiras-do-oeste",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-037",
+    "municipio_slug": "porto-velho",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-038",
+    "municipio_slug": "presidente-medici",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-039",
+    "municipio_slug": "primavera-de-rondonia",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-040",
+    "municipio_slug": "rio-crespo",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-041",
+    "municipio_slug": "rolim-de-moura",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-042",
+    "municipio_slug": "santa-luzia-doeste",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-043",
+    "municipio_slug": "sao-felipe-doeste",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-044",
+    "municipio_slug": "sao-francisco-do-guapore",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-045",
+    "municipio_slug": "sao-miguel-do-guapore",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-046",
+    "municipio_slug": "seringueiras",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-047",
+    "municipio_slug": "teixeiropolis",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-048",
+    "municipio_slug": "theobroma",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-049",
+    "municipio_slug": "urupa",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-050",
+    "municipio_slug": "vale-do-anari",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-051",
+    "municipio_slug": "vale-do-paraiso",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  },
+  {
+    "id": "local-052",
+    "municipio_slug": "vilhena",
+    "ordem": 1,
+    "link": "",
+    "status": "em_breve",
+    "fixado": true,
+    "limite_cliques": 700,
+    "cliques": 0
+  }
+]

@@ -1,0 +1,231 @@
+import { lerConteudo } from '@/lib/conteudo/ler'
+import { lerSlots } from '@/lib/midia/ler'
+import { Secao, CabecalhoSecao } from '@/components/ui/Secao'
+import { Imagem } from '@/components/ui/Imagem'
+import { Video } from '@/components/ui/Video'
+import { emPe, formatoValido, larguraDoVideo, TETO_AO_LADO_DO_TEXTO } from '@/lib/video'
+import { Texto } from '@/components/ui/TextoComDestaque'
+
+/**
+ * Prestação de contas do mandato. O que está listado vem do registro
+ * público da casa legislativa — nesta campanha, a Assembleia
+ * Legislativa de Rondônia.
+ *
+ * (A frase acima dizia "mandato de vereadora" e "Câmara Municipal de
+ * Porto Velho", da campanha anterior. Descrição de componente que
+ * nomeia o cargo de uma campanha específica envelhece na primeira
+ * troca e passa a mentir para quem vier depois.)
+ *
+ * ⚠️ A FAIXA DE NÚMEROS SAIU, a pedido da campanha. Eram quatro
+ *    cartões grandes — 9 leis, 1 comissão, 7 projetos, 14.634 votos —
+ *    ocupando a primeira tela da seção. Dois deles já viviam em outro
+ *    lugar da página (a faixa corrida diz "9 leis sancionadas", a
+ *    introdução explica a comissão), e o quarto era o único dado da
+ *    página que ninguém tinha confirmado.
+ *
+ *    Tirar quatro cartões grandes do topo deixaria a seção abrindo em
+ *    texto puro, então o peso visual não some: ele passa para o vídeo,
+ *    que sobe para o lado da introdução. Prestação de contas dita por
+ *    ela vale mais que quatro algarismos — e a prova que o leitor
+ *    confere sozinho continua sendo o registro público, lá no fim.
+ */
+export async function Provas() {
+  const [{ provas }, slots] = await Promise.all([lerConteudo(), lerSlots()])
+
+  const formato = formatoValido(provas.video.formato)
+  const vertical = emPe(formato)
+  const teto = vertical ? TETO_AO_LADO_DO_TEXTO : undefined
+
+  /**
+   * ⚠️ MEXER EM `components/` PARA PERSONALIZAR É PROIBIDO NESTE
+   *    PROJETO, e isto aqui é a exceção que o AGENTS.md manda
+   *    justificar no comentário. Não é ajuste de campanha: é defeito.
+   *
+   *    `content/copy.ts` promete, escrito, que o endereço vazio
+   *    "esconde o botão" — e o componente nunca cumpriu. Com
+   *    `link: ''`, `<a href="">` continua na tela e aponta para a
+   *    própria página: quem clica em "Abrir o registro oficial" é
+   *    devolvido ao topo, e o print vira um link igualmente morto.
+   *
+   *    O estrago é maior aqui do que pareceria em outra seção. Esta é
+   *    a seção que convida o leitor a NÃO acreditar e conferir; um
+   *    botão que promete o registro e recarrega a página é a demonstração
+   *    ao vivo de que não há registro nenhum — a seção prova o oposto
+   *    do que ela existe para provar. Enquanto a URL da ALE-RO não for
+   *    conferida (PENDENCIAS.md), o certo é o bloco não oferecer o
+   *    clique.
+   *
+   *    Vale para qualquer campanha, não só para esta, e é o mesmo
+   *    princípio do `VIDEO` sem endereço em copy.ts: campo vazio some,
+   *    nunca fica quebrado na tela.
+   */
+  const temRegistro = provas.documento.link.trim() !== ''
+
+  return (
+    <Secao id="provas" fundo="azul-profundo" espaco="solto" className="overflow-hidden">
+
+      <div className="relative">
+        {/* Sem o vídeo, isto é uma coluna só e o cabeçalho ocupa a
+            largura inteira, como em toda outra seção. Com o vídeo, a
+            grade abre em duas. É o `grid` com `md:grid-cols-2` só
+            quando há o que pôr do lado — daí o ternário, e não uma
+            coluna vazia esperando. */}
+        {/* ⚠️ EM PÉ, A SEGUNDA COLUNA VALE O VÍDEO — não meia seção.
+            Com `1fr_1fr`, o vídeo em pé recebia 540 px de coluna para
+            ocupar 306: sobravam 117 px de cada lado, e o pior deles era
+            o da direita, porque deixava o vídeo sem encostar na borda
+            que os três cartões de entrega logo abaixo respeitam. `auto`
+            devolve essa borda. */}
+        <div
+          className={
+            provas.video.url
+              ? vertical
+                ? 'grid items-center gap-10 md:grid-cols-[1fr_auto] md:gap-14'
+                : 'grid items-center gap-10 md:grid-cols-[1fr_1fr] md:gap-14'
+              : ''
+          }
+        >
+          <CabecalhoSecao
+            etiqueta={provas.etiqueta}
+            titulo={provas.titulo}
+            intro={provas.intro}
+            tom="escuro"
+          />
+          {provas.video.url ? (
+            <div
+              data-revelar
+              // Largura escrita no em pé: coluna `auto` não mede filho
+              // que só tem `max-width`. Ver a mesma nota em `Rua`.
+              style={vertical ? { ['--largura' as string]: larguraDoVideo(formato, teto) } : undefined}
+              // ⚠️ `mx-auto` SÓ NO EM PÉ, e a razão é uma armadilha do
+              //    grid: margem automática num item de grade faz o item
+              //    encolher para o conteúdo em vez de esticar. Com o
+              //    vídeo deitado, cujo quadro é `width: 100%`, isso vira
+              //    um cálculo circular — 100% de uma largura que depende
+              //    do conteúdo — e o vídeo desaparece com 0 px. Em pé
+              //    não acontece porque ali a largura está escrita.
+              className={
+                vertical ? 'mx-auto mt-10 w-full md:mt-0 md:w-[var(--largura)]' : 'mt-10 md:mt-0'
+              }
+            >
+              <Video
+                url={provas.video.url}
+                formato={formato}
+                alturaMax={teto}
+                preencher={vertical}
+                opcoes={provas.video.opcoes}
+                titulo={provas.video.titulo}
+              />
+            </div>
+          ) : null}
+        </div>
+
+        {/* Entregas — grade simples, sem barra rolável.
+            Já foi trilho horizontal e voltou atrás: barra rolável
+            dentro de página que rola é sempre uma briga entre dois
+            alvos de rolagem. No trackpad vai um pouco de X junto com o
+            Y, o navegador tranca o gesto na horizontal e a página
+            inteira para de descer.
+
+            São três cartões. Não vale um mecanismo, e muito menos vale
+            prender a tela como nas duas seções que usam palco: aqui a
+            pessoa está a duas seções dos grupos de WhatsApp e cada
+            tela a mais é gente que não chega lá.
+
+            ⚠️ TINHAM FOTO E NÃO TÊM MAIS. Cada cartão é uma LEI, e não
+            existe foto de uma lei. O que existia era espaço reservado
+            para foto ilustrativa ao lado de "Lei 3.285/2025" — e foto
+            ilustrativa enfraquece o único bloco DOCUMENTAL da página,
+            que é o bloco que separa candidatura séria de vendedor de promessa.
+            O número da lei virou o elemento visual, e a prova de
+            verdade desceu para o registro público, logo abaixo. */}
+        <ul className="mt-12 grid gap-5 md:grid-cols-3">
+          {provas.entregas.map((e, i) => (
+            <li
+              key={e.id}
+              data-revelar
+              style={{ ['--atraso' as string]: `${i * 80}ms` }}
+              className="flex flex-col chanfro-lg border border-white/10 bg-white/[0.06] p-6"
+            >
+              <span className="text-sm font-medium text-amarelo">{e.municipio}</span>
+              <h3 className="mt-2 text-xl text-white"><Texto tom="amarelo">{e.titulo}</Texto></h3>
+              <p className="mt-2 flex-1 text-base text-white/65"><Texto tom="amarelo">{e.texto}</Texto></p>
+              <span className="mt-5 inline-flex self-start chanfro-sm bg-white/10 px-4 py-1.5 font-[family-name:var(--font-titulo)] text-lg font-bold text-white tabular-nums">
+                {e.valor}
+              </span>
+            </li>
+          ))}
+        </ul>
+
+        {/* Era um aviso de "seção em preenchimento", com triângulo de
+            alerta, de quando os números eram placeholder. Agora a
+            seção tem dado real e esta linha é a CONTINUAÇÃO da lista —
+            as leis que não couberam nos três cartões. Alerta amarelo
+            em cima de prestação de contas lia como problema. */}
+        <div className="mt-8 flex items-start gap-3 chanfro bg-white/[0.06] px-5 py-4 text-base text-white/80 ring-1 ring-white/10">
+          <svg viewBox="0 0 24 24" className="mt-0.5 size-5 shrink-0 text-amarelo" fill="currentColor" aria-hidden>
+            <path d="M4 6h2v2H4V6Zm4 0h12v2H8V6ZM4 11h2v2H4v-2Zm4 0h12v2H8v-2Zm-4 5h2v2H4v-2Zm4 0h12v2H8v-2Z" />
+          </svg>
+          <p><Texto tom="amarelo">{provas.aviso}</Texto></p>
+        </div>
+
+        {/* O registro público.
+            É a única coisa desta seção que o leitor pode conferir
+            sozinho, agora, sem confiar em nós — e por isso é a peça
+            mais valiosa dela. O print entra clicável: quem duvida
+            clica, e quem clica já não duvidava do mesmo jeito. */}
+        <div className="mt-8 grid items-center gap-8 chanfro-lg border border-white/10 bg-white/[0.06] p-7 md:grid-cols-[1fr_1.1fr] md:p-9">
+          <div>
+            <h3 className="titulo-secao text-white">{provas.documento.titulo}</h3>
+            <p className="mt-4 text-base text-white/70">{provas.documento.texto}</p>
+            {temRegistro ? (
+              <a
+                href={provas.documento.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="toque mt-6 inline-flex min-h-12 items-center gap-2 chanfro bg-amarelo px-6 font-semibold text-azul-escuro transition-all duration-300 hover:bg-[color-mix(in_srgb,var(--color-amarelo)_88%,white)]"
+              >
+                {provas.documento.rotuloLink}
+                <svg viewBox="0 0 24 24" className="size-4" fill="currentColor" aria-hidden>
+                  <path d="M14 3h7v7h-2V6.4l-9.3 9.3-1.4-1.4L17.6 5H14V3ZM5 5h4v2H6v11h11v-3h2v5H5V5Z" />
+                </svg>
+              </a>
+            ) : null}
+          </div>
+
+          {/* O print continua na tela sem o link — ele é prova por si,
+              e some sozinho quando o slot está vazio. O que não pode
+              é ser clicável para lugar nenhum. */}
+          {temRegistro ? (
+            <a
+              href={provas.documento.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-revelar
+              className="block overflow-hidden chanfro-lg ring-1 ring-white/15 transition-transform duration-300 hover:scale-[1.01]"
+            >
+              <Imagem
+                slot="provas.documento"
+                slots={slots}
+                sizes="(max-width: 768px) 100vw, 45vw"
+                className="w-full object-cover"
+              />
+            </a>
+          ) : (
+            <div
+              data-revelar
+              className="block overflow-hidden chanfro-lg ring-1 ring-white/15"
+            >
+              <Imagem
+                slot="provas.documento"
+                slots={slots}
+                sizes="(max-width: 768px) 100vw, 45vw"
+                className="w-full object-cover"
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </Secao>
+  )
+}

@@ -1,0 +1,41 @@
+-- ═══════════════════════════════════════════════════════════════════════
+--  01 · INSTALAÇÃO COMPLETA
+--
+--  Modelo universal de LP de campanha — banco inteiro, num arquivo só.
+--
+--  ONDE RODAR
+--    Supabase ▸ SQL Editor ▸ New query ▸ colar tudo ▸ Run.
+--    (ou: psql "$DATABASE_URL" -f sql/01-instalacao.sql)
+--
+--  DEPOIS DESTE, RODE NA ORDEM
+--    sql/02-seed-municipios.sql   o território (gerado por `npm run uf`)
+--    sql/03-administrador.sql     opcional, só quando migrar para o
+--                                 Supabase Auth
+--
+--  É IDEMPOTENTE. Rodar de novo não duplica nada e não apaga nada:
+--  tudo é `create if not exists`, `create or replace` ou `on conflict
+--  do nothing`. Pode rodar num banco já em uso para aplicar mudanças.
+--
+--  O QUE ELE CRIA
+--    municipios · grupos · eventos · administradores
+--    conteudo · conteudo_versoes        (o CMS do painel)
+--    midia · midia_slots                (as imagens)
+--    trafego                            (pixel e Conversions API)
+--    + as views de métrica, as policies de RLS e a função contar_clique
+--
+--  ⚠️ A COISA MAIS IMPORTANTE DESTE ARQUIVO é a seção de SEGURANÇA:
+--     ela é o que impede o link dos grupos de vazar para o navegador.
+--     São três camadas independentes (RLS, privilégio por coluna e
+--     view sem a coluna). Não remova nenhuma "para simplificar" — a
+--     razão de serem três é que uma sempre falha.
+--
+--  ⚠️ FUSO HORÁRIO. As views de métrica agrupam o dia em
+--     'America/Sao_Paulo'. Se a campanha for no Acre, em Rondônia, no
+--     Amazonas ou em Mato Grosso, troque o fuso ANTES de rodar —
+--     procure por "FUSO DA CAMPANHA" neste arquivo. Com o fuso errado
+--     o relatório do dia vira em hora errada e ninguém percebe.
+--
+--  Gerado a partir de supabase/migrations/. Para editar, edite lá e
+--  rode `npm run sql` para reconstruir este arquivo.
+-- ═══════════════════════════════════════════════════════════════════════
+

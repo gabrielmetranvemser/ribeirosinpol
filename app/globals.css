@@ -1,0 +1,2027 @@
+@import 'tailwindcss';
+
+/* ═══════════════════════════════════════════════════════════════
+   SISTEMA VISUAL — paleta oficial da campanha.
+
+   As cinco cores vêm da marca. O símbolo é a bandeira do Brasil
+   estilizada, então a página usa as três cores do jeito que a
+   bandeira usa: verde e azul carregam superfície, amarelo NUNCA
+   carrega superfície grande — ele é o que aponta para a ação.
+
+   Divisão por seção:
+     hero e CTA final .... azul, com força
+     valores e futuro .... verde em ênfase
+     botões e detalhes ... amarelo
+
+   Regras não-negociáveis (plano, seção 9):
+   · corpo de texto ≥ 18px
+   · alvo de toque ≥ 48px
+   · amarelo nunca é cor de texto sobre claro (contraste 1.4:1)
+   · animação discreta, respeitando prefers-reduced-motion
+   ═══════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* ── Paleta oficial ────────────────────────────────────────── */
+  --color-azul-escuro: #002776;   /* superfície escura, texto forte  */
+  --color-azul: #003BB2;          /* cor de marca                     */
+  --color-verde-escuro: #006627;  /* superfície escura alternativa    */
+  --color-verde: #009C3B;         /* ênfase                           */
+  --color-amarelo: #FFDF00;       /* ação: botões e detalhes          */
+
+  /* ── Derivadas (fundos e neutros) ──────────────────────────── */
+  --color-azul-noite: #001642;    /* fim do gradiente do hero         */
+  /* Tintas funcionais — só para estado de interface (hover, aviso,
+     seleção). NUNCA como fundo de seção: fundo lavado tira a força
+     da paleta e deixa a página com cara de apresentação corporativa. */
+  --color-azul-suave: #E6EDFA;
+  --color-verde-suave: #E7F5EC;
+  --color-amarelo-suave: #FFFBE0;
+
+  --color-branco: #ffffff;
+  --color-areia: #f7f7f4;
+  --color-tinta: #0E1D39;         /* texto principal                  */
+  --color-grafite: #4c5866;       /* texto secundário                 */
+  --color-linha: #e3e6ea;
+  --color-linha-escura: #0B3574;
+
+  /* ── Tipografia ─────────────────────────────────────────────
+     O logotipo é uma grotesca condensada, pesada e itálica. Repetir
+     esse peso nos títulos da página deixa tudo pesado demais — foi o
+     problema da Tusker. A Archivo tem o mesmo esqueleto industrial,
+     mas com peso graduável: 700 nos títulos dá autoridade sem virar
+     bloco. O itálico dela ecoa a marca quando precisa. */
+  --font-titulo: var(--fonte-titulo), 'Archivo', ui-sans-serif, system-ui, sans-serif;
+  --font-corpo: var(--fonte-corpo), ui-sans-serif, system-ui, sans-serif;
+
+  --text-base: 1.0625rem;
+  --text-base--line-height: 1.7;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.7;
+  --text-xl: 1.3125rem;
+  --text-xl--line-height: 1.6;
+
+  /* ── Forma ──
+     O CORTE. Um número, e não um por componente: chanfro que muda de
+     tamanho de peça para peça deixa de ser sistema e vira decoração.
+     Os três tamanhos existem porque o corte é proporcional à ALTURA da
+     peça, não porque cada peça tem gosto próprio — 14px num botão de
+     44px come um terço da altura.
+
+     Os raios continuam abaixo: o painel usa quase duzentas classes
+     `rounded-*` e ficou de fora desta troca de propósito (é ferramenta
+     interna, e canto cortado em formulário de administração custa tempo
+     e não vende voto). */
+  --chanfro: 0.875rem;
+  --chanfro-sm: 0.5rem;
+  --chanfro-lg: 1.5rem;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+  --radius-2xl: 2.25rem;
+
+  /* ── Sombra ── */
+  --shadow-suave: 0 1px 2px rgb(1 58 103 / 0.05), 0 8px 24px -8px rgb(1 58 103 / 0.12);
+  --shadow-media: 0 2px 4px rgb(1 58 103 / 0.05), 0 16px 40px -12px rgb(1 58 103 / 0.18);
+  --shadow-alta: 0 4px 8px rgb(1 58 103 / 0.06), 0 28px 60px -18px rgb(1 58 103 / 0.26);
+
+  --ease-suave: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Mola: passa um pouco do ponto e volta. É o que dá a sensação de
+     resposta física do iOS. Só em transformação — em cor, o overshoot
+     vira piscada. */
+  --ease-mola: cubic-bezier(0.34, 1.42, 0.64, 1);
+  --ease-saida: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════════════════════ */
+
+@layer base {
+  * { min-width: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    background-color: var(--color-branco);
+    color: var(--color-tinta);
+    font-family: var(--font-corpo);
+    font-size: var(--text-lg);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-titulo);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+    color: inherit;
+  }
+
+  h1 { letter-spacing: -0.035em; line-height: 1.02; }
+
+  p { text-wrap: pretty; }
+  a { color: inherit; }
+
+  /* O anel de foco. A cor sai por variável, e não fixa, porque uma cor
+     só não serve as duas metades do site: sobre branco quem lê é o azul
+     da marca (9,3:1), e sobre superfície escura ele some — #003BB2
+     contra #002776 dá 1,46:1, que é anel nenhum.
+
+     Já era assim antes desta paleta (#066db9 sobre #01518f tinha o
+     mesmo defeito); o azul da bandeira, sendo mais fechado, só tornou
+     impossível não ver. */
+  :focus-visible {
+    outline: 2px solid var(--anel-foco, var(--color-azul));
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* O amarelo é a única cor da marca que serve nas duas superfícies:
+     10,2:1 sobre o azul da bandeira, 5,4:1 sobre o verde escuro. */
+  .capa,
+  [class*='fundo-azul'],
+  [class*='fundo-verde'] {
+    --anel-foco: var(--color-amarelo);
+  }
+
+  ::selection {
+    background: var(--color-amarelo);
+    color: var(--color-tinta);
+  }
+
+  a, button, [role='button'] { touch-action: manipulation; }
+  img, svg, video, canvas { display: block; max-width: 100%; }
+
+  @supports (scrollbar-width: thin) {
+    * { scrollbar-width: thin; scrollbar-color: var(--color-linha) transparent; }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   UTILITÁRIOS
+   ═══════════════════════════════════════════════════════════════ */
+
+@utility container-lp {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  max-width: 75rem;
+
+  @media (min-width: 768px) { padding-inline: 2rem; }
+}
+
+/* A trilha do álbum. Sangra até a borda da tela no celular e volta a
+   ser grade comum a partir de 768px — onde existe trackpad, barra
+   rolável horizontal rouba o scroll vertical da página.
+
+   A calha é reposta em padding para o primeiro cartão nascer alinhado
+   ao título, em vez de colado na borda. `scroll-padding` repete a
+   conta porque o encaixe do snap ignora o padding do contêiner. */
+@utility album-trilha {
+  margin-inline: -1.25rem;
+  padding-inline: 1.25rem;
+  scroll-padding-inline: 1.25rem;
+  /* Sem isto, chegar ao fim da trilha continua o gesto no histórico do
+     navegador — no iOS, deslizar a última foto volta a página. */
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar { display: none; }
+
+  @media (min-width: 768px) {
+    margin-inline: 0;
+    padding-inline: 0;
+    overscroll-behavior-x: auto;
+  }
+}
+
+/* ── A fita que desliza no dedo, e nas setas ───────────────────
+   ⚠️ NÃO É A `palco-fita`, E A DIFERENÇA É DE QUEM MANDA.
+
+   A `palco-fita` anda sozinha conforme a página desce: a tela prende,
+   o dedo rola para baixo e os cartões passam de lado. Funciona para
+   três frases curtas (Compromissos), e não funciona para vídeo — quem
+   quer voltar ao segundo vídeo precisa rolar a página PARA CIMA, e
+   quem só quer passar a seção fica preso vendo cartões desfilarem.
+
+   Aqui a fita é uma barra rolável comum: o dedo arrasta, as setas
+   andam de um cartão por vez, e a página desce quando a pessoa quer
+   que ela desça. O `scroll-snap` é o que faz o cartão parar inteiro na
+   tela em vez de cortado no meio.
+
+   As margens negativas sangram a fita até a borda da calha do
+   container e o padding devolve o recuo: assim o primeiro cartão nasce
+   alinhado ao título, e o último tem o mesmo respiro do outro lado.
+   `scroll-padding` repete a conta porque o encaixe do snap ignora o
+   padding do contêiner. */
+@utility fita-desliza {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  /* Sem isto, chegar ao fim da fita continua o gesto no histórico do
+     navegador — no iOS, deslizar o último cartão volta a página. */
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  margin-inline: -1.25rem;
+  padding-inline: 1.25rem;
+  scroll-padding-inline: 1.25rem;
+
+  &::-webkit-scrollbar { display: none; }
+
+  @media (min-width: 768px) {
+    margin-inline: -2rem;
+    padding-inline: 2rem;
+    scroll-padding-inline: 2rem;
+  }
+}
+
+@utility titulo-cartaz {
+  font-family: var(--font-titulo);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 6.2vw, 4.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.036em;
+}
+
+@utility titulo-secao {
+  font-family: var(--font-titulo);
+  font-weight: 700;
+  font-size: clamp(1.85rem, 3.8vw, 2.9rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+@utility etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-corpo);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Itálico da marca. Usado com moderação: número, selo, destaque curto. */
+@utility voz-marca {
+  font-family: var(--font-titulo);
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+/* Grifo amarelo sob a palavra-chave. */
+@utility grifo {
+  display: inline;
+  background-image: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-amarelo) 80%, transparent) 0 30%,
+    transparent 30%
+  );
+  background-repeat: no-repeat;
+  padding-inline: 0.06em;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CHANFRO — o canto cortado em diagonal
+
+   DOIS CANTOS OPOSTOS: superior-esquerdo e inferior-direito.
+
+   O corte de cima liga (0, c) a (c, 0) e o de baixo liga (100%−c, 100%)
+   a (100%, 100%−c) — em coordenadas de tela, as duas arestas sobem da
+   esquerda para a direita. Ficam PARALELAS, e a inclinação é a mesma do
+   itálico da marca (a grotesca condensada de `voz-marca`). O par oposto
+   daria duas arestas na diagonal contrária, que brigam com ela.
+
+   Dois cantos e não quatro: quatro cortados dão um octógono — forma
+   fechada, simétrica, parada. Dois opostos insinuam um paralelogramo,
+   que tem direção.
+
+   ⚠️ DUAS IMPLEMENTAÇÕES, E A DIFERENÇA NÃO É COSMÉTICA.
+
+      `clip-path` recorta a caixa DEPOIS de pintar: borda, box-shadow e
+      — o pior — o ANEL DE FOCO são cortados junto. Com
+      `outline-offset: 3px`, que é o padrão deste arquivo, o anel é
+      desenhado inteiramente FORA da caixa, ou seja, exatamente onde o
+      recorte joga fora. Um botão chanfrado por clip-path fica SEM anel
+      de foco, e isso não é acabamento: é o teclado deixando de alcançar
+      a página.
+
+      `corner-shape: bevel` faz o bisel no próprio motor de borda —
+      `border`, `box-shadow` e `outline` acompanham sozinhos e não há
+      recorte nenhum. É a implementação certa; só não existe em toda
+      parte ainda. A estratégia é a mesma de `animation-timeline` neste
+      arquivo: o caminho bom onde existe, um caminho honesto onde não.
+
+   ⚠️ POR QUE O POLÍGONO ESTÁ REPETIDO EM CADA UTILITÁRIA em vez de
+      morar numa variável. `--forma: polygon(… var(--corte) …)` no :root
+      resolveria `var(--corte)` NO :ROOT — o valor desceria herdado já
+      pronto, e um `--corte` posto no elemento não teria efeito nenhum.
+      Não dá erro; só não funciona, que é pior.
+
+   O tamanho sai de `--corte`, então qualquer ponto de uso ajusta com
+   `[--corte:0.5rem]` sem precisar de uma quarta utilitária.
+   ═══════════════════════════════════════════════════════════════ */
+
+@utility chanfro {
+  --corte: var(--chanfro);
+  clip-path: polygon(
+    var(--corte) 0,
+    100% 0,
+    100% calc(100% - var(--corte)),
+    calc(100% - var(--corte)) 100%,
+    0 100%,
+    0 var(--corte)
+  );
+  /* O anel volta para DENTRO da caixa. Fica cortado nas duas diagonais,
+     o que é feio — e é infinitamente melhor do que sumir. */
+  &:focus-visible { outline-offset: -3px; }
+
+  @supports (corner-shape: bevel) {
+    clip-path: none;
+    corner-shape: bevel;
+    /* TL e BR recebem o corte; TR e BL ficam em zero. Canto de raio
+       zero é quadrado, e `bevel` não tem o que biselar nele. */
+    border-radius: var(--corte) 0;
+    &:focus-visible { outline-offset: 3px; }
+  }
+}
+
+@utility chanfro-sm {
+  --corte: var(--chanfro-sm);
+  clip-path: polygon(
+    var(--corte) 0, 100% 0,
+    100% calc(100% - var(--corte)), calc(100% - var(--corte)) 100%,
+    0 100%, 0 var(--corte)
+  );
+  &:focus-visible { outline-offset: -3px; }
+
+  @supports (corner-shape: bevel) {
+    clip-path: none;
+    corner-shape: bevel;
+    border-radius: var(--corte) 0;
+    &:focus-visible { outline-offset: 3px; }
+  }
+}
+
+@utility chanfro-lg {
+  --corte: var(--chanfro-lg);
+  clip-path: polygon(
+    var(--corte) 0, 100% 0,
+    100% calc(100% - var(--corte)), calc(100% - var(--corte)) 100%,
+    0 100%, 0 var(--corte)
+  );
+  &:focus-visible { outline-offset: -3px; }
+
+  @supports (corner-shape: bevel) {
+    clip-path: none;
+    corner-shape: bevel;
+    border-radius: var(--corte) 0;
+    &:focus-visible { outline-offset: 3px; }
+  }
+}
+
+/* box-shadow em elemento recortado sai QUADRADA por baixo da forma
+   chanfrada — a sombra é pintada antes do recorte e o recorte só apara
+   o que está dentro da caixa. `filter: drop-shadow` acontece depois e
+   segue a silhueta.
+
+   Só em botão. Um botão é pequeno e existe um ou dois por tela, então o
+   passe de blur cabe; num grid de seis cartões não caberia, e é por
+   isso que o cartão foi por outro caminho (borda pintada, sem sombra).
+
+   `drop-shadow` não tem *spread*, então o -12px de --shadow-media não
+   tem tradução direta: os valores abaixo foram reescritos para o mesmo
+   peso visual, não convertidos. */
+@supports not (corner-shape: bevel) {
+  .chanfro.shadow-suave,
+  .chanfro.shadow-media,
+  .chanfro.shadow-alta { box-shadow: none; }
+
+  .chanfro.shadow-suave { filter: drop-shadow(0 4px 8px rgb(0 22 66 / 0.14)); }
+  .chanfro.shadow-media {
+    filter: drop-shadow(0 2px 3px rgb(0 22 66 / 0.10))
+            drop-shadow(0 8px 14px rgb(0 22 66 / 0.20));
+  }
+  .chanfro.shadow-alta {
+    filter: drop-shadow(0 3px 5px rgb(0 22 66 / 0.12))
+            drop-shadow(0 14px 24px rgb(0 22 66 / 0.26));
+  }
+}
+
+/* O cartão, chanfrado como o resto do sistema.
+
+   ⚠️ SEM `corner-shape`, A BORDA TEM DE SER PINTADA. `clip-path` corta a
+      `border` junto, e num cartão branco sobre página branca a borda é o
+      que carrega a leitura inteira — sem ela o cartão simplesmente some.
+      Então o elemento inteiro fica da cor da linha e um `::before`
+      recuado 1px devolve o branco por dentro: duas caixas recortadas,
+      nenhum blur.
+
+      É outro caminho que o do botão de propósito. `drop-shadow` também
+      resolveria, mas cartão anda em grade de seis, e seis passes de blur
+      numa tela custam o que um ou dois botões não custam.
+
+   ⚠️ O -0.586px NÃO É CHUTE. A diagonal externa é a reta x+y = c; a
+      caixa interna, recuada 1px, tem a dela em x+y = c'+2 nas
+      coordenadas de fora. A distância entre duas retas x+y=k é Δk/√2,
+      então 1px de espessura perpendicular exige c' = c + √2 − 2.
+
+   A SOMBRA CAI no caminho de fallback, e é decisão e não esquecimento:
+   com a aresta pintada visível ela seria redundante. */
+@utility cartao {
+  --corte: var(--chanfro-lg);
+  position: relative;
+  isolation: isolate;
+  background-color: var(--color-linha);
+  clip-path: polygon(
+    var(--corte) 0, 100% 0,
+    100% calc(100% - var(--corte)), calc(100% - var(--corte)) 100%,
+    0 100%, 0 var(--corte)
+  );
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 1px;
+    /* Acima do fundo do próprio elemento e abaixo do conteúdo em fluxo:
+       é a ordem de pintura de contexto de empilhamento, e é exatamente
+       o que se quer aqui. */
+    z-index: -1;
+    background-color: var(--color-branco);
+    --corte-interno: calc(var(--corte) - 0.586px);
+    clip-path: polygon(
+      var(--corte-interno) 0, 100% 0,
+      100% calc(100% - var(--corte-interno)), calc(100% - var(--corte-interno)) 100%,
+      0 100%, 0 var(--corte-interno)
+    );
+  }
+
+  @supports (corner-shape: bevel) {
+    background-color: var(--color-branco);
+    border: 1px solid var(--color-linha);
+    box-shadow: var(--shadow-suave);
+    clip-path: none;
+    corner-shape: bevel;
+    border-radius: var(--corte) 0;
+    &::before { content: none; }
+  }
+}
+
+/* ── Fundos ────────────────────────────────────────────────────
+   Cada superfície escura é MONOCROMÁTICA: um matiz só, variando
+   apenas em claro/escuro.
+
+   Misturar verde com azul num gradiente passa por um verde-água que
+   não existe na marca — o meio do caminho entre dois matizes distantes
+   é sempre uma terceira cor, e nunca é a que se quer. Verde e azul
+   convivem, mas em seções diferentes, nunca dentro do mesmo gradiente. */
+
+@utility fundo-azul {
+  background-image: linear-gradient(168deg, #0A55D6 0%, var(--color-azul) 30%, var(--color-azul-escuro) 78%, var(--color-azul-noite) 100%);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   A PRIMEIRA DOBRA — SEIS ESQUEMAS DE COR
+
+   ⚠️ A REGRA QUE SUSTENTA TODOS ELES: o lado do TEXTO é sempre o lado
+   ESCURO do degradê.
+
+   Não é preferência estética, é o que torna o sistema possível. Com
+   essa garantia, o texto é branco nos seis esquemas, a foto recortada
+   tem sempre fundo com contraste, e a única coisa que precisa mudar de
+   esquema para esquema é o REALCE e o BOTÃO. Sem ela, cada esquema
+   precisaria de uma versão escura da marca, de outra cor de texto e de
+   outra sombra — seis desenhos em vez de um sistema.
+
+   Em números: o lado do texto fica sempre abaixo de ~25% de
+   luminância, o que dá pelo menos 8:1 contra branco. O teto da WCAG
+   para texto grande é 3:1, e para corpo é 4,5:1.
+
+   ⚠️ O REALCE E O BOTÃO SÃO COR AUSENTE DO PRÓPRIO DEGRADÊ. É a regra
+   que faz os dois saltarem em vez de afundar: amarelo sobre um fundo
+   que termina em amarelo vira camuflagem. Por isso o botão é azul nos
+   esquemas com amarelo, e amarelo nos que não têm.
+
+   ⚠️ VERDE E AZUL NUNCA SE ENCOSTAM sem o amarelo no meio. O caminho
+   direto entre os dois passa por verde-água, que não existe na marca —
+   é o erro que esta dobra já cometeu duas vezes. No esquema
+   "azul e verde" os dois ficam em pontas opostas, com a transição
+   acontecendo no escuro, onde o matiz intermediário não aparece.
+   ═══════════════════════════════════════════════════════════════ */
+
+@layer components {
+  .capa {
+    /* Padrões, sobrescritos por cada esquema abaixo.
+
+       ⚠️ O FUNDO TAMBÉM TEM PADRÃO, e não é zelo: se o valor gravado
+       não casar com nenhum esquema — nome antigo, dado adulterado — a
+       dobra ficaria sem degradê nenhum, com título branco sobre branco.
+       Melhor cair na capa oficial do que sumir. */
+    --capa-realce: var(--color-amarelo);
+    --capa-botao: var(--color-azul-escuro);
+    --capa-botao-texto: #fff;
+    background-color: var(--color-verde-escuro);
+    background-image: linear-gradient(
+      104deg,
+      #004E1E 0%,
+      var(--color-verde-escuro) 18%,
+      var(--color-verde) 46%,
+      #7FB800 66%,
+      var(--color-amarelo) 92%,
+      #F5D400 100%
+    );
+  }
+
+  /* O trecho em destaque do título, na cor que o esquema pede. */
+  .realce-capa {
+    color: var(--capa-realce);
+  }
+}
+
+/* ── 1. Azul ──────────────────────────────────────────────── */
+[data-capa='azul'] {
+  --capa-realce: var(--color-amarelo);
+  --capa-botao: var(--color-amarelo);
+  --capa-botao-texto: var(--color-azul-escuro);
+  background-color: var(--color-azul-noite);
+  background-image: linear-gradient(
+    104deg,
+    var(--color-azul-noite) 0%,
+    var(--color-azul-escuro) 30%,
+    var(--color-azul) 66%,
+    #0A55D6 100%
+  );
+}
+
+/* ── 2. Verde ─────────────────────────────────────────────── */
+[data-capa='verde'] {
+  --capa-realce: var(--color-amarelo);
+  --capa-botao: var(--color-amarelo);
+  --capa-botao-texto: var(--color-azul-escuro);
+  background-color: #004E1E;
+  background-image: linear-gradient(
+    104deg,
+    #003B17 0%,
+    var(--color-verde-escuro) 28%,
+    var(--color-verde) 68%,
+    #33B45F 100%
+  );
+}
+
+/* ── 3. Amarelo ───────────────────────────────────────────────
+   Do âmbar fechado ao amarelo da bandeira. O âmbar É amarelo, só
+   escuro: mantém a família da cor e devolve o contraste que o
+   amarelo puro não tem. O realce vira AZUL — única cor viva que não
+   está no degradê. */
+[data-capa='amarelo'] {
+  --capa-realce: #5BB8FF;
+  --capa-botao: var(--color-azul-escuro);
+  --capa-botao-texto: #fff;
+  background-color: #5A4E00;
+  background-image: linear-gradient(
+    104deg,
+    #463C00 0%,
+    #7A6A00 26%,
+    #C7AE00 62%,
+    var(--color-amarelo) 88%,
+    #FFF08F 100%
+  );
+}
+
+/* ── 4. Verde e amarelo — a capa oficial ──────────────────── */
+[data-capa='verde-amarelo'] {
+  --capa-realce: var(--color-amarelo);
+  --capa-botao: var(--color-azul-escuro);
+  --capa-botao-texto: #fff;
+  background-color: var(--color-verde-escuro);
+  background-image: linear-gradient(
+    104deg,
+    #004E1E 0%,
+    var(--color-verde-escuro) 18%,
+    var(--color-verde) 46%,
+    #7FB800 66%,
+    var(--color-amarelo) 92%,
+    #F5D400 100%
+  );
+}
+
+/* ── 5. Azul e verde ──────────────────────────────────────────
+   Os dois em pontas opostas e a transição no escuro: é onde o
+   verde-água do meio do caminho não aparece. */
+[data-capa='azul-verde'] {
+  --capa-realce: var(--color-amarelo);
+  --capa-botao: var(--color-amarelo);
+  --capa-botao-texto: var(--color-azul-escuro);
+  background-color: var(--color-azul-noite);
+  background-image: linear-gradient(
+    104deg,
+    var(--color-azul-noite) 0%,
+    var(--color-azul-escuro) 26%,
+    #004A6B 48%,
+    var(--color-verde-escuro) 66%,
+    var(--color-verde) 90%,
+    #33B45F 100%
+  );
+}
+
+/* ── 6. Amarelo e azul ────────────────────────────────────────
+   Invertido em relação ao nome, e de propósito: o azul fica onde o
+   texto está. Amarelo à esquerda deixaria o título ilegível. */
+[data-capa='amarelo-azul'] {
+  --capa-realce: var(--color-amarelo);
+  --capa-botao: var(--color-amarelo);
+  --capa-botao-texto: var(--color-azul-escuro);
+  background-color: var(--color-azul-noite);
+  background-image: linear-gradient(
+    104deg,
+    var(--color-azul-noite) 0%,
+    var(--color-azul-escuro) 24%,
+    var(--color-azul) 46%,
+    #6FA300 72%,
+    var(--color-amarelo) 92%,
+    #FFF08F 100%
+  );
+}
+
+/* ── 7. A bandeira — azul, verde e amarelo ────────────────────
+   As três cores da bandeira de Rondônia num degradê só, na ordem em
+   que a arte de rua desta campanha as usa. É a capa desta campanha.
+
+   É o único dos sete que atravessa as três, e é por isso que ele é o
+   que mais depende da regra do topo deste bloco: o azul fica no lado
+   do TEXTO e o amarelo no canto da foto. Invertido, o título ficaria
+   sobre amarelo e não haveria cor de texto que salvasse.
+
+   O encontro entre o azul e o verde acontece no PETRÓLEO (#004A6B) e
+   acontece no escuro — mesma solução do esquema 5, e pelo mesmo
+   motivo: o caminho direto entre os dois passa por verde-água, que não
+   existe na marca e aparece na hora em que a mistura clareia. Do verde
+   para o amarelo o caminho é natural e não precisa de ponte.
+
+   ⚠️ O REALCE É AMARELO AQUI, e isso parece violar a regra de que
+      realce é cor AUSENTE do degradê. Não é: a regra existe contra
+      camuflagem, e camuflagem depende de distância. O amarelo deste
+      degradê vive nos últimos 12% da diagonal, do outro lado da tela;
+      o realce fica sobre o azul-noite dos primeiros 22%, onde ele dá
+      10,2:1. É a mesma escolha que a arte de rua faz — o número
+      25197 é amarelo sobre o azul. */
+[data-capa='bandeira'] {
+  --capa-realce: var(--color-amarelo);
+  --capa-botao: var(--color-amarelo);
+  --capa-botao-texto: var(--color-azul-escuro);
+  background-color: var(--color-azul-noite);
+  /* As paradas foram empurradas para a esquerda em relação ao primeiro
+     desenho: o azul segurava metade da diagonal e o amarelo sobrava
+     numa faixa de 10% colada na borda, o que lê como "azul com um
+     risco amarelo" e não como a bandeira. A coluna de texto termina
+     por volta de 46% da largura, então o escuro só precisa chegar até
+     ali — o resto da diagonal é onde a arte respira. */
+  background-image: linear-gradient(
+    104deg,
+    var(--color-azul-noite) 0%,
+    var(--color-azul-escuro) 17%,
+    #004A6B 32%,
+    var(--color-verde-escuro) 46%,
+    var(--color-verde) 66%,
+    #7FB800 84%,
+    var(--color-amarelo) 100%
+  );
+}
+
+/* ── O brilho atrás das figuras ───────────────────────────────
+   Existe na arte oficial: o claro do fundo não é chapado, é luz
+   saindo de trás das pessoas. Vale para os seis. */
+.capa {
+  position: relative;
+}
+.capa::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(
+    52% 60% at 76% 36%,
+    rgb(255 255 255 / 0.16) 0%,
+    transparent 72%
+  );
+}
+
+/* ── Celular ──────────────────────────────────────────────────
+   A coluna de texto ocupa a largura inteira, então não existe canto
+   para onde empurrar a cor clara. A diagonal vira quase vertical: o
+   escuro em cima, atrás do texto; o claro embaixo, atrás delas. */
+@media (max-width: 1023px) {
+  [data-capa] {
+    background-image: linear-gradient(
+      168deg,
+      var(--capa-topo, #00250F) 0%,
+      var(--capa-meio, #006627) 42%,
+      var(--capa-pe, #F5D400) 100%
+    );
+  }
+  [data-capa='azul'] { --capa-topo: #000E2E; --capa-meio: var(--color-azul-escuro); --capa-pe: #0A55D6; }
+  [data-capa='verde'] { --capa-topo: #003B17; --capa-meio: #006627; --capa-pe: #33B45F; }
+  [data-capa='amarelo'] { --capa-topo: #463C00; --capa-meio: #7A6A00; --capa-pe: #FFF08F; }
+  [data-capa='verde-amarelo'] { --capa-topo: #004E1E; --capa-meio: #006627; --capa-pe: #F5D400; }
+  [data-capa='azul-verde'] { --capa-topo: #000E2E; --capa-meio: #004A6B; --capa-pe: #33B45F; }
+  [data-capa='amarelo-azul'] { --capa-topo: #000E2E; --capa-meio: var(--color-azul); --capa-pe: #FFF08F; }
+
+  /* A bandeira é o único esquema que NÃO cabe nos três encaixes acima,
+     e não é preciosismo: com topo/meio/pé o salto do azul para o verde
+     seria feito em um passo só, e é justamente esse passo que precisa
+     da ponte de petróleo para não virar verde-água no meio do caminho.
+     Cinco paradas, então, e a regra inteira escrita aqui. */
+  [data-capa='bandeira'] {
+    background-image: linear-gradient(
+      168deg,
+      var(--color-azul-noite) 0%,
+      var(--color-azul-escuro) 22%,
+      #004A6B 44%,
+      var(--color-verde-escuro) 64%,
+      var(--color-verde) 84%,
+      var(--color-amarelo) 100%
+    );
+  }
+
+  .capa::before {
+    background-image: radial-gradient(
+      80% 26% at 62% 88%,
+      rgb(255 255 255 / 0.14) 0%,
+      transparent 74%
+    );
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   O SLIDER DE FUNDO DA PRIMEIRA DOBRA
+
+   Três fitas de fotos de rua correndo por trás das figuras, em
+   sentidos opostos. Mesma mecânica da faixa amarela da página: a lista
+   aparece três vezes e a animação desloca um terço, então o laço é
+   invisível. Sem JavaScript.
+
+   ⚠️ ISTO JÁ FOI UM CROSSFADE EM TELA CHEIA e estava errado por dois
+   motivos. Um: a 42% de opacidade e em soft-light, trocar a foto
+   inteira não lê como troca, lê como PISCA — o olho registra a
+   luminância do fundo mudando sem entender o quê. Dois: em tela cheia
+   cada foto virava textura abstrata, e não dava para identificar que
+   era gente na rua, que era a única coisa que elas precisavam dizer.
+   Cartão pequeno tem BORDA, e é a borda que faz o olho ler "foto".
+
+   ⚠️ `soft-light` E NÃO SÓ OPACIDADE. Foto sobre gradiente, com
+   opacidade sozinha, continua sendo uma foto POR CIMA: dá para ver a
+   borda do retângulo e o cinza dela briga com o verde. No soft-light a
+   luminância da foto MODULA a cor que já está lá — o claro clareia o
+   verde, o escuro escurece, e o matiz continua sendo o da campanha.
+
+   ⚠️ A MÁSCARA É O QUE PROTEGE A LEITURA, e não é enfeite. Sem ela as
+   fitas correm por baixo do parágrafo de 260 caracteres e o contraste
+   do texto passa a depender de qual foto está passando — ou seja,
+   muda sozinho o tempo inteiro.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Um TERÇO, e não metade: a fita tem três passadas da mesma lista, e
+   deslocar um terço é deslocar exatamente uma passada. Ao fim do ciclo
+   a segunda passada está no lugar onde a primeira começou e o salto de
+   volta é invisível. As outras duas passadas são a reserva que impede
+   a fita de aparecer vazia em tela larga. */
+@keyframes fundo-vivo-corre {
+  to { transform: translate3d(-33.3333%, 0, 0); }
+}
+
+@layer components {
+  .fundo-vivo {
+    display: flex;
+    flex-direction: column;
+    /* Celular: as fitas descem para o pé da dobra, atrás das figuras.
+       Centradas, a de cima corria na altura do parágrafo e a máscara
+       tinha de apagá-la — sobrava uma fita e meia visível. */
+    justify-content: flex-end;
+    gap: 0.6rem;
+    padding-bottom: 0.75rem;
+
+    /* ⚠️ 0.46 ERA POUCO. Em soft-light a camada já perde muito
+       contraste contra o gradiente; somado a 46% de opacidade, dava
+       para ver que havia ALGO ali sem dar para ver o quê — e o ponto
+       destas fotos é justamente serem reconhecíveis como gente na rua. */
+    opacity: 0.62;
+    mix-blend-mode: soft-light;
+
+    /* O texto ocupa a metade de cima da dobra no celular. */
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      transparent 42%,
+      rgb(0 0 0 / 0.5) 56%,
+      #000 70%
+    );
+  }
+
+  @media (min-width: 1024px) {
+    .fundo-vivo {
+      /* No desktop as figuras ficam à direita e ocupam a altura toda,
+         então as fitas voltam a ser centradas. */
+      justify-content: center;
+      padding-bottom: 0;
+      gap: 0.9rem;
+      /* A coluna de texto termina em ~49% da largura. */
+      mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        transparent 46%,
+        rgb(0 0 0 / 0.45) 60%,
+        #000 74%
+      );
+    }
+  }
+
+  .fundo-vivo-fita {
+    display: flex;
+    width: max-content;
+    gap: 0.6rem;
+    animation: fundo-vivo-corre var(--fita-duracao) linear infinite;
+    will-change: transform;
+  }
+
+  @media (min-width: 1024px) {
+    .fundo-vivo-fita { gap: 0.9rem; }
+  }
+
+  /* O tamanho é a decisão de projeto aqui, não o enquadramento.
+     Grande demais e volta a ser textura; pequeno demais e vira
+     miniatura de galeria. Nesta medida dá para ver que são pessoas na
+     rua sem que a foto dispute atenção com o rosto da candidato. */
+  .fundo-vivo-quadro {
+    position: relative;
+    flex: none;
+    width: 8.5rem;
+    height: 10.5rem;
+    overflow: hidden;
+    border-radius: 0.75rem;
+  }
+
+  @media (min-width: 1024px) {
+    .fundo-vivo-quadro {
+      width: 13rem;
+      height: 16rem;
+      border-radius: 1rem;
+    }
+  }
+
+  /* Quem pediu menos movimento fica com as fitas paradas, não com o
+     fundo vazio: a foto é conteúdo, o deslocamento é que é movimento. */
+  @media (prefers-reduced-motion: reduce) {
+    .fundo-vivo-fita { animation: none; }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   A TEXTURA DE FUNDO
+
+   Uma camada sobre a página inteira. Serve para tirar o ar de gradiente
+   digital liso — dá a superfície de material impresso, que é o registro
+   certo para peça de campanha.
+
+   Três tipos, e a diferença é de referência: o halftone lembra
+   impressão em rotativa, o ruído lembra papel, o tracejado lembra
+   serigrafia.
+
+   ⚠️ ERAM TRÊS NOMES — sutil, média, forte — e três nomes não cobrem o
+   espaço entre "não vejo nada" e "está demais". Agora a força é um
+   número de 0 a 100 vindo do painel, e cada tipo tem o próprio TETO:
+   a mesma opacidade que some no halftone berra no tracejado. O 100 de
+   cada um é o limite em que ele ainda é textura, e não assunto.
+
+   Quatro decisões que fazem isso funcionar em vez de sujar:
+
+   · `position: fixed`. A trama não rola junto com o conteúdo. Se
+     rolasse, o olho a leria como parte da página e ela viraria ruído
+     em movimento; parada, ela é o papel por baixo.
+
+   · `mix-blend-mode: overlay`. Marca escura sumiria no azul-noite da
+     dobra e apareceria só nas seções claras — a textura existiria em
+     metade da página. Overlay clareia o escuro e quase não toca o
+     claro, então a mesma camada serve as duas.
+
+   · `pointer-events: none`. Camada fixa cobrindo a tela inteira é a
+     maneira mais fácil de matar TODOS os cliques da página. Sem esta
+     linha, nenhum botão da campanha funcionaria.
+
+   · z-index abaixo do cabeçalho (50) e do botão flutuante (40): os
+     dois são interface, e interface não recebe textura de papel.
+   ═══════════════════════════════════════════════════════════════ */
+
+[data-textura]::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  /* --textura-forca chega do painel, de 0 a 1. O teto é por tipo. */
+  opacity: calc(var(--textura-forca, 0) * var(--textura-teto, 1));
+}
+
+/* Trama de pontos. O passo curto é o que lê como impressão em vez de
+   como bolinhas: acima de 6px o olho separa os pontos um a um. */
+[data-textura='halftone']::after {
+  --textura-teto: 0.5;
+  background-image: radial-gradient(#fff 0.8px, transparent 1px);
+  background-size: 4px 4px;
+}
+
+/* Grão de papel. O ruído é gerado pelo próprio navegador com
+   feTurbulence — nenhuma imagem baixada, nenhum arquivo no deploy.
+   `numOctaves=1` mantém o grão fino; mais oitavas viram nuvem. */
+[data-textura='ruido']::after {
+  --textura-teto: 0.75;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23r)'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
+}
+
+/* Linhas diagonais. Teto mais baixo que os outros dois: linha contínua
+   tem muito mais área pintada que ponto, então a mesma opacidade pesa
+   o dobro. */
+[data-textura='tracejado']::after {
+  --textura-teto: 0.28;
+  background-image: repeating-linear-gradient(
+    45deg,
+    #fff 0 1px,
+    transparent 1px 7px
+  );
+}
+
+/* Em tela de baixa densidade a trama fina vira moiré, e aí ela deixa
+   de ser textura e vira defeito. */
+@media (max-resolution: 1x) {
+  [data-textura='halftone']::after { background-size: 5px 5px; }
+  [data-textura='tracejado']::after {
+    background-image: repeating-linear-gradient(45deg, #fff 0 1px, transparent 1px 9px);
+  }
+}
+
+@utility fundo-azul-profundo {
+  background-image: linear-gradient(168deg, var(--color-azul-escuro) 0%, var(--color-azul-noite) 100%);
+}
+
+/* ⚠️ NENHUMA PARADA DESTES DOIS DEGRADÊS CHEGA AO VERDE DA BANDEIRA, e
+   não é descuido. #009C3B com texto branco dá 3,61:1: passa em título
+   grande e REPROVA em corpo (4,5:1) — e as duas superfícies abaixo
+   carregam parágrafo (`Secao` tom verde, e o cartão de Compartilhar).
+
+   O verde da bandeira é ÊNFASE: vive no símbolo, na cunha da cena e nos
+   detalhes. Debaixo de um parágrafo vai a versão escura dele. #008532
+   (4,77:1) é o mais claro que estes degradês podem ser.
+
+   A paleta anterior errava o mesmo — #509c47 dava 3,39:1, pior —, então
+   isto não é regressão: é o conserto que a troca de paleta expôs. */
+@utility fundo-verde {
+  background-image: linear-gradient(168deg, #008532 0%, #007A2E 34%, var(--color-verde-escuro) 100%);
+}
+
+@utility fundo-verde-profundo {
+  background-image: linear-gradient(168deg, #007A2E 0%, var(--color-verde-escuro) 100%);
+}
+
+/* Brilho suave sobre fundo claro. */
+@utility brilho-claro {
+  background-image:
+    radial-gradient(55% 50% at 12% 0%, color-mix(in srgb, var(--color-azul) 9%, transparent) 0%, transparent 70%),
+    radial-gradient(45% 45% at 98% 15%, color-mix(in srgb, var(--color-verde) 9%, transparent) 0%, transparent 70%);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ANIMAÇÃO
+
+   Orçamento: 3 segundos até o botão principal ficar clicável num
+   celular mediano em 4G. Por isso tudo aqui é CSS — nenhuma
+   biblioteca, nenhum JS por quadro. O único JavaScript de animação
+   da página é o IntersectionObserver de Revelar.tsx, que só põe um
+   atributo e sai de cena.
+
+   Três famílias:
+     · revelação simples ... [data-revelar], o padrão
+     · palco ............... preso na tela, pintado pelo scroll
+     · movimento por scroll  animation-timeline, zero JS
+   ═══════════════════════════════════════════════════════════════ */
+
+@keyframes sobe-suave {
+  from { opacity: 0; transform: translate3d(0, 1.25rem, 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes surge {
+  from { opacity: 0; transform: scale(0.985); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes entra-lateral {
+  from { opacity: 0; transform: translate3d(1.25rem, 0, 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+@utility anima-hero { animation: sobe-suave 0.8s var(--ease-suave) both; }
+@utility anima-surge { animation: surge 1s var(--ease-suave) both; }
+
+/* Troca de etapa no fluxo do filtro: o bloco de controle entra pela
+   direita, como tela de aplicativo. O palco não se mexe — se ele
+   também animasse, a prévia piscaria a cada passo e o efeito viraria
+   ruído em cima da única coisa que a pessoa está olhando. */
+@utility anima-etapa { animation: entra-lateral 0.34s var(--ease-saida) both; }
+
+@layer components {
+  [data-revelar] {
+    opacity: 0;
+    transform: translate3d(0, 1.25rem, 0);
+    transition:
+      opacity 0.7s var(--ease-suave),
+      transform 0.7s var(--ease-suave);
+    transition-delay: var(--atraso, 0ms);
+  }
+
+  [data-revelar][data-visivel='true'] { opacity: 1; transform: none; }
+
+  .sem-js [data-revelar] { opacity: 1; transform: none; }
+}
+
+/* ───────────────────────────────────────────────────────────────
+   MOVIMENTO POR SCROLL — sem JavaScript nenhum
+
+   animation-timeline liga a animação à posição da rolagem. Onde não
+   houver suporte, a regra inteira é ignorada e o elemento fica
+   parado no lugar certo: degradação sem fallback a manter.
+   ─────────────────────────────────────────────────────────────── */
+
+@keyframes desliza-parallax {
+  from { transform: translate3d(0, -3%, 0); }
+  to   { transform: translate3d(0, 3%, 0); }
+}
+
+@keyframes avanca-barra {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@utility parallax-suave {
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      animation: desliza-parallax linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+      will-change: transform;
+    }
+  }
+}
+
+@utility barra-progresso {
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+
+  @supports (animation-timeline: scroll()) {
+    animation: avanca-barra linear both;
+    animation-timeline: scroll(root block);
+  }
+}
+
+/* ───────────────────────────────────────────────────────────────
+   BRILHO QUE SEGUE O CURSOR
+
+   Só onde existe ponteiro de verdade. No celular a regra nem é
+   avaliada, o listener nem é registrado, e o custo é zero.
+   ─────────────────────────────────────────────────────────────── */
+
+@utility brilho-cursor {
+  @media (pointer: fine) {
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: var(--brilho-op, 0);
+      transition: opacity 0.45s var(--ease-saida);
+      background-image: radial-gradient(
+        24rem 24rem at var(--cx, 50%) var(--cy, 50%),
+        color-mix(in srgb, var(--color-branco) 16%, transparent) 0%,
+        transparent 68%
+      );
+    }
+  }
+}
+
+/* ───────────────────────────────────────────────────────────────
+   RESPOSTA AO TOQUE
+
+   O que falta hoje: apertar um alvo e nada acontecer até a página
+   trocar. O afundamento de 3% é o sinal de que o toque foi lido.
+   ─────────────────────────────────────────────────────────────── */
+
+@utility toque {
+  transition: transform 0.24s var(--ease-mola);
+
+  &:active { transform: scale(0.97); }
+}
+
+@utility toque-leve {
+  transition: transform 0.24s var(--ease-mola);
+
+  &:active { transform: scale(0.985); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MOVIMENTO REDUZIDO
+
+   Regra do plano: nenhuma animação nova pode ignorar isto. As três
+   famílias acima morrem juntas, e o conteúdo fica no estado final —
+   nunca escondido.
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  [data-revelar] { opacity: 1 !important; transform: none !important; }
+}
+
+/* O palco do filtro: a prévia que não muda de lugar entre as etapas.
+
+   O teto é pela ALTURA, não pela largura, porque o story é 9:16 — numa
+   tela de celular, largura cheia vira 600px de altura e o controle da
+   etapa some abaixo da dobra. A pessoa fica olhando a foto sem ver o
+   botão que faz a coisa andar.
+
+   46svh no celular é o que sobra depois de trilha, texto do passo,
+   controle, linha de privacidade e barra de ação — tudo numa tela só.
+   svh e não vh: com vh, a barra do navegador do celular entra na conta
+   e o teto fica maior que a tela de verdade. */
+@utility palco-filtro {
+  --palco-altura: 46svh;
+  max-width: calc(var(--palco-altura) * var(--palco-prop));
+
+  @media (min-width: 1024px) {
+    --palco-altura: 70svh;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PALCO — prender a tela e pintar pela rolagem
+
+   Um palco é uma seção que fica presa enquanto a página rola, com o
+   conteúdo mudando conforme a pessoa avança. Rolar para cima desfaz
+   na mesma proporção: não é uma animação que "toca", é um estado
+   ligado à posição da rolagem.
+
+   Dois palcos usam isto: a CENA DA BANDEIRA (verde, cunha amarela,
+   disco azul) e os COMPROMISSOS (fita de cartões que anda de lado).
+
+   Por que o palco existe como mecanismo em vez de uma barra rolável
+   comum: barra rolável horizontal em desktop rouba o gesto. O
+   trackpad manda um pouco de X junto com o Y, o navegador tranca o
+   gesto no eixo horizontal, e a página inteira para de descer. Aqui
+   quem rola é sempre a página — o movimento lateral é consequência,
+   nunca um alvo de rolagem concorrente.
+
+   Por isso tudo pende de UMA variável, --palco-p, de 0 a 1:
+
+     · onde há animation-timeline, o próprio navegador escreve --palco-p
+       a partir da rolagem. Zero JavaScript, e a reversão sai de graça
+       porque não existe "tocar" — existe posição.
+     · onde não há, PalcoMotor.tsx escreve a mesma variável num listener
+       com rAF. Mesmo CSS, mesma conta, mesmo resultado.
+
+   --palco-p precisa ser REGISTRADA. Custom property sem @property é
+   texto para o interpolador: iria de 0 a 1 num salto no meio do
+   caminho, em vez de percorrer os valores.
+   ═══════════════════════════════════════════════════════════════ */
+
+@property --palco-p {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+/* O avanço de UMA camada, de 0 (ainda não começou) a 1 (completa).
+   Registrada pelo `inherits: false`, e é o que importa aqui: custom
+   property comum é herdada, e cada banda define a sua com uma janela
+   diferente. Sem o registro, o valor da banda vazaria para os filhos
+   dela — inclusive para o painel de texto que mora lá dentro. */
+@property --cena-q {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+@keyframes palco-rolagem {
+  from { --palco-p: 0; }
+  to   { --palco-p: 1; }
+}
+
+@layer components {
+  /* O trilho é alto de propósito: a altura dele É a duração do palco.
+     Cada palco declara os seus passos; o padrão de 3 dá 280svh, menos
+     de três rolagens de tela. */
+  .palco-trilho {
+    height: calc(100svh + var(--palco-passos, 3) * 60svh);
+    view-timeline: --palco block;
+  }
+
+  .palco-fixa {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+    isolation: isolate;
+    animation: palco-rolagem linear both;
+    animation-timeline: --palco;
+    /* `contain` é a janela em que o trilho cobre a tela inteira — ou
+       seja, exatamente o tempo em que a cena fica presa.
+
+       ⚠️ Ela começa 96px antes do que a intuição diz, porque o <html>
+       tem scroll-padding-top: 6rem (a barra fixa) e a linha do tempo
+       de vista respeita esse recuo. Por isso as contas abaixo abrem
+       com folga: em --palco-p 0.10 ainda é tudo verde. */
+    animation-range: contain 0% contain 100%;
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     A BANDEIRA DE RONDÔNIA — TRÊS TEMPOS
+
+       1 · AZUL      a tela inteira, e o texto fica nela um bom tempo
+       2 · AMARELO   sobe alto, tomando três quartos da tela, com o
+                     texto grande dentro dele
+       3 · A BANDEIRA  o amarelo ASSENTA na metade, o verde sobe do pé
+                     e a estrela nasce do meio — as três coisas ao
+                     mesmo tempo. Depois a estrela cresce até a tela
+                     ser só ela, com o texto no meio dela.
+
+     ⚠️ TRÊS, E NÃO QUATRO. A versão anterior dava um tempo a cada cor,
+        e a cena virava uma sequência de slides: cada forma esperava a
+        anterior terminar. Fundindo as três formas num tempo só, a
+        bandeira MONTA em vez de ser desenhada peça por peça — e sobra
+        rolagem para os dois primeiros textos ficarem legíveis.
+
+     ⚠️ CADA TEXTO MORA DENTRO DA CAMADA DA PRÓPRIA COR. Não é detalhe
+        de organização: é o efeito. O recorte que pinta a cor é o mesmo
+        que revela o texto, então o texto não "aparece sobre" a cor —
+        ele chega COM ela. O terceiro é a exceção: a camada dele é a
+        estrela, que a essa altura é a tela inteira.
+
+     ⚠️ O AMARELO SOBE ALÉM DA METADE E DEPOIS DESCE. Não é enfeite: em
+        50% ele é meia tela, e meia tela menos a barra fixa não segura
+        um texto grande. Subindo a 22% ele fica com três quartos, o
+        texto cabe, e a descida até a divisão da bandeira vira o
+        primeiro movimento do terceiro tempo — a cor achando o lugar
+        dela.
+
+     A ORDEM DE PINTURA É A DO HTML, e é a do desenho oficial: azul,
+     amarelo, verde, estrela. Nenhum z-index — quem vem depois pinta
+     por cima.
+     ═══════════════════════════════════════════════════════════ */
+
+  .cena-banda,
+  .cena-painel,
+  .cena-bandeira {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* ⚠️ O ZOOM É DA BANDEIRA INTEIRA, e não da estrela sozinha. Uma
+     versão anterior crescia só a estrela: o verde e o amarelo ficavam
+     parados no tamanho antigo enquanto ela inflava por cima, e o
+     resultado não era uma bandeira ampliada — era uma estrela grande
+     colada numa bandeira pequena, com todas as proporções quebradas.
+
+     Com a escala num invólucro que segura as quatro camadas, a
+     bandeira continua EXATA durante o zoom inteiro: o horizonte, a
+     abertura de 110,016° e o vértice da estrela no ápice do verde
+     seguem valendo em qualquer quadro. O que muda é só o quanto dela
+     cabe na janela.
+
+     A origem é o CENTRO DA ESTRELA, e não o meio da tela: é para
+     dentro dela que a câmera entra, e é isso que faz a tela terminar
+     branca. O centro fica a 0,21978 da altura da estrela acima do
+     vértice de baixo (139,14856 de 633,15595); como a altura é a
+     largura sobre 1,051462, em função de --astro-tam dá 0,20902.
+
+     ⚠️ 14 NÃO É NÚMERO REDONDO ESCOLHIDO NO OLHO. É quanto a bandeira
+        precisa crescer para o canto mais distante da tela cair dentro
+        da estrela — o pior caso medido é 11,88, num 3440×1440, e o
+        resto é margem. Menos e sobram lascas de cor nos cantos. */
+  .cena-bandeira {
+    --cena-zoom: clamp(0, calc((var(--palco-p) - 0.74) / 0.22), 1);
+    /* Acelera (z²): uma aproximação que começa depressa parece erro de
+       renderização; começando devagar e fechando rápido, ela lê como
+       câmera entrando. */
+    --cena-z: calc(var(--cena-zoom) * var(--cena-zoom));
+    transform: scale(calc(1 + 13 * var(--cena-z)));
+    transform-origin: 50% calc(50svh - 0.20902 * var(--astro-tam));
+    will-change: transform;
+  }
+
+  .palco-fixa {
+    /* O grão vem do próprio navegador, com feTurbulence: nenhum arquivo
+       no deploy e nenhuma requisição — o mesmo caminho da textura da
+       página. O feColorMatrix dessatura porque feTurbulence produz
+       estática COLORIDA, e estática colorida sobre cor saturada lava o
+       matiz em vez de dar grão. */
+    --cena-grao: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)' opacity='0.5'/%3E%3C/svg%3E");
+
+    /* O TAMANHO DA LEI: a caixa da estrela tem 47,553% da altura da
+       bandeira em largura (665,73956 de 1400), e a bandeira tem a
+       altura da tela. O teto por largura é só do celular — 47,553svh
+       de 844px dariam 401px numa tela de 390, e as pontas laterais
+       sairiam cortadas. Uma bandeira 10:7 não cabe inteira num
+       aparelho 9:19,5. */
+    --astro-tam: min(47.553svh, 78vw);
+
+    /* A meia-base da cunha verde. Sai do desenho oficial: ápice no
+       centro da bandeira (0,0) e base nos dois cantos de baixo
+       (±1000, 700) — meia-base / altura = 1000/700 = 1,428571. Aqui a
+       altura do ápice até o pé da tela é 50svh, então a meia-base é
+       71,4286svh e a abertura sai exata (110,016°) em qualquer tela.
+
+       ⚠️ NÃO É "a cunha vai até os cantos". Numa tela 16:9 isso abriria
+          121° e achataria a bandeira; num celular, 49°, uma agulha. Com
+          a abertura fixa, o que muda de tela para tela é QUANTO da
+          bandeira cabe na janela — que é o que acontece de verdade ao
+          pendurar uma bandeira 10:7 numa moldura de outra proporção. */
+    --cena-base: 71.4286svh;
+
+    /* O TERCEIRO TEMPO, e as três formas pendem dele: o amarelo assenta,
+       o verde sobe e a estrela nasce na mesma janela de rolagem. Uma
+       variável só para as três é o que garante que elas cheguem
+       juntas — com três contas separadas, mexer numa desalinha as
+       outras duas e o defeito só aparece no meio do movimento. */
+    --cena-monta: clamp(0, calc((var(--palco-p) - 0.54) / 0.20), 1);
+  }
+
+  /* Dois planos em toda banda: luz e cor.
+
+     ⚠️ O GRÃO NÃO ESTÁ AQUI, e saiu daqui de propósito. As bandas são
+        escaladas quatorze vezes no zoom, e o grão escalaria junto:
+        cada ponto de ruído viraria uma mancha de quase três mil
+        pixels. Ele passou a morar numa camada só, FORA do invólucro
+        que escala — ver .cena-grao. */
+  .cena-banda {
+    background-repeat: no-repeat, no-repeat;
+  }
+
+  /* ── 1. AZUL — a base ────────────────────────────────────────
+     Sem recorte nenhum: já está inteira quando a cena abre e fica por
+     baixo de tudo até o fim. */
+  .cena-azul {
+    background-color: var(--color-azul-escuro);
+    background-image:
+      radial-gradient(130% 80% at 50% 0%,
+        color-mix(in srgb, var(--color-azul) 60%, transparent) 0%, transparent 66%),
+      linear-gradient(172deg, var(--color-azul-escuro) 0%, var(--color-azul-noite) 100%);
+  }
+
+  /* ── 2. AMARELO — sobe alto, depois assenta ──────────────────
+     A aresta chega INCLINADA e assenta reta: enquanto sobe, o canto
+     esquerdo vem 6% atrás do direito, e a diferença zera quando ele
+     encontra a linha da bandeira. Sem isso é um retângulo subindo —
+     correto e morto. Com isso ele tem direção, e a inclinação é a
+     mesma dos chanfros do resto do site. */
+  .cena-amarelo {
+    --cena-q: clamp(0, calc((var(--palco-p) - 0.24) / 0.22), 1);
+    /* 100% (fora da tela) → 22% (três quartos) → 50% (a bandeira). */
+    --cena-y: calc(100% - var(--cena-q) * 78% + var(--cena-monta) * 28%);
+    --cena-inclina: calc((1 - var(--cena-q)) * 6% + var(--cena-monta) * 0%);
+    background-color: var(--color-amarelo);
+    background-image:
+      radial-gradient(120% 90% at 50% 100%, rgb(0 0 0 / 0.14) 0%, transparent 70%),
+      linear-gradient(172deg,
+        color-mix(in srgb, var(--color-amarelo) 88%, #fff) 0%,
+        var(--color-amarelo) 100%);
+    clip-path: polygon(
+      0% calc(var(--cena-y) + var(--cena-inclina)),
+      100% calc(var(--cena-y) - var(--cena-inclina)),
+      100% 100%,
+      0% 100%
+    );
+  }
+
+  /* ── 3. VERDE — a cunha ──────────────────────────────────────
+     Base e ápice crescem no mesmo passo, então a abertura é constante:
+     o olho lê UMA forma crescendo do pé da tela, e não uma forma que
+     muda de proporção no caminho.
+
+     ⚠️ O QUARTO PONTO (50% 100%) É REDUNDANTE — está sobre a aresta
+        entre o primeiro e o terceiro. Existe para a cunha ter a MESMA
+        contagem de pontos da faixa amarela: clip-path só interpola
+        entre formas do mesmo tipo e com o mesmo número de pontos.
+
+     Em --cena-monta 0 o polígono degenera numa reta de área zero. É
+     válido (recorta tudo) — ao contrário de raio negativo, que
+     invalidaria a função inteira e faria a camada aparecer de uma vez. */
+  .cena-verde {
+    background-color: var(--color-verde-escuro);
+    background-image:
+      radial-gradient(120% 80% at 50% 42%,
+        color-mix(in srgb, var(--color-verde) 72%, transparent) 0%, transparent 72%),
+      linear-gradient(172deg, var(--color-verde) 0%, var(--color-verde-escuro) 100%);
+    clip-path: polygon(
+      calc(50% - var(--cena-monta) * var(--cena-base)) 100%,
+      50% calc(100% - var(--cena-monta) * 50%),
+      calc(50% + var(--cena-monta) * var(--cena-base)) 100%,
+      50% 100%
+    );
+  }
+
+  /* ── 4. A ESTRELA ────────────────────────────────────────────
+     ⚠️ A GEOMETRIA É A DO DESENHO OFICIAL, ponto por ponto, e não uma
+        estrela de cinco pontas qualquer. A razão entre os raios interno
+        e externo da estrela de Rondônia é 139,14856/350 = 0,39757 — o
+        pentagrama "de livro" usa sen18°/sen126° = 0,38197. São 4% na
+        largura dos braços, e é a diferença entre a estrela da bandeira
+        e uma estrela parecida com ela.
+
+     ⚠️ O QUE A ANCORA É O VÉRTICE INTERNO DE BAIXO, não o centro. No
+        desenho oficial esse vértice — o vão entre as duas pernas — cai
+        EXATAMENTE em (0,0), o mesmo ponto do ápice da cunha e da
+        divisão azul/amarelo. É por isso que na bandeira o verde encosta
+        perfeitamente na base da estrela e o amarelo começa um pouco
+        abaixo do meio dela: 27,26 pontos percentuais abaixo. O vértice
+        fica a 77,2556% da altura da caixa; ancorá-lo no centro da tela
+        dá as duas relações de graça, em qualquer tamanho e em
+        qualquer tela.
+
+     ⚠️ ELA FICA POR CIMA DO VERDE, e isso É o desenho oficial: no
+        arquivo da bandeira a estrela é o último caminho pintado.
+        Parece errado — a intuição diz que a cunha deveria cobrir as
+        pernas dela. Não precisa: as duas pontas de baixo caem
+        EXATAMENTE sobre as arestas da cunha (205,72/144,01 = 1,42857 =
+        1000/700, a mesma inclinação), e o vão entre as pernas tem
+        exatos 110,016°, que é a abertura da cunha. As duas formas se
+        encaixam sem sobra e sem falha. Por baixo, as pernas dela
+        sumiriam — e na bandeira elas são brancas.
+
+     ⚠️ ELA NASCE DO MEIO, sem viajar e sem crescer sozinha. Duas
+        versões anteriores erraram aqui: uma a fazia subir pela quina do
+        verde até o ápice (bonito, e um quarto tempo disfarçado, porque
+        a viagem exigia rolagem só dela); outra a fazia inflar até tomar
+        a tela enquanto o verde e o amarelo ficavam parados — e aí não
+        era uma bandeira ampliada, era uma estrela grande colada numa
+        bandeira pequena.
+
+        Aqui ela só nasce no lugar, dentro do mesmo tempo em que o
+        amarelo assenta e o verde sobe. Quem cresce depois é a BANDEIRA
+        INTEIRA, no invólucro .cena-bandeira. */
+  .cena-astro {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: var(--astro-tam);
+    /* 665,73956 × 633,15595 no desenho oficial. */
+    aspect-ratio: 665.73956 / 633.15595;
+    translate: -50% -77.2556%;
+    background-color: #fff;
+
+    clip-path: polygon(
+      50.0000% 0.0000%,
+      62.2855% 37.4989%,
+      100.0000% 38.1966%,
+      69.8784% 62.0699%,
+      80.9017% 100.0000%,
+      50.0000% 77.2556%,
+      19.0983% 100.0000%,
+      30.1216% 62.0699%,
+      0.0000% 38.1966%,
+      37.7145% 37.4989%
+    );
+
+    /* Nasce um pouco depois de o amarelo e o verde começarem a se
+       mexer, e termina junto com eles: é a última coisa a aparecer e a
+       que fecha a bandeira. */
+    --cena-q: clamp(0, calc((var(--palco-p) - 0.58) / 0.16), 1);
+
+    /* Desacelera ao chegar (2q − q²): o palco entrega posição LINEAR, e
+       uma estrela que cresce em velocidade constante e para de supetão
+       não assenta — ela trava. */
+    --cena-e: calc(var(--cena-q) * (2 - var(--cena-q)));
+
+    /* 72° e não 90° nem 45°: a estrela de cinco pontas tem simetria de
+       rotação de 72°, então girar exatamente essa volta faz a silhueta
+       de partida ser idêntica à de chegada. O olho vê um giro que
+       RESOLVE, em vez de um objeto torto se endireitando.
+
+       A origem é o vértice de baixo — o ponto que encosta no ápice do
+       verde —, para ele não deslizar enquanto ela cresce e gira. */
+    transform: rotate(calc((1 - var(--cena-e)) * -72deg)) scale(var(--cena-e));
+    transform-origin: 50% 77.2556%;
+  }
+
+  /* O GRÃO DA CENA INTEIRA, numa camada só.
+
+     ⚠️ FORA DO INVÓLUCRO QUE ESCALA, e é a razão de ele existir como
+        elemento em vez de ser mais uma camada no background de cada
+        banda (que é como ele começou). No zoom a bandeira cresce
+        quatorze vezes; o grão cresceria junto, e um ponto de ruído de
+        200px viraria uma mancha de 2800. Aqui ele fica preso ao
+        tamanho da tela e o passo não muda do primeiro ao último quadro.
+
+     `multiply` e não `overlay` porque esta camada tem de servir às
+     quatro superfícies da cena: overlay dá grão sobre o azul e sobre o
+     verde, e não faz absolutamente nada sobre o branco da estrela —
+     que é justamente onde a cena termina.
+
+     A opacidade é baixa e CONSTANTE: com ruído de média 0,5, multiply a
+     0,18 escurece o fundo em ~9% e devolve o grão. Mais que isso e a
+     página inteira parece suja. */
+  .cena-grao {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: var(--cena-grao);
+    background-size: 200px 200px;
+    mix-blend-mode: multiply;
+    opacity: 0.18;
+  }
+
+  /* ── OS TRÊS TEXTOS ──────────────────────────────────────────
+     Cada um entra e sai por duas rampas próprias, e as janelas são
+     escolhidas para que dois nunca estejam legíveis ao mesmo tempo —
+     eles se cruzam a meio caminho, um subindo e o outro saindo.
+
+     A visibilidade é opacidade E, nas bandas recortadas, o recorte da
+     própria cor. As duas coisas juntas: sem a opacidade, o texto do
+     amarelo continuaria lá quando a cor assentasse por baixo dele; sem
+     o recorte, ele apareceria antes de a cor chegar nele. */
+  .cena-painel {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    --cena-in: 1;
+    --cena-out: 0;
+    opacity: calc(var(--cena-in) - var(--cena-out));
+  }
+
+  /* Todo texto SOBE: chega de baixo com a cor dele e sai por cima
+     quando a próxima chega. Um eixo só, porque é o eixo em que esta
+     bandeira se monta — a faixa sobe, a cunha sobe, a estrela cresce. */
+  .cena-texto {
+    --cena-d: calc((1 - var(--cena-in)) * 6svh - var(--cena-out) * 6svh);
+    transform: translate3d(0, var(--cena-d), 0);
+    will-change: transform;
+  }
+
+  /* 1 · no azul, no meio da tela. Sem rampa de entrada: já está lá
+     quando a cena abre, e fica um quarto da rolagem — é o texto que
+     tem mais tempo de tela dos três. */
+  .cena-painel-1 {
+    align-items: center;
+    color: var(--color-branco);
+    --cena-out: clamp(0, calc((var(--palco-p) - 0.22) / 0.08), 1);
+  }
+
+  /* 2 · no amarelo, centrado nos três quartos que ele tomou. Texto
+     azul-escuro: é a única cor da marca que passa sobre o amarelo
+     (10,2:1). Sai antes de a cor começar a assentar. */
+  .cena-painel-2 {
+    align-items: center;
+    padding-top: 22svh;
+    color: var(--color-azul-escuro);
+    --cena-in: clamp(0, calc((var(--palco-p) - 0.28) / 0.08), 1);
+    --cena-out: clamp(0, calc((var(--palco-p) - 0.50) / 0.06), 1);
+  }
+
+  /* 3 · DENTRO DA ESTRELA, depois que ela tomou a tela. É o único
+     painel sem cor de fundo própria: o fundo dele é a estrela, e por
+     isso o texto é azul-escuro — sobre branco, 13,5:1.
+
+     ⚠️ ENTRA ANTES DE O BRANCO FECHAR NOS CANTOS, e é de propósito. O
+        centro da tela já é branco muito antes dos cantos, e este texto
+        é central. Esperar o fechamento completo deixava três
+        centésimos de TELA BRANCA VAZIA entre uma coisa e outra.
+
+     O recuo de baixo põe o texto na altura do CENTRO da estrela, que
+     está 9,94% acima do meio da tela. Não é o meio da tela: é o meio
+     da coisa que está em volta dele. */
+  .cena-painel-3 {
+    align-items: center;
+    padding-top: 5.5rem;
+    padding-bottom: 20svh;
+    color: var(--color-azul-escuro);
+    --cena-in: clamp(0, calc((var(--palco-p) - 0.86) / 0.06), 1);
+  }
+
+
+  /* ── Fita de cartões ──────────────────────────────────────────
+     Uma fila que anda de lado conforme a página desce.
+
+     A conta é (100vw - 100%): em translate, porcentagem se resolve
+     contra o PRÓPRIO elemento, então 100% é a largura da fita e a
+     diferença é exatamente o que sobra para fora da tela. Sem
+     medir nada em JavaScript, e continua certo quando a campanha
+     acrescenta ou tira um compromisso pelo painel. */
+  .palco-fita {
+    display: flex;
+    width: max-content;
+    /* Mesma calha do container-lp: o primeiro cartão nasce alinhado ao
+       título, não colado na borda. A conta é a do container repetida
+       porque aqui a fita é mais larga que a tela e não pode usá-lo. */
+    padding-inline: max(1.25rem, calc((100vw - 75rem) / 2 + 1.25rem));
+    /* O clamp segura a fita parada no começo. Sem ele a fita já entra
+       andando: o palco não abre em --palco-p 0 exato, por causa do
+       scroll-padding de 96px que a barra fixa exige. */
+    transform: translate3d(
+      calc(clamp(0, (var(--palco-p) - 0.08) / 0.84, 1) * (100vw - 100%)),
+      0,
+      0
+    );
+    will-change: transform;
+  }
+
+  @media (min-width: 768px) {
+    .palco-fita { padding-inline: max(2rem, calc((100vw - 75rem) / 2 + 2rem)); }
+  }
+}
+
+/* ── Onde não existe animation-timeline ────────────────────────
+   A cena vira três blocos empilhados, cada um com a sua cor e o seu
+   texto. Perde o efeito, mantém a informação — que é o que não pode
+   faltar: com --palco-p parado em 0, dois terços do texto ficariam
+   recortados para fora da tela, invisíveis para sempre.
+
+   Este é o estado de PARTIDA nesses navegadores, e não algo que o
+   JavaScript desfaz depois. Fosse ao contrário — estático no HTML,
+   dinâmico ao hidratar — todo mundo veria a página saltar de três
+   telas para uma. Aqui só recalcula quem não tem suporte E tem JS, e
+   quem não tem nenhum dos dois lê os três textos empilhados.
+
+   O :not(.palco-viva) é o que evita repetir os recortes aqui dentro:
+   quando PalcoMotor acende a classe, estas regras simplesmente param
+   de valer e as de cima voltam a mandar. */
+
+@supports not (animation-timeline: view()) {
+  [data-palco]:not(.palco-viva) .palco-trilho { height: auto; }
+
+  [data-palco]:not(.palco-viva) .palco-fixa {
+    position: static;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* Sem palco, a cena vira quatro blocos de cor empilhados, cada um
+     com o texto dele dentro — que é a mesma leitura da versão animada,
+     sem o movimento.
+
+     ⚠️ AS BANDAS NÃO PODEM SER ESCONDIDAS AQUI. Elas deixaram de ser
+        só desenho: três dos quatro textos moram DENTRO delas, e um
+        `display: none` na banda leva o texto junto. O recorte é que
+        sai — a cor fica. */
+  [data-palco]:not(.palco-viva) .cena-banda {
+    position: static;
+    clip-path: none;
+  }
+
+  /* A estrela e o grão somem: sozinha, entre blocos de texto e sem a
+     bandeira em volta, ela é um adesivo — e o grão é o acabamento de
+     uma tela branca que aqui não existe. */
+  [data-palco]:not(.palco-viva) .cena-astro,
+  [data-palco]:not(.palco-viva) .cena-grao { display: none; }
+
+  /* ⚠️ O `opacity: 1` NÃO É ZELO. Quem esconde o texto vencido nesta
+     cena é a conta de opacidade das rampas, e sem rolagem --palco-p
+     fica em 0: três dos quatro painéis ficariam invisíveis, sem erro
+     nenhum na tela. O mesmo vale para o `clip-path` do quarto, que sem
+     rolagem é um círculo de raio zero. Estas duas linhas são o que
+     separa uma degradação graciosa de três quartos da cena sumida. */
+  [data-palco]:not(.palco-viva) .cena-painel {
+    position: static;
+    min-height: 62svh;
+    padding-block: 4rem;
+    opacity: 1;
+    clip-path: none;
+  }
+
+  /* Sem rolagem não há zoom: o invólucro volta ao tamanho natural. */
+  [data-palco]:not(.palco-viva) .cena-bandeira {
+    position: static;
+    transform: none;
+  }
+
+  /* ⚠️ O TERCEIRO PRECISA DE FUNDO BRANCO, e não escuro. A banda dele,
+     na versão animada, é a própria estrela — por isso o texto dele é
+     azul-escuro. Com fundo escuro aqui seria azul-escuro sobre
+     azul-escuro: o painel existiria, ocuparia a altura dele e não
+     mostraria uma palavra. */
+  [data-palco]:not(.palco-viva) .cena-painel-3 {
+    background-color: var(--color-branco);
+  }
+
+  [data-palco]:not(.palco-viva) .cena-texto { transform: none; }
+
+  /* A fita vira grade: mesma informação, sem o movimento. */
+  [data-palco]:not(.palco-viva) .palco-fita {
+    display: grid;
+    width: auto;
+    padding-inline: 0;
+    gap: 1.25rem;
+    transform: none;
+  }
+
+  @media (min-width: 640px) {
+    [data-palco]:not(.palco-viva) .palco-fita { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  [data-palco]:not(.palco-viva) .palco-fita > * { width: auto; }
+}
+
+/* Movimento reduzido: mesma pilha estática, e nada pode reacendê-la.
+   A regra global lá de cima zera animation-duration, o que numa
+   animação de rolagem significa "pula para o fim" — só o azul
+   sobraria. Aqui a cena é desmontada antes de isso acontecer. */
+@media (prefers-reduced-motion: reduce) {
+  .palco-trilho { height: auto !important; }
+
+  .palco-fixa {
+    position: static !important;
+    height: auto !important;
+    overflow: visible !important;
+    animation: none !important;
+  }
+
+  .cena-banda {
+    position: static !important;
+    clip-path: none !important;
+  }
+
+  .cena-astro,
+  .cena-grao { display: none !important; }
+
+  /* Mesma armadilha do bloco acima, e aqui pior: a regra global de
+     movimento reduzido zera animation-duration, o que numa animação de
+     rolagem significa "pula para o fim" — --palco-p iria a 1, e aí só
+     o último painel sobraria visível. */
+  .cena-painel {
+    position: static !important;
+    min-height: 62svh !important;
+    padding-block: 4rem !important;
+    opacity: 1 !important;
+    clip-path: none !important;
+  }
+
+  /* ⚠️ E O ZOOM TEM DE SER NEUTRALIZADO AQUI. A regra global de
+     movimento reduzido zera animation-duration, o que numa animação de
+     rolagem significa "pula para o fim": --palco-p iria a 1 e o
+     invólucro ficaria em escala 14, com a bandeira quatorze vezes
+     maior que a tela. */
+  .cena-bandeira {
+    position: static !important;
+    transform: none !important;
+  }
+
+  /* Branco, e não escuro: o texto deste painel é azul-escuro porque na
+     versão animada o fundo dele é a estrela. */
+  .cena-painel-3 { background-color: var(--color-branco); }
+
+  .cena-texto { transform: none !important; }
+
+  .palco-fita {
+    display: grid !important;
+    width: auto !important;
+    padding-inline: 0 !important;
+    gap: 1.25rem;
+    transform: none !important;
+  }
+
+  .palco-fita > * { width: auto !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PRIMEIRA DOBRA — profundidade pela rolagem
+
+   ⚠️ O QUADRO SAIU. Era um retângulo arredondado atrás da foto que
+   encolhia pelo topo enquanto a foto crescia — duas animações em
+   sentidos opostos, ancoradas no mesmo pé, e o olho lia isso como uma
+   coisa vindo para frente enquanto a outra recuava.
+
+   A campanha pediu a dobra sem retângulo, com as figuras recortadas
+   plantadas direto no fundo. Sem o quadro não há par, e uma animação
+   sozinha não é profundidade — é só uma foto que cresce. Ficou só o
+   avanço leve da figura da frente, o suficiente para a dobra não ser
+   uma imagem parada.
+
+   Presa à rolagem da página inteira, e não à entrada do elemento em
+   tela: a primeira dobra JÁ está visível quando a página abre, então
+   uma linha do tempo de "entrada" começaria com o efeito no meio.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ⚠️ AS DUAS CRESCEM, e não uma cresce enquanto a outra recua.
+   A primeira versão fazia a de trás encolher para simular perspectiva,
+   e o efeito era o contrário do pretendido: quem está atrás sumindo
+   enquanto quem está na frente avança lê como duas coisas separadas se
+   afastando, não como um grupo se aproximando.
+
+   Crescendo as duas, com a da frente crescendo MAIS, o grupo inteiro
+   parece vir na direção de quem lê — e a diferença entre 1.07 e 1.03
+   é o que mantém a profundidade entre elas. */
+@keyframes hero-cresce  { to { transform: scale(1.07); } }
+@keyframes hero-cresce-atras { to { transform: scale(1.03); } }
+
+@layer components {
+  .hero-foto,
+  .hero-fundo {
+    /* Plantadas no chão: o pé não se mexe, só o topo. */
+    transform-origin: 50% 100%;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .hero-foto,
+      .hero-fundo {
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: scroll(root block);
+        animation-range: 0 72vh;
+        will-change: transform;
+      }
+
+      .hero-foto  { animation-name: hero-cresce; }
+      .hero-fundo { animation-name: hero-cresce-atras; }
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FAIXA CORRIDA
+   ═══════════════════════════════════════════════════════════════ */
+
+@keyframes faixa-correr {
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+@layer components {
+  .faixa-trilha {
+    display: flex;
+    width: max-content;
+    align-items: center;
+    animation: faixa-correr 38s linear infinite;
+    will-change: transform;
+  }
+
+  /* Parar com o ponteiro em cima é acessibilidade, não enfeite: texto
+     em movimento é uma das reclamações mais antigas de quem tem
+     dificuldade de leitura, e um jeito de parar precisa existir. */
+  @media (pointer: fine) {
+    .faixa:hover .faixa-trilha { animation-play-state: paused; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faixa-trilha { animation: none !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FOLHA — bottom sheet no celular, caixa centralizada no desktop
+
+   É um <dialog> nativo. O que ele entrega de graça e um modal caseiro
+   erra: foco preso dentro, Escape fechando, e o resto da página
+   escondido do leitor de tela.
+
+   ⚠️ display vai em .folha[open], NUNCA em .folha. O navegador esconde
+      o dialog fechado com `dialog:not([open]) { display: none }` na
+      folha de estilo dele — e estilo de autor ganha de estilo de
+      navegador, por especificidade que seja. Um `display: flex` solto
+      aqui deixaria a folha visível de portas fechadas.
+   ═══════════════════════════════════════════════════════════════ */
+
+@keyframes folha-sobe {
+  from { transform: translate3d(0, 100%, 0); }
+  to   { transform: none; }
+}
+
+@keyframes folha-fundo {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@layer components {
+  .folha {
+    position: fixed;
+    inset: auto 0 0 0;
+    width: 100%;
+    max-width: 100%;
+    max-height: 88svh;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+    background-color: var(--color-branco);
+    color: var(--color-tinta);
+    box-shadow: var(--shadow-alta);
+    /* O iPhone tem indicador de home por cima do rodapé da folha. */
+    padding-bottom: env(safe-area-inset-bottom);
+    overflow: hidden;
+  }
+
+  .folha[open] {
+    display: flex;
+    flex-direction: column;
+    animation: folha-sobe 0.34s var(--ease-saida);
+  }
+
+  .folha::backdrop {
+    background-color: rgb(1 36 64 / 0.5);
+    animation: folha-fundo 0.24s var(--ease-saida);
+  }
+
+  @media (min-width: 768px) {
+    .folha {
+      inset: 0;
+      margin: auto;
+      max-width: 44rem;
+      max-height: 78svh;
+      border-radius: var(--radius-xl);
+      padding-bottom: 0;
+    }
+
+    /* No desktop ela não sobe do rodapé — aparece onde já está. */
+    .folha[open] { animation: surge 0.22s var(--ease-saida); }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .folha[open],
+  .folha::backdrop { animation: none !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MAPA DO ESTADO — o relevo e o ponteiro
+   ═══════════════════════════════════════════════════════════════ */
+
+@layer components {
+  .mapa-mun {
+    transition:
+      transform 0.26s var(--ease-mola),
+      opacity 0.2s var(--ease-saida);
+  }
+
+  /* O bloco inteiro sobe: topo e parede juntos, como uma peça só.
+     O deslocamento vem em variável já pré-distorcida pela matriz do
+     mapa — translateY puro sairia torto, seguindo a inclinação da
+     mesa em vez da vertical da tela. */
+  @media (pointer: fine) {
+    .mapa-mun { cursor: pointer; }
+
+    .mapa-mun:hover {
+      transform: translate(var(--erguer-x), var(--erguer-y));
+    }
+
+    .mapa-mun:hover .mapa-topo { filter: brightness(1.08); }
+  }
+
+  .mapa-mun.escolhida {
+    transform: translate(var(--erguer-x), var(--erguer-y));
+  }
+
+  .mapa-mun.escolhida .mapa-topo {
+    stroke: var(--color-amarelo);
+    stroke-opacity: 1;
+    stroke-width: 5;
+  }
+
+  /* Desfoque de área grande é caro em GPU de celular fraco, e a sombra
+     é justamente o detalhe que menos se nota numa tela de 375px. */
+  @media (max-width: 767px) {
+    .mapa-sombra { display: none; }
+  }
+
+  /* Escolhida uma cidade, as outras recuam. O contraste é o que
+     responde "é esta mesma?" sem precisar de texto nenhum. */
+  .mapa-area-toque[data-escolhida] .mapa-mun:not(.escolhida) { opacity: 0.5; }
+}
+
+/* O nome que aparece com o ponteiro. Fora de @layer para não brigar
+   com utilitária nenhuma: ele é posicionado por JavaScript e precisa
+   que estas cinco linhas valham sempre. */
+.mapa-rotulo {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  transform: translate(-50%, -100%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mapa-mun { transition: none !important; }
+}

@@ -1,0 +1,52 @@
+# ═══════════════════════════════════════════════════════════════
+# SEGREDOS — o que não pode ir para o GitHub de jeito nenhum
+#
+# ⚠️ O `.env.local` carrega a SUPABASE_SERVICE_ROLE_KEY, que ignora
+#    todas as regras de RLS: quem tem essa chave manda no banco
+#    inteiro, incluindo os links dos 52 grupos de WhatsApp.
+#
+#    Segredo commitado não some com um `git rm`: ele fica no histórico
+#    e continua acessível por qualquer clone. Se algum dia isto
+#    escapar, o conserto NÃO é apagar o arquivo — é rotacionar a chave
+#    no Supabase (Project Settings ▸ API ▸ Reset).
+# ═══════════════════════════════════════════════════════════════
+.env
+.env.*
+!.env.example
+
+# ═══════════════════════════════════════════════════════════════
+# DEPENDÊNCIAS E BUILD
+# ═══════════════════════════════════════════════════════════════
+node_modules/
+.next/
+out/
+build/
+dist/
+*.tsbuildinfo
+
+# ═══════════════════════════════════════════════════════════════
+# FERRAMENTAS E SISTEMA
+# ═══════════════════════════════════════════════════════════════
+.DS_Store
+.vercel/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.idea/
+.vscode/
+
+# ═══════════════════════════════════════════════════════════════
+# ⚠️ O QUE **NÃO** ESTÁ IGNORADO, E POR QUÊ
+#
+# · `data/grupos.local.json` — parece link de grupo, mas não é: são os
+#   52 municípios em estado "em breve", sem URL nenhuma. É o fallback
+#   que mantém a página de pé sem banco. Os links de verdade vivem
+#   SÓ no Supabase, e nunca em arquivo — se vazassem, raspariam os 52
+#   grupos de uma vez.
+#
+# · `MARCA/` — a arte oficial da campanha. Vai junto de propósito:
+#   quem clonar o repositório precisa dela para subir pelo painel.
+#
+# · `.claude/launch.json` — só diz como subir o dev server.
+# ═══════════════════════════════════════════════════════════════

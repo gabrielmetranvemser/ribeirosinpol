@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920" role="img" aria-label="Moldura de story">
+  <title>Moldura de story — NOME DO CANDIDATO 00000</title>
+
+  <!--
+    REDE DE SEGURANÇA. A arte final entra pelo painel, em Imagens, e
+    passa a valer sem deploy. Esta fica para o caso de não entrar.
+
+    Nada aqui avisa que é provisória, e é de propósito: carimbar
+    "moldura de exemplo" dentro da imagem EXPORTADA faria quem gerasse
+    uma foto postar isso no story. O único aviso carimbado é o de CNPJ
+    faltando, porque esse é problema legal e não estético.
+
+    Gerado por scripts/gerar-molduras.mjs — não editar à mão.
+  -->
+
+  <defs>
+    <linearGradient id="veu" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#013a67" stop-opacity="0"/>
+      <stop offset="42%"  stop-color="#013a67" stop-opacity="0.82"/>
+      <stop offset="100%" stop-color="#013a67" stop-opacity="0.97"/>
+    </linearGradient>
+  </defs>
+
+  <!-- O véu sobe em degradê em vez de cortar reto: borda dura no meio
+       de uma foto lê como tarja, e ninguém posta uma tarja. -->
+  <rect x="0" y="1080" width="1080" height="840" fill="url(#veu)"/>
+
+  <text x="88" y="1476" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" letter-spacing="10" fill="#fbd83f">EU APOIO</text>
+  <text x="88" y="1580" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="76" font-weight="700" letter-spacing="-2" fill="#ffffff">NOME DO CANDIDATO</text>
+  <text x="88" y="1740" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="150" font-weight="700" letter-spacing="-6" fill="#fbd83f">00000</text>
+  <text x="88" y="1852" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="22" fill="#ffffff" fill-opacity="0.55">⚠ SEM CNPJ — NÃO PUBLICAR ESTA MOLDURA</text>
+
+  <rect x="0" y="1900" width="1080" height="20" fill="#fbd83f"/>
+</svg>

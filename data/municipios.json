@@ -1,0 +1,314 @@
+[
+  {
+    "slug": "alta-floresta-doeste",
+    "nome": "Alta Floresta D'Oeste",
+    "latitude": -12.472449,
+    "longitude": -62.274992
+  },
+  {
+    "slug": "alto-alegre-dos-parecis",
+    "nome": "Alto Alegre dos Parecis",
+    "latitude": -12.592371,
+    "longitude": -61.878909
+  },
+  {
+    "slug": "alto-paraiso",
+    "nome": "Alto Paraíso",
+    "latitude": -9.650896,
+    "longitude": -63.3948
+  },
+  {
+    "slug": "alvorada-doeste",
+    "nome": "Alvorada D'Oeste",
+    "latitude": -11.309888,
+    "longitude": -62.545116
+  },
+  {
+    "slug": "ariquemes",
+    "nome": "Ariquemes",
+    "latitude": -9.952527,
+    "longitude": -62.956006
+  },
+  {
+    "slug": "buritis",
+    "nome": "Buritis",
+    "latitude": -10.052764,
+    "longitude": -63.94046
+  },
+  {
+    "slug": "cabixi",
+    "nome": "Cabixi",
+    "latitude": -13.474839,
+    "longitude": -60.641062
+  },
+  {
+    "slug": "cacaulandia",
+    "nome": "Cacaulândia",
+    "latitude": -10.331585,
+    "longitude": -62.9865
+  },
+  {
+    "slug": "cacoal",
+    "nome": "Cacoal",
+    "latitude": -11.301189,
+    "longitude": -61.325362
+  },
+  {
+    "slug": "campo-novo-de-rondonia",
+    "nome": "Campo Novo de Rondônia",
+    "latitude": -10.487024,
+    "longitude": -63.800134
+  },
+  {
+    "slug": "candeias-do-jamari",
+    "nome": "Candeias do Jamari",
+    "latitude": -8.887473,
+    "longitude": -63.326175
+  },
+  {
+    "slug": "castanheiras",
+    "nome": "Castanheiras",
+    "latitude": -11.470312,
+    "longitude": -61.88063
+  },
+  {
+    "slug": "cerejeiras",
+    "nome": "Cerejeiras",
+    "latitude": -13.202918,
+    "longitude": -61.259708
+  },
+  {
+    "slug": "chupinguaia",
+    "nome": "Chupinguaia",
+    "latitude": -12.53726,
+    "longitude": -60.897885
+  },
+  {
+    "slug": "colorado-do-oeste",
+    "nome": "Colorado do Oeste",
+    "latitude": -13.159229,
+    "longitude": -60.548833
+  },
+  {
+    "slug": "corumbiara",
+    "nome": "Corumbiara",
+    "latitude": -12.926786,
+    "longitude": -61.090334
+  },
+  {
+    "slug": "costa-marques",
+    "nome": "Costa Marques",
+    "latitude": -12.146506,
+    "longitude": -64.058826
+  },
+  {
+    "slug": "cujubim",
+    "nome": "Cujubim",
+    "latitude": -9.170317,
+    "longitude": -62.565849
+  },
+  {
+    "slug": "espigao-doeste",
+    "nome": "Espigão D'Oeste",
+    "latitude": -11.351585,
+    "longitude": -60.784916
+  },
+  {
+    "slug": "governador-jorge-teixeira",
+    "nome": "Governador Jorge Teixeira",
+    "latitude": -10.748899,
+    "longitude": -63.184275
+  },
+  {
+    "slug": "guajara-mirim",
+    "nome": "Guajará-Mirim",
+    "latitude": -11.304492,
+    "longitude": -64.537871
+  },
+  {
+    "slug": "itapua-do-oeste",
+    "nome": "Itapuã do Oeste",
+    "latitude": -9.172524,
+    "longitude": -63.045062
+  },
+  {
+    "slug": "jaru",
+    "nome": "Jaru",
+    "latitude": -10.590212,
+    "longitude": -62.582605
+  },
+  {
+    "slug": "ji-parana",
+    "nome": "Ji-Paraná",
+    "latitude": -10.46213,
+    "longitude": -61.757028
+  },
+  {
+    "slug": "machadinho-doeste",
+    "nome": "Machadinho D'Oeste",
+    "latitude": -9.204703,
+    "longitude": -62.01048
+  },
+  {
+    "slug": "ministro-andreazza",
+    "nome": "Ministro Andreazza",
+    "latitude": -11.159817,
+    "longitude": -61.568563
+  },
+  {
+    "slug": "mirante-da-serra",
+    "nome": "Mirante da Serra",
+    "latitude": -11.076651,
+    "longitude": -62.850701
+  },
+  {
+    "slug": "monte-negro",
+    "nome": "Monte Negro",
+    "latitude": -10.212642,
+    "longitude": -63.372216
+  },
+  {
+    "slug": "nova-brasilandia-doeste",
+    "nome": "Nova Brasilândia D'Oeste",
+    "latitude": -11.643381,
+    "longitude": -62.280149
+  },
+  {
+    "slug": "nova-mamore",
+    "nome": "Nova Mamoré",
+    "latitude": -10.381655,
+    "longitude": -64.629358
+  },
+  {
+    "slug": "nova-uniao",
+    "nome": "Nova União",
+    "latitude": -10.888805,
+    "longitude": -62.532472
+  },
+  {
+    "slug": "novo-horizonte-do-oeste",
+    "nome": "Novo Horizonte do Oeste",
+    "latitude": -11.680258,
+    "longitude": -62.082954
+  },
+  {
+    "slug": "ouro-preto-do-oeste",
+    "nome": "Ouro Preto do Oeste",
+    "latitude": -10.609204,
+    "longitude": -62.171609
+  },
+  {
+    "slug": "parecis",
+    "nome": "Parecis",
+    "latitude": -12.262514,
+    "longitude": -61.415016
+  },
+  {
+    "slug": "pimenta-bueno",
+    "nome": "Pimenta Bueno",
+    "latitude": -11.894112,
+    "longitude": -60.830371
+  },
+  {
+    "slug": "pimenteiras-do-oeste",
+    "nome": "Pimenteiras do Oeste",
+    "latitude": -13.173821,
+    "longitude": -61.545973
+  },
+  {
+    "slug": "porto-velho",
+    "nome": "Porto Velho",
+    "latitude": -9.152823,
+    "longitude": -64.303223
+  },
+  {
+    "slug": "presidente-medici",
+    "nome": "Presidente Médici",
+    "latitude": -11.166126,
+    "longitude": -61.877667
+  },
+  {
+    "slug": "primavera-de-rondonia",
+    "nome": "Primavera de Rondônia",
+    "latitude": -11.880046,
+    "longitude": -61.316354
+  },
+  {
+    "slug": "rio-crespo",
+    "nome": "Rio Crespo",
+    "latitude": -9.64515,
+    "longitude": -62.792138
+  },
+  {
+    "slug": "rolim-de-moura",
+    "nome": "Rolim de Moura",
+    "latitude": -11.732814,
+    "longitude": -61.772533
+  },
+  {
+    "slug": "santa-luzia-doeste",
+    "nome": "Santa Luzia D'Oeste",
+    "latitude": -12.026698,
+    "longitude": -61.700825
+  },
+  {
+    "slug": "sao-felipe-doeste",
+    "nome": "São Felipe D'Oeste",
+    "latitude": -11.904401,
+    "longitude": -61.467976
+  },
+  {
+    "slug": "sao-francisco-do-guapore",
+    "nome": "São Francisco do Guaporé",
+    "latitude": -12.367978,
+    "longitude": -63.122784
+  },
+  {
+    "slug": "sao-miguel-do-guapore",
+    "nome": "São Miguel do Guaporé",
+    "latitude": -11.616092,
+    "longitude": -62.982375
+  },
+  {
+    "slug": "seringueiras",
+    "nome": "Seringueiras",
+    "latitude": -11.805575,
+    "longitude": -63.231508
+  },
+  {
+    "slug": "teixeiropolis",
+    "nome": "Teixeirópolis",
+    "latitude": -10.943286,
+    "longitude": -62.279513
+  },
+  {
+    "slug": "theobroma",
+    "nome": "Theobroma",
+    "latitude": -10.121408,
+    "longitude": -62.342934
+  },
+  {
+    "slug": "urupa",
+    "nome": "Urupá",
+    "latitude": -11.103526,
+    "longitude": -62.4241
+  },
+  {
+    "slug": "vale-do-anari",
+    "nome": "Vale do Anari",
+    "latitude": -9.733146,
+    "longitude": -61.938918
+  },
+  {
+    "slug": "vale-do-paraiso",
+    "nome": "Vale do Paraíso",
+    "latitude": -10.383481,
+    "longitude": -62.093793
+  },
+  {
+    "slug": "vilhena",
+    "nome": "Vilhena",
+    "latitude": -12.095637,
+    "longitude": -60.248779
+  }
+]

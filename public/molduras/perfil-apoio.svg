@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080" role="img" aria-label="Moldura de perfil">
+  <title>Moldura de perfil — NOME DO CANDIDATO 00000</title>
+
+  <!--
+    REDE DE SEGURANÇA. A arte final entra pelo painel, em Imagens, e
+    passa a valer sem deploy. Esta fica para o caso de não entrar.
+
+    Nada aqui avisa que é provisória, e é de propósito: carimbar
+    "moldura de exemplo" dentro da imagem EXPORTADA faria quem gerasse
+    uma foto postar isso no story. O único aviso carimbado é o de CNPJ
+    faltando, porque esse é problema legal e não estético.
+
+    Gerado por scripts/gerar-molduras.mjs — não editar à mão.
+  -->
+
+  <!--
+    Tudo centrado e dentro do círculo inscrito. O destino principal
+    deste formato é foto de perfil do WhatsApp, que corta em círculo:
+    conteúdo encostado nas pontas some no corte, e junto com ele iria o
+    CNPJ, que é exigência legal. O ponto mais baixo usado aqui é a
+    linha do CNPJ, e nela o círculo ainda tem 388px de largura.
+  -->
+
+  <defs>
+    <linearGradient id="veu" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#013a67" stop-opacity="0"/>
+      <stop offset="45%"  stop-color="#013a67" stop-opacity="0.84"/>
+      <stop offset="100%" stop-color="#013a67" stop-opacity="0.97"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="500" width="1080" height="580" fill="url(#veu)"/>
+
+  <text x="540" y="786" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="26" font-weight="700" letter-spacing="8" fill="#fbd83f">EU APOIO</text>
+  <text x="540" y="866" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="58" font-weight="700" letter-spacing="-1" fill="#ffffff">NOME DO CANDIDATO</text>
+  <text x="540" y="988" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="112" font-weight="700" letter-spacing="-4" fill="#fbd83f">00000</text>
+  <text x="540" y="1046" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="18" fill="#ffffff" fill-opacity="0.55">⚠ SEM CNPJ — NÃO PUBLICAR ESTA MOLDURA</text>
+</svg>
