@@ -301,7 +301,7 @@ export const ESQUEMA: Record<string, SecaoEsquema> = {
         rotulo: 'Legendas das fotos',
         rotuloItem: 'Foto',
         titulo: 'legenda',
-        min: 3,
+        min: 2,
         max: 8,
         ajuda: 'A ordem aqui é a ordem na galeria, e casa com os espaços Foto 1 a Foto 8 na aba Imagens.',
         item: {
@@ -332,7 +332,12 @@ export const ESQUEMA: Record<string, SecaoEsquema> = {
         rotulo: 'Legendas das fotos',
         rotuloItem: 'Foto',
         titulo: 'legenda',
-        min: 3,
+        // ⚠️ ERA `min: 3, max: 3` — exatamente três, nem uma a menos.
+        //    Campanha entrega foto em lote, e travar em três significa
+        //    que duas fotos boas não podem subir enquanto a terceira não
+        //    chega. O piso agora é 1, e a grade de `Rua.tsx` se ajusta ao
+        //    número de fotos.
+        min: 1,
         max: 3,
         item: {
           id: ID,

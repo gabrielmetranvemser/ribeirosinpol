@@ -138,13 +138,24 @@ export async function Rua() {
           ) : null}
         </div>
 
+        {/* ⚠️ A GRADE SEGUE O NÚMERO DE FOTOS, e isso não é
+            refinamento: com três, a primeira ocupa a coluna alta da
+            esquerda (`row-span-2`) e as outras duas empilham à
+            direita. Com DUAS, esse mesmo `row-span-2` deixava a
+            segunda linha da direita vazia — um buraco escuro do
+            tamanho de uma foto, que lê como imagem que não carregou.
+
+            Campanha entrega material em lotes; ficar com duas fotos
+            por semanas é o normal, não a exceção. Então: três ou mais,
+            a grade destaca a primeira; duas, as duas ficam do mesmo
+            tamanho, lado a lado. */}
         <ul className="mt-12 grid gap-4 md:grid-cols-2 md:gap-5">
           {rua.fotos.map((foto, i) => (
             <li
               key={foto.id}
               data-revelar
               style={{ ['--atraso' as string]: `${i * 90}ms` }}
-              className={i === 0 ? 'md:row-span-2' : ''}
+              className={i === 0 && rua.fotos.length > 2 ? 'md:row-span-2' : ''}
             >
               <figure className="group relative h-full overflow-hidden chanfro-lg bg-white/5">
                 <Imagem

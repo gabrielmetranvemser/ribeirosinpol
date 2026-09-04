@@ -1056,7 +1056,7 @@ export const album = {
   intro:
     'Depois de tantos anos dentro da Polícia Civil, meus colegas me confiaram outra ' +
     'responsabilidade. Não é foto produzida para esta página: é o que ficou de quem estava na ' +
-    'sala no dia.',
+    'sala no dia da assembleia.',
   /**
    * ⚠️ QUATRO, E NÃO OITO. O álbum nasceu com oito espaços porque
    *    servia de acervo de família genérico; aqui ele conta UM
@@ -1071,10 +1071,8 @@ export const album = {
    *    quatro é o número honesto.
    */
   fotos: [
-    { id: 'album-01', legenda: 'A assembleia geral do SINPOL', ano: '2022' },
+    { id: 'album-01', legenda: 'A assembleia geral do SINPOL', ano: 'Porto Velho' },
     { id: 'album-02', legenda: 'Falando para a categoria', ano: 'SINPOL/RO' },
-    { id: 'album-03', legenda: 'A campanha que a categoria lançou', ano: '2022' },
-    { id: 'album-04', legenda: '9.751 votos, em 52 municípios', ano: '2022' },
   ],
   rodape: 'Fotos do arquivo do sindicato e da campanha de 2022.',
 } as const
@@ -1107,10 +1105,16 @@ export const rua = {
     'área financeira da Polícia Civil. Foi ali que entendi o que carrego até hoje: o combate ao ' +
     'crime começa antes do crime.',
   video: { ...VIDEO },
+  /**
+   * ⚠️ DUAS, E NÃO TRÊS — e as duas legendas descrevem as fotos que
+   *    existem de verdade, não as que seriam ideais. A primeira é a
+   *    continência numa formatura; a segunda, a visita às unidades.
+   *    Não há foto de plantão na DEAAI no material da campanha, e a
+   *    legenda anterior descrevia uma que ninguém tinha.
+   */
   fotos: [
-    { id: 'rua-01', legenda: 'Plantão na Delegacia dos Menores', local: 'DEAAI · Porto Velho' },
-    { id: 'rua-02', legenda: 'No setor de investigação', local: 'Polícia Civil de RO' },
-    { id: 'rua-03', legenda: 'A rotina de quem está na ponta', local: 'Rondônia' },
+    { id: 'rua-01', legenda: 'Continência na formatura', local: 'Rondônia' },
+    { id: 'rua-02', legenda: 'Visita às unidades da Polícia Civil', local: 'Interior de RO' },
   ],
   // ⚠️ As melhores fotos de rua são de fotógrafo e de veículo de
   //    imprensa. Este crédito não é enfeite: é a condição de uso.

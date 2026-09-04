@@ -164,49 +164,65 @@ export const SLOTS: Slot[] = [
   },
 
   // ── O álbum ────────────────────────────────────────────────────
-  // Oito fotos de papel. O mínimo é baixo de propósito: o acervo de
-  // família é analógico, fotografado de celular, e algumas não passam
-  // de 500px. Elas aparecem pequenas na galeria — exigir 1200 aqui
-  // seria barrar justamente o material que o documento chama de ouro.
+  // ⚠️ DEITADO (3:2), E NÃO EM PÉ. Nasceu 3:4 porque servia a um acervo
+  //    de família analógico — foto de papel é quase sempre em pé. Nesta
+  //    campanha o bloco é outro: a assembleia do SINPOL de 2022, e as
+  //    fotos que existem dela são horizontais de sala cheia (1440×959,
+  //    que é 3:2 exato). Em 3:4 elas perdiam METADE da largura, e numa
+  //    foto de setenta pessoas em fileira isso não é recorte, é
+  //    apagar gente.
+  //
+  //    O mínimo continua baixo: é registro de celular em assembleia,
+  //    não ensaio.
   ...Array.from({ length: 8 }, (_, i) => ({
     chave: `album.${i + 1}`,
     rotulo: `Foto ${i + 1}`,
     onde: 'O álbum',
-    proporcao: '3/4',
-    larguraMin: 600,
-    alturaMin: 800,
+    proporcao: '3/2',
+    larguraMin: 900,
+    alturaMin: 600,
     nota:
       i === 0
-        ? 'Fotos de papel. Recorte na borda do papel e endireite antes de subir — várias do acervo estão giradas 90°.'
+        ? 'Fotos horizontais, de sala cheia. Endireite antes de subir — registro de celular costuma vir torto.'
         : undefined,
   })),
 
   // ── A rua ──────────────────────────────────────────────────────
+  // ⚠️ EM PÉ (3:4), E ISSO ACERTA UMA CONTRADIÇÃO ANTIGA: os três
+  //    espaços eram declarados 4:3 DEITADO, mas a grade de `Rua.tsx`
+  //    dá à primeira foto um `md:row-span-2` — uma caixa ALTA. Com
+  //    `object-cover`, uma foto deitada ali era cortada nas laterais
+  //    pelo CSS, sem que nada avisasse. O que o espaço prometia e o
+  //    que o layout desenhava eram coisas diferentes.
+  //
+  //    Agora os três são em pé, que é o formato das fotos da Polícia
+  //    Civil que a campanha tem — a continência em formatura é 768×1024,
+  //    3:4 exato, e entra sem perder um pixel.
   {
     chave: 'rua.1',
     rotulo: 'Foto 1 — a mais forte',
     onde: 'A rua',
-    proporcao: '4/3',
-    larguraMin: 1000,
-    alturaMin: 750,
-    nota: 'A pessoa na rua, no carro de som, no meio da gente. É a prova visual da manchete da página.',
+    proporcao: '3/4',
+    larguraMin: 700,
+    alturaMin: 930,
+    nota: 'Ocupa a coluna alta, à esquerda. É a prova visual da manchete da página.',
   },
   {
     chave: 'rua.2',
     rotulo: 'Foto 2',
     onde: 'A rua',
-    proporcao: '4/3',
-    larguraMin: 1000,
-    alturaMin: 750,
+    proporcao: '3/4',
+    larguraMin: 700,
+    alturaMin: 930,
     nota: 'A bandeira na pista, todos de máscara. Data a cena na pandemia sem precisar escrever a data.',
   },
   {
     chave: 'rua.3',
     rotulo: 'Foto 3',
     onde: 'A rua',
-    proporcao: '4/3',
-    larguraMin: 1000,
-    alturaMin: 750,
+    proporcao: '3/4',
+    larguraMin: 700,
+    alturaMin: 930,
     nota: '⚠️ Confira a marca d’água: as melhores fotos da rua são de terceiros e precisam de autorização.',
   },
 
@@ -215,9 +231,13 @@ export const SLOTS: Slot[] = [
     chave: 'valores.imagem',
     rotulo: 'Foto de apoio',
     onde: 'Minhas bandeiras',
-    proporcao: '3/4',
-    larguraMin: 800,
-    alturaMin: 1066,
+    // ⚠️ DEITADO, e é o que a caixa sempre pediu: a figura desta seção
+    //    é uma grade `[0.9fr_1.1fr]` com `min-h-26rem`, ou seja, uma
+    //    janela mais larga que alta. Declarar 3:4 aqui obrigava o
+    //    `object-cover` a comer as laterais de toda foto aceita.
+    proporcao: '4/3',
+    larguraMin: 1000,
+    alturaMin: 750,
     nota: '⚠️ Decisão de campanha. Foto com arma pesa em classificador de rede social e o custo cai no alcance orgânico — que é o motor desta página. A camiseta PRO ARMAS entrega o mesmo posicionamento sem o risco.',
   },
 
