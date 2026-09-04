@@ -44,6 +44,19 @@ yarn-error.log*
 .vscode/
 
 # ═══════════════════════════════════════════════════════════════
+# MATERIAL BRUTO
+#
+# 44 MB de fotos originais baixadas do Drive da campanha, à espera de
+# subir pelo painel. Não são fonte do projeto: o destino delas é o
+# Storage do Supabase, e de lá o site as serve. Versionar seria inchar
+# um repositório público com arquivos que só passam por ele uma vez.
+#
+# (MARCA/ fica versionado justamente por ser o contrário: é pequeno,
+# é a identidade, e quem clonar precisa dele em mãos.)
+# ═══════════════════════════════════════════════════════════════
+FOTOS/
+
+# ═══════════════════════════════════════════════════════════════
 # ⚠️ O QUE **NÃO** ESTÁ IGNORADO, E POR QUÊ
 #
 # · `data/grupos.local.json` — parece link de grupo, mas não é: são os

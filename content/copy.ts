@@ -264,8 +264,8 @@ export const origem = {
 //    diagnóstico, que é exatamente o que a seção seguinte acusa.
 // ─────────────────────────────────────────────────────────────
 export const problema = {
-  etiqueta: 'O que ainda falta',
-  titulo: 'Eu não vim dizer que [[está tudo resolvido.]]',
+  etiqueta: 'Hoje eu tenho novos desafios',
+  titulo: 'Por que eu [[quero continuar?]]',
   intro:
     'Meu primeiro mandato me mostrou que resultado exige persistência. Uma demanda não termina ' +
     'quando a gente faz uma indicação, e uma luta não termina quando a gente faz um discurso. ' +
@@ -348,7 +348,7 @@ export const problema = {
 // ─────────────────────────────────────────────────────────────
 export const valores = {
   etiqueta: 'Minhas bandeiras',
-  titulo: 'Minha origem policial é o método, [[não o limite.]]',
+  titulo: 'Meu mandato é sobre [[quem nunca vestiu farda.]]',
   intro:
     'Quando eu defendo uma delegacia melhor estruturada, não estou pensando apenas no policial: ' +
     'estou pensando na família que chega ali procurando justiça. Segurança pública é proteger ' +
@@ -476,7 +476,7 @@ export const cena = {
 //    entram por aqui ou pelo painel, sem deploy.
 export const provas = {
   etiqueta: 'O que eu fiz',
-  titulo: 'Pesquisa [[o que eu fiz.]]',
+  titulo: 'Uma das maiores conquistas: [[valorizar quem protege.]]',
   intro:
     'Qualquer um sobe num palanque e fala bonito. O que separa candidato sério de vendedor de ' +
     'promessa é uma coisa só: o que já está feito e pode ser conferido. Isto é o primeiro ' +
@@ -613,7 +613,7 @@ export const trilha = {
 // ─────────────────────────────────────────────────────────────
 export const futuro = {
   etiqueta: 'O que eu vou fazer',
-  titulo: 'O que eu levo [[pro segundo mandato.]]',
+  titulo: 'É assim que eu quero [[continuar trabalhando.]]',
   intro:
     'Eu não quero voltar à Assembleia para começar uma história. Quero continuar uma que já ' +
     'começou. São seis compromissos escritos de um jeito que dá para cobrar em quatro anos.',
@@ -816,7 +816,7 @@ export const compartilhar = {
 // pedir o voto: uma seção inteira para ela empurraria o pedido para
 // baixo da dobra em celular, que é onde 90% desta página é lida.
 export const ctaFinal = {
-  titulo: [`${campanha.eleicao.dataVotacao}.`, '[[O próximo passo é seu.]]'],
+  titulo: ['Eu sou Ribeiro do Sinpol.', `${campanha.eleicao.dataVotacao}.`, '[[O próximo passo é seu.]]'],
   texto:
     'Sou policial civil, administrador, ex-presidente do SINPOL, deputado estadual, pai da ' +
     'Valentina e cristão. Acima de qualquer título, sou um rondoniense que viveu aqui a vida ' +
@@ -1051,22 +1051,32 @@ export const privacidade = {
 //    desenha o quadro com a proporção reservada e nada quebra.
 // ─────────────────────────────────────────────────────────────
 export const album = {
-  etiqueta: 'O arquivo',
-  titulo: 'Não dá pra [[inventar isso.]]',
+  etiqueta: '2022 · O SINPOL',
+  titulo: 'Quando os policiais me confiaram [[uma nova missão.]]',
   intro:
-    'Da farda ao sindicato, do sindicato à Assembleia. Não é foto produzida para esta página: ' +
-    'é o que ficou de quem estava junto em cada uma delas.',
+    'Depois de tantos anos dentro da Polícia Civil, meus colegas me confiaram outra ' +
+    'responsabilidade. Não é foto produzida para esta página: é o que ficou de quem estava na ' +
+    'sala no dia.',
+  /**
+   * ⚠️ QUATRO, E NÃO OITO. O álbum nasceu com oito espaços porque
+   *    servia de acervo de família genérico; aqui ele conta UM
+   *    capítulo — o sindicato e a eleição de 2022 —, e para esse
+   *    capítulo existem quatro fotos: as duas da assembleia geral, que
+   *    vieram embutidas no próprio RIBEIRO SITE.docx, e as da campanha,
+   *    que estão no post do Instagram que o documento indica.
+   *
+   *    Encher os outros quatro espaços com legendas de 2001 e do
+   *    mandato — que é como estava — punha a trajetória inteira debaixo
+   *    de um título que fala de 2022. O componente aceita de 3 a 8, e
+   *    quatro é o número honesto.
+   */
   fotos: [
-    { id: 'album-01', legenda: 'Formado em Administração e na Polícia Civil', ano: '2001' },
-    { id: 'album-02', legenda: 'Na DEAAI, a Delegacia dos Menores', ano: 'Porto Velho' },
-    { id: 'album-03', legenda: 'À frente do setor de investigação', ano: 'Polícia Civil' },
-    { id: 'album-04', legenda: 'Eleito presidente do SINPOL/RO', ano: '2022' },
-    { id: 'album-05', legenda: 'A campanha que a categoria lançou', ano: '2022' },
-    { id: 'album-06', legenda: 'Entrega de kimonos para o jiu-jitsu', ano: 'Rondônia' },
-    { id: 'album-07', legenda: 'As primeiras Carteiras Azuis', ano: 'Porto Velho' },
-    { id: 'album-08', legenda: 'Audiência sobre regularização fundiária', ano: 'Porto Velho' },
+    { id: 'album-01', legenda: 'A assembleia geral do SINPOL', ano: '2022' },
+    { id: 'album-02', legenda: 'Falando para a categoria', ano: 'SINPOL/RO' },
+    { id: 'album-03', legenda: 'A campanha que a categoria lançou', ano: '2022' },
+    { id: 'album-04', legenda: '9.751 votos, em 52 municípios', ano: '2022' },
   ],
-  rodape: 'Fotos do arquivo pessoal e do mandato.',
+  rodape: 'Fotos do arquivo do sindicato e da campanha de 2022.',
 } as const
 
 // ─────────────────────────────────────────────────────────────
@@ -1090,7 +1100,7 @@ export const album = {
 // ─────────────────────────────────────────────────────────────
 export const rua = {
   etiqueta: '2001 · Polícia Civil',
-  titulo: 'A rua não era [[figura de linguagem.]]',
+  titulo: 'Minha história na [[Polícia Civil.]]',
   texto:
     'Trabalhei na DEAAI, a Delegacia dos Menores, e acompanhei de perto crianças e adolescentes ' +
     'entrando no caminho da criminalidade. Também chefiei o setor de investigação e atuei na ' +

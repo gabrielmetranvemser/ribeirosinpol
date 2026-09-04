@@ -61,33 +61,87 @@ export default async function Home() {
       <Header silencio={silencio} simbolo={simboloDaMarca} ocultas={secoesOcultas(exibir)} />
 
       <main id="conteudo">
+        {/* ═══════════════════════════════════════════════════════
+            ⚠️ ESTA ORDEM É A DO `RIBEIRO SITE.docx`, NÃO A DO MODELO.
+               Não mexa nela sem abrir o documento ao lado.
+
+            O modelo nasceu com uma ordem de CONVERSÃO — dor, valores,
+            provas, pedido —, que é a ordem de quem quer o clique o
+            mais cedo possível. A primeira montagem desta campanha
+            seguiu essa ordem e espremeu os 18 blocos do documento
+            dentro dela. O resultado desmontava a narrativa: o bloco
+            "POR QUE EU QUERO CONTINUAR", que é o fecho emocional do
+            documento, virava a SEXTA seção da página, e o esporte —
+            duas seções seguidas no documento — ficava repartido entre
+            bandeiras e prestação de contas.
+
+            Agora é o inverso, que era o pedido: o documento manda na
+            ordem, e os componentes se acomodam a ele. Cada linha
+            abaixo diz de qual bloco do documento ela veio.
+
+            O CUSTO, para quem for mexer: seguindo o documento, o
+            pedido de voto fica no fim. Quem segura a conversão até lá
+            é o `BotaoFlutuante` e o `Header` — os dois acompanham a
+            rolagem. Não remova nenhum dos dois achando que é enfeite.
+            ═══════════════════════════════════════════════════════ */}
         <Hero silencio={silencio} />
         {exibir.faixa ? <FaixaCorrida /> : null}
+
+        {/* 1 · "EU SOU RIBEIRO DO SINPOL" — Porto Velho, a mãe, os ofícios */}
         {exibir.origem ? <Origem /> : null}
-        {/* Álbum e Rua ficam entre Origem e Problema porque a ordem
-            aqui é cronológica: ela conta de onde veio, o álbum mostra
-            o passado, a rua mostra 2020 — e só então a página vira
-            para o que está errado hoje. */}
-        {exibir.album ? <Album /> : null}
+
+        {/* 2 · "MINHA HISTÓRIA NA POLÍCIA CIVIL" — 2001, DEAAI, investigação.
+               Vem ANTES do álbum: no documento a farda antecede o sindicato. */}
         {exibir.rua ? <Rua /> : null}
-        {exibir.problema ? <Problema /> : null}
-        {exibir.valores ? <Valores /> : null}
+
+        {/* 3 · "QUANDO OS POLICIAIS ME CONFIARAM UMA NOVA MISSÃO" —
+               SINPOL, 2022, os 9.751 votos. É o bloco que traz as duas
+               fotos da assembleia embutidas no próprio .docx. */}
+        {exibir.album ? <Album /> : null}
+
+        {/* A virada, em três tempos, montando a bandeira de Rondônia.
+               Fecha a biografia e abre o mandato — não corresponde a um
+               bloco do documento, é a dobradiça entre as duas metades. */}
         {exibir.cena ? <CenaBandeira /> : null}
+
+        {/* 4 a 7 · "UMA DAS MAIORES CONQUISTAS: VALORIZAR QUEM PROTEGE",
+               "SEGURANÇA PÚBLICA PARA QUEM ESTÁ DO LADO DE FORA DA
+               DELEGACIA", as fotos das UNISPS e "QUEM PROTEGE TAMBÉM
+               PRECISA SER PROTEGIDO". Os quatro blocos são prestação de
+               contas e cabem numa seção só. */}
         {exibir.provas ? <Provas /> : null}
-        {/* Depois de Provas, nunca antes: primeiro a lei, depois o
-            elogio. Invertido, os depoimentos chegam antes de existir
-            motivo para eles. */}
-        {exibir.social ? <ProvaSocial /> : null}
-        {/* A trilha vem antes de Compromissos porque é o último bloco
-            de prova: depois dela a página para de olhar para trás e
-            começa a prometer. E vem depois da prova social pela mesma
-            regra que já rege esta ordem — primeiro o que aconteceu,
-            depois o que dizem sobre isso, só então o que virá. */}
+
+        {/* 8 · "EU LEVEI A EXPERIÊNCIA DA DEAAI PARA O ESPORTE" — é
+               exatamente aqui que o documento cola os links de vídeo.
+               A seção some sozinha enquanto nenhum tiver endereço. */}
         {exibir.trilha ? <Trilha /> : null}
-        {exibir.futuro ? <Futuro /> : null}
+
+        {/* 9 a 14 · do esporte à escritura: "ESPORTE QUE SALVA", "MEU
+               MANDATO TAMBÉM É SOBRE QUEM NUNCA VESTIU UMA FARDA", a
+               Carteira Azul, as crianças, as mulheres e a escritura. */}
+        {exibir.valores ? <Valores /> : null}
+
+        {/* 15 · "UM MANDATO QUE CHEGA AO INTERIOR" — os 52 municípios.
+               O documento põe o interior aqui, e é uma sorte: é o único
+               ponto em que o pedido do grupo nasce do próprio texto em
+               vez de interromper. */}
         {exibir.grupos ? <SecaoGrupos municipios={municipios} sugerido={sugerido} /> : null}
+
+        {/* 16 e 17 · "HOJE, EU TENHO NOVOS DESAFIOS" e "POR QUE EU
+               QUERO CONTINUAR?" — o bloco dos "ainda existem". No
+               documento é o fecho, e agora é o fecho aqui também. */}
+        {exibir.problema ? <Problema /> : null}
+        {exibir.futuro ? <Futuro /> : null}
+
+        {/* Desligada de fábrica: direito de imagem e jurídico. */}
+        {exibir.social ? <ProvaSocial /> : null}
+
         {exibir.filtro ? <SecaoFiltro /> : null}
         {exibir.compartilhar ? <Compartilhar siteUrl={config.siteUrl} /> : null}
+
+        {/* 18 · "EU SOU RIBEIRO DO SINPOL" — sou policial, sou pai da
+               Valentina, sou cristão. A última linha do documento é a
+               última linha da página. */}
         <CtaFinal silencio={silencio} />
       </main>
 
