@@ -238,9 +238,32 @@ export function Video({
           `playsInline` são o que impede o iOS de assumir o controle da
           tela ao encostar no elemento. */}
       {video.provedor === 'arquivo' ? (
+        /* ⚠️ `poster` RESOLVE O QUE O `preload` NÃO RESOLVIA.
+           O comentário acima descreve a intenção — buscar o cabeçalho e
+           um quadro —, mas ela só valia com `carregamento: 'com-previa'`.
+           Com 'ao-clicar', que é o padrão e o certo para não gastar
+           banda, o `preload` vira 'none': o navegador não busca NADA, e
+           o cartão fica um retângulo escuro com um botão de play. Foi
+           exatamente o que apareceu na seção do esporte.
+
+           As duas saídas eram ruins. Ligar 'com-previa' faz o navegador
+           puxar centenas de kB por vídeo só para desenhar um quadro —
+           quatro vídeos, e a página fica pesada justamente onde se
+           queria leveza.
+
+           `poster` é uma imagem de verdade: ~25 a 58 kB em WebP, com
+           lazy nativo, e desenha em qualquer navegador sem tocar no
+           arquivo de vídeo. A capa vive ao lado do MP4, no mesmo balde,
+           com o sufixo `-capa.webp` — convenção, não campo novo no
+           painel, que era a objeção original a ter capa aqui.
+
+           Se a capa não existir, o `poster` simplesmente falha em
+           silêncio (imagem de poster não desenha ícone de quebrado) e o
+           comportamento volta a ser o de antes. Nada a tratar. */
         // eslint-disable-next-line jsx-a11y/media-has-caption
         <video
           src={`${video.embed}#t=0.1`}
+          poster={video.embed.replace(/\.[a-z0-9]+$/i, '-capa.webp')}
           className="absolute inset-0 size-full object-cover"
           preload={opcoes.carregamento === 'com-previa' ? 'metadata' : 'none'}
           muted

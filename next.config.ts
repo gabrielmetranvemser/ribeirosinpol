@@ -69,6 +69,34 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   images: {
     formats: ['image/avif', 'image/webp'],
+
+    /**
+     * ⚠️ O TETO É 1920, E NÃO OS 3840 DO PADRÃO DO NEXT. Esta linha é a
+     *    diferença de peso mais cara da página inteira.
+     *
+     *    O padrão do Next gera variantes até 3840 px e as anuncia no
+     *    `srcset`. Num monitor grande com DPR 2, o navegador escolhe a
+     *    maior que couber — e ele estava escolhendo a de 3840 para
+     *    quase toda foto da home.
+     *
+     *    O problema é que NENHUMA imagem desta campanha tem 3840 px de
+     *    origem: o processamento de upload já limita o lado maior a
+     *    2400 (`TETO_LADO` em lib/midia/processar.ts). Ou seja, o
+     *    otimizador estava AMPLIANDO 2048 para 3840 e cobrando por
+     *    isso. Medido numa das fotos da faixa: 91 kB em 1200, 183 kB em
+     *    1920, 224 kB em 3840 — dois terços a mais que a de 1920 para
+     *    entregar exatamente os mesmos pixels, borrados.
+     *
+     *    1920 cobre o caso real: a foto mais larga da página ocupa
+     *    ~1150 px de CSS, o que em DPR 2 pede 2300 — e a fonte tem
+     *    2048. Pedir acima disso é pedir upscale.
+     *
+     *    Se um dia entrar arte de origem maior que 2400, subir este
+     *    teto exige subir o `TETO_LADO` junto. Os dois andam em par.
+     */
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+
     // Par obrigatório da recusa de SVG no upload: SVG é documento
     // executável, e otimizá-lo não o torna seguro.
     dangerouslyAllowSVG: false,
