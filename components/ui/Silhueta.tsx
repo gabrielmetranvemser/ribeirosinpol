@@ -13,6 +13,8 @@ interface Props {
   variante?: 'corpo-inteiro' | 'meio-corpo' | 'rosto'
   tom?: 'claro' | 'escuro'
   className?: string
+  /** Estilo inline — ver a nota em Imagem.tsx. */
+  estilo?: React.CSSProperties
   rotulo?: string
 }
 
@@ -20,6 +22,7 @@ export function Silhueta({
   variante = 'meio-corpo',
   tom = 'claro',
   className = '',
+  estilo,
   rotulo = 'Foto PNG recortada',
 }: Props) {
   const cor = tom === 'escuro' ? 'text-white/35' : 'text-azul/25'
@@ -27,6 +30,7 @@ export function Silhueta({
   return (
     <div
       className={`relative isolate flex items-end justify-center overflow-hidden ${className}`}
+      style={estilo}
       role="img"
       aria-label={`Espaço reservado para foto: ${variante.replace('-', ' ')}`}
     >

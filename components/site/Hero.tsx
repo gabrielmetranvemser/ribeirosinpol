@@ -327,13 +327,31 @@ export async function Hero({ silencio = false }: { silencio?: boolean }) {
 
                 {/* Ela. É a única figura que o painel controla — trocar
                     a foto principal não pode exigir deploy. */}
+                {/* ⚠️ TAMANHO E DESCIDA VÊM DO PAINEL, por variável CSS.
+                    Era `h-[112%]` cravado aqui. Virou controle porque é
+                    decisão de campanha e não de código: o recorte que
+                    sobem muda a cada foto — uns vêm de corpo inteiro,
+                    outros da cintura para cima — e o mesmo 112% que
+                    enquadra bem um deixa o outro pequeno no meio da
+                    tela.
+
+                    ⚠️ VARIÁVEL CSS, E NÃO CLASSE MONTADA. `h-[${n}%]`
+                       não funcionaria: o Tailwind varre os arquivos
+                       procurando nomes literais e não gera CSS para
+                       classe interpolada — a altura cairia para o
+                       padrão em silêncio, sem erro de build. Já
+                       aconteceu neste projeto, na grade do álbum. */}
                 <Imagem
                   slot="hero.retrato"
                   slots={slots}
                   vazio="silhueta"
                   prioridade
                   sizes="(max-width: 1024px) 65vw, 32vw"
-                  className="hero-foto pointer-events-none relative z-10 order-1 h-[112%] w-auto max-w-none shrink-0 object-contain object-bottom drop-shadow-[0_18px_40px_rgba(6,48,26,0.3)]"
+                  estilo={{
+                    height: `${aparencia.heroFiguraAltura}%`,
+                    transform: `translateY(${aparencia.heroFiguraDescida}%)`,
+                  }}
+                  className="hero-foto pointer-events-none relative z-10 order-1 w-auto max-w-none shrink-0 object-contain object-bottom drop-shadow-[0_18px_40px_rgba(6,48,26,0.3)]"
                 />
 
               {/* ⚠️ A MARCA DEITADA, POR CIMA DAS DUAS.

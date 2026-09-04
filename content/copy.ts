@@ -1341,6 +1341,33 @@ export const aparencia = {
    */
   heroCor: 'bandeira',
 
+  /**
+   * O TAMANHO DA FIGURA NA PRIMEIRA DOBRA, em % da altura da dobra.
+   *
+   * ⚠️ ISTO ERA UM NÚMERO CRAVADO NO COMPONENTE (`h-[112%]`), e virou
+   *    controle porque é decisão de campanha, não de código: o recorte
+   *    que a campanha sobe muda a cada foto — uns vêm de corpo inteiro,
+   *    outros da cintura para cima — e o mesmo 112% que enquadra bem
+   *    um deixa o outro pequeno no meio da tela. Trocar isso não pode
+   *    custar um deploy.
+   *
+   * Acima de 100 a figura é maior que a dobra e sobra para baixo; é o
+   * normal, e é o que faz ela encostar no pé da seção em vez de
+   * flutuar. Combinado com `heroFiguraDescida`, é assim que se "corta"
+   * a foto na altura que a campanha quiser sem editar o arquivo.
+   */
+  heroFiguraAltura: 112,
+
+  /**
+   * QUANTO A FIGURA DESCE, em % da própria altura.
+   *
+   * Empurra a foto para baixo, jogando o pé dela para fora da dobra.
+   * É o corte sem tesoura: para mostrar o Ribeiro da cintura para
+   * cima, aumente a altura e desça o quanto for preciso — o excedente
+   * some no pé da seção, que já tem `overflow: hidden`.
+   */
+  heroFiguraDescida: 0,
+
   /** nenhuma · halftone · ruido · tracejado */
   textura: 'halftone',
   /** De 0 a 100. Ver .textura em globals.css: 100 é o teto do tipo. */

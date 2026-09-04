@@ -20,6 +20,8 @@ interface Props {
   nota?: string
   tom?: 'claro' | 'escuro' | 'azul'
   className?: string
+  /** Estilo inline — ver a nota em Imagem.tsx. */
+  estilo?: React.CSSProperties
   /**
    * O tamanho do corte do canto. 'lg' é o padrão dos cartões do site.
    *
@@ -54,11 +56,14 @@ export function QuadroImagem({
   tom = 'claro',
   className = '',
   canto = 'lg',
+  estilo,
 }: Props) {
   return (
     <div
       className={`relative isolate flex items-center justify-center overflow-hidden border ${TONS[tom]} ${CANTOS[canto]} ${className}`}
-      style={{ aspectRatio: proporcao }}
+      // O estilo de quem chama vem DEPOIS da proporção, de propósito:
+      // é ele que precisa poder sobrescrever a altura reservada.
+      style={{ aspectRatio: proporcao, ...estilo }}
       role="img"
       aria-label={`Espaço reservado para imagem${nota ? `: ${nota}` : ''}`}
     >

@@ -18,6 +18,7 @@ export function Imagem({
   sizes,
   prioridade = false,
   vazio = 'quadro',
+  estilo,
 }: {
   slot: string
   slots: Record<string, ImagemDoSlot>
@@ -25,6 +26,17 @@ export function Imagem({
   sizes?: string
   prioridade?: boolean
   vazio?: 'quadro' | 'silhueta'
+  /**
+   * Estilo inline, para o que não cabe em classe do Tailwind — hoje só
+   * o tamanho da figura da primeira dobra, que vem do painel como
+   * número e por isso não pode virar `h-[${n}%]` (o Tailwind varre
+   * nomes literais e não geraria a classe).
+   *
+   * ⚠️ Vale também para os dois estados VAZIOS. Sem isso, a silhueta e
+   *    o quadro cinza ignoram o ajuste, e a dobra salta de tamanho no
+   *    instante em que a foto real entra no lugar do placeholder.
+   */
+  estilo?: React.CSSProperties
 }) {
   const def = SLOTS_POR_CHAVE[slot]
   const img = slots[slot]
@@ -37,6 +49,7 @@ export function Imagem({
           tom="claro"
           rotulo="Foto PNG · recorte sem fundo"
           className={className}
+          estilo={estilo}
         />
       )
     }
@@ -53,6 +66,7 @@ export function Imagem({
         rotulo={def?.rotulo ?? 'Imagem'}
         nota={def ? `mínimo ${def.larguraMin}×${def.alturaMin}` : undefined}
         className={className}
+        estilo={estilo}
       />
     )
   }
@@ -68,6 +82,7 @@ export function Imagem({
       placeholder={img.blur ? 'blur' : 'empty'}
       blurDataURL={img.blur ?? undefined}
       className={className}
+      style={estilo}
     />
   )
 }

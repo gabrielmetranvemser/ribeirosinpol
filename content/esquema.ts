@@ -949,6 +949,26 @@ export const ESQUEMA: Record<string, SecaoEsquema> = {
         ajuda:
           'Em todos, o lado escuro fica sob o texto e o claro atrás das fotos — é o que mantém o título legível. A cor do destaque e a do botão mudam sozinhas para continuar saltando do fundo.',
       },
+      heroFiguraAltura: {
+        tipo: 'deslizante',
+        rotulo: 'Tamanho da figura na primeira dobra',
+        min: 80,
+        max: 190,
+        passo: 2,
+        sufixo: '%',
+        ajuda:
+          'Em relação à altura da dobra. Acima de 100 a figura passa do pé da seção, e o excedente é cortado — é assim que ela fica grande sem flutuar no meio da tela.',
+      },
+      heroFiguraDescida: {
+        tipo: 'deslizante',
+        rotulo: 'Descer a figura',
+        min: 0,
+        max: 60,
+        passo: 2,
+        sufixo: '%',
+        ajuda:
+          'Empurra a foto para baixo e joga o pé dela para fora da dobra. Junto com o tamanho, é o corte sem tesoura: para mostrar da cintura para cima, aumente o tamanho e desça até enquadrar.',
+      },
       textura: {
         tipo: 'escolha',
         rotulo: 'Textura de fundo',
