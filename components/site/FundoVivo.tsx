@@ -64,9 +64,40 @@ import Image from 'next/image'
  * linhas mostrariam a mesma imagem na mesma coluna e o olho leria
  * repetição em vez de acervo.
  */
-const LINHA_UM = [1, 4, 2, 5, 3]
-const LINHA_DOIS = [5, 2, 4, 3, 1]
-const LINHA_TRES = [3, 1, 5, 4, 2]
+/**
+ * A PROPORÇÃO DE CADA FOTO, na ordem dos arquivos.
+ *
+ * ⚠️ É O QUE FAZ O MURAL SER MASONRY E NÃO UMA GRADE. A altura da
+ *    fita é fixa; a largura de cada ladrilho sai daqui. Foto deitada
+ *    vira um ladrilho largo, foto em pé vira um estreito, e as três
+ *    fitas — que têm ordens diferentes — nunca alinham as emendas.
+ *    É o que dá o desenho de tijolo:
+ *
+ *      [ ] [.    ] [. ] [.   ] [ ]
+ *      [.    ] [. ] [ ] [.     ]
+ *
+ *    O caminho preguiçoso seria forçar todas ao mesmo quadro com
+ *    `object-cover`. Aí a foto deitada de sessenta pessoas em fileira
+ *    perde as duas pontas e vira um pedaço de parede — que é
+ *    exatamente o problema que este arquivo já registrou uma vez, no
+ *    comentário sobre foto em tela cheia virar textura.
+ *
+ * ⚠️ OS NÚMEROS SÃO MEDIDOS, não estimados: saem do sharp na geração
+ *    dos arquivos. Trocar uma foto de fundo exige medir a nova e
+ *    atualizar aqui, senão o ladrilho estica ou espreme a imagem.
+ */
+const PROPORCOES = [1.334, 0.75, 1.502, 0.75, 1.334, 0.75, 1.502, 0.8, 1.334, 0.666]
+
+/**
+ * Três ordens embaralhadas à mão. Fixas — ver o comentário sobre
+ * hidratação. Cada uma começa por uma foto diferente, e as três
+ * intercalam deitadas com em pé para que nenhuma fita fique só com
+ * ladrilho largo (o que a faria correr mais rápido que as outras aos
+ * olhos) nem só com estreito.
+ */
+const LINHA_UM = [1, 4, 3, 6, 9, 2, 7, 10, 5, 8]
+const LINHA_DOIS = [5, 2, 9, 8, 3, 10, 1, 6, 7, 4]
+const LINHA_TRES = [7, 10, 1, 4, 5, 8, 3, 2, 9, 6]
 
 function Fita({
   ordem,
@@ -92,12 +123,23 @@ function Fita({
           de tela. */}
       {[0, 1, 2].map((passada) =>
         ordem.map((n) => (
-          <div key={`${passada}-${n}`} className="fundo-vivo-quadro">
+          <div
+            key={`${passada}-${n}`}
+            className="fundo-vivo-quadro"
+            // A largura do ladrilho sai da proporção da foto: a altura
+            // da fita é fixa, então `aspect-ratio` resolve a largura
+            // sozinho. Ver PROPORCOES, acima.
+            style={{ ['--ar' as string]: PROPORCOES[n - 1] }}
+          >
             <Image
               src={`/fundo-${n}.webp`}
               alt=""
               fill
-              sizes="(max-width: 1024px) 40vw, 18vw"
+              // O ladrilho mais largo tem 1,5× a altura da fita
+              // (16rem no desktop), ou seja ~24rem. `24rem` é o teto
+              // real, e pedir `18vw` fazia o navegador buscar variante
+              // maior que a necessária em tela larga.
+              sizes="(max-width: 1024px) 14rem, 24rem"
               // Só a primeira passada da primeira linha entra no
               // carregamento inicial; o resto é o mesmo arquivo, já em
               // cache do navegador.

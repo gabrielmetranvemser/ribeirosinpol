@@ -863,18 +863,31 @@
      Grande demais e volta a ser textura; pequeno demais e vira
      miniatura de galeria. Nesta medida dá para ver que são pessoas na
      rua sem que a foto dispute atenção com o rosto da candidato. */
+  /* ⚠️ ALTURA FIXA, LARGURA PELA PROPORÇÃO — é isto que faz o mural
+     ser masonry. Era `width: 8.5rem; height: 10.5rem`, um quadro só
+     para todas, e com `object-cover` a foto deitada de sessenta
+     pessoas em fileira perdia as duas pontas.
+
+     `aspect-ratio` com `width: auto` deixa o ladrilho nascer do
+     tamanho que a foto pede. A fita continua sendo um flex de largura
+     `max-content`, então a soma das larguras variáveis é o
+     comprimento de uma passada — e o laço de -33,3333% continua
+     exato, porque as três passadas são idênticas entre si. */
   .fundo-vivo-quadro {
     position: relative;
     flex: none;
-    width: 8.5rem;
     height: 10.5rem;
+    width: auto;
+    aspect-ratio: var(--ar, 0.81);
     overflow: hidden;
     border-radius: 0.75rem;
   }
 
   @media (min-width: 1024px) {
     .fundo-vivo-quadro {
-      width: 13rem;
+      /* Só a altura cresce no desktop. A largura continua saindo da
+         proporção — pôr `width` aqui de volta desmancharia o masonry
+         exatamente nas telas onde ele mais aparece. */
       height: 16rem;
       border-radius: 1rem;
     }
