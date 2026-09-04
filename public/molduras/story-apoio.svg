@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920" role="img" aria-label="Moldura de story">
-  <title>Moldura de story — NOME DO CANDIDATO 00000</title>
+  <title>Moldura de story — RIBEIRO DO SINPOL 25197</title>
 
   <!--
     REDE DE SEGURANÇA. A arte final entra pelo painel, em Imagens, e
@@ -15,9 +15,9 @@
 
   <defs>
     <linearGradient id="veu" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%"   stop-color="#013a67" stop-opacity="0"/>
-      <stop offset="42%"  stop-color="#013a67" stop-opacity="0.82"/>
-      <stop offset="100%" stop-color="#013a67" stop-opacity="0.97"/>
+      <stop offset="0%"   stop-color="#001642" stop-opacity="0"/>
+      <stop offset="42%"  stop-color="#001642" stop-opacity="0.82"/>
+      <stop offset="100%" stop-color="#001642" stop-opacity="0.97"/>
     </linearGradient>
   </defs>
 
@@ -25,10 +25,10 @@
        de uma foto lê como tarja, e ninguém posta uma tarja. -->
   <rect x="0" y="1080" width="1080" height="840" fill="url(#veu)"/>
 
-  <text x="88" y="1476" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" letter-spacing="10" fill="#fbd83f">EU APOIO</text>
-  <text x="88" y="1580" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="76" font-weight="700" letter-spacing="-2" fill="#ffffff">NOME DO CANDIDATO</text>
-  <text x="88" y="1740" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="150" font-weight="700" letter-spacing="-6" fill="#fbd83f">00000</text>
-  <text x="88" y="1852" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="22" fill="#ffffff" fill-opacity="0.55">⚠ SEM CNPJ — NÃO PUBLICAR ESTA MOLDURA</text>
+  <text x="88" y="1476" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" letter-spacing="10" fill="#FFDF00">EU APOIO</text>
+  <text x="88" y="1580" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="76" font-weight="700" letter-spacing="-2" fill="#ffffff">RIBEIRO DO SINPOL</text>
+  <text x="88" y="1740" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="150" font-weight="700" letter-spacing="-6" fill="#FFDF00">25197</text>
+  <text x="88" y="1852" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="22" fill="#ffffff" fill-opacity="0.55">CNPJ 68.519.615/0001-62</text>
 
-  <rect x="0" y="1900" width="1080" height="20" fill="#fbd83f"/>
+  <rect x="0" y="1900" width="1080" height="20" fill="#FFDF00"/>
 </svg>

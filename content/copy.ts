@@ -646,9 +646,23 @@ export const futuro = {
       id: 'fut-04',
       numero: '04',
       titulo: 'Escritura na mão da família',
+      /**
+       * ⚠️ OS BAIRROS ESTÃO NOMEADOS DE PROPÓSITO, e este é o único
+       *    compromisso da lista que nomeia lugar. O documento da
+       *    campanha traz os sete, e escondê-los atrás de "comunidades
+       *    de Porto Velho" jogava fora exatamente o que o projeto pede
+       *    em toda seção: dado local que o leitor reconhece. Quem mora
+       *    na Terra Prometida se encontra nesta frase; "comunidades do
+       *    interior" não pertence a ninguém.
+       *
+       *    É também o que torna o compromisso cobrável: daqui a quatro
+       *    anos dá para perguntar, bairro por bairro, se a escritura
+       *    saiu.
+       */
       texto:
-        'Acompanhar a regularização fundiária nas comunidades de Porto Velho e do interior que ' +
-        'já estão em processo, até o documento chegar à mão de quem mora na casa.',
+        'Acompanhar a regularização fundiária em Aparecida, Cascalheira, Monte Sinai, Planalto, ' +
+        'Porto Cristo, Terra Prometida e nas áreas da BR-319, até a escritura chegar à mão de ' +
+        'quem mora na casa.',
     },
     {
       id: 'fut-05',
@@ -832,7 +846,12 @@ export const faixa = {
 // 11. RODAPÉ
 // ─────────────────────────────────────────────────────────────
 export const rodape = {
-  assinatura: `Feito em ${campanha.estado}.`,
+  /**
+   * A última linha do documento da campanha, e por isso a última linha
+   * do site. "Feito em Rondônia." era o padrão de fábrica e servia
+   * para qualquer candidatura de qualquer estado — que é o problema.
+   */
+  assinatura: 'Juntos pela Rondônia que a gente quer.',
   links: [
     { id: 'link-01', rotulo: 'Grupos de WhatsApp', href: '/grupos' },
     { id: 'link-02', rotulo: `Coloque o ${campanha.numero} na sua foto`, href: '/filtro' },
