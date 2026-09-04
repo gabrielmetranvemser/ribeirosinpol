@@ -91,6 +91,31 @@ export const SLOTS: Slot[] = [
     nota: 'A marca da campanha em faixa, com o nome escrito em BRANCO e fundo transparente. Aparece no rodapé, que é escuro. Sem imagem aqui, o site escreve o nome e o cargo na fonte de título — funciona, e é o estado normal enquanto a arte não chega.',
   },
   {
+    /**
+     * ⚠️ O NÚMERO SOZINHO, NA TIPOGRAFIA DA CAMPANHA.
+     *
+     *    `components/ui/Marca.tsx` já sabia receber uma imagem aqui —
+     *    o `Numero` tem o parâmetro `url` desde sempre —, mas ninguém
+     *    alimentava, então a chamada final desenhava "25197" com a
+     *    fonte de título do site. Fica parecido e não é: o número da
+     *    urna é a coisa que a campanha mais repete em adesivo, santinho
+     *    e camiseta, e é o que a pessoa procura na tela da urna. Ele
+     *    tem de ser sempre o MESMO desenho.
+     *
+     *    A arte que a campanha entregou não trazia o número solto: ele
+     *    só existia dentro do adesivo de bolso. Este PNG saiu de lá.
+     */
+    chave: 'marca.numero',
+    rotulo: 'O número, na arte oficial',
+    onde: 'Marca',
+    proporcao: null,
+    larguraMin: 600,
+    alturaMin: 160,
+    alpha: true,
+    nota: 'Só os algarismos, PNG com fundo transparente, na fonte da campanha. Sem esta imagem o site escreve o número na fonte de título — parecido, mas não é a marca.',
+  },
+
+  {
     chave: 'marca.lockup',
     rotulo: 'Marca com o número (em pé)',
     onde: 'Marca',

@@ -63,7 +63,13 @@ export async function CtaFinal({ silencio = false }: { silencio?: boolean }) {
               duas coisas escrevem em transform e a última a falar
               apagaria a outra. */}
           <div className="parallax-suave">
-            <Numero className="w-full drop-shadow-[0_16px_40px_rgba(0,0,0,0.35)]" />
+            {/* A arte oficial do número quando ela existe; o desenho em
+                fonte de título como reserva. Ver `marca.numero` em
+                content/slots.ts para por que os dois não são a mesma coisa. */}
+            <Numero
+              url={slots['marca.numero']?.url ?? null}
+              className="w-full drop-shadow-[0_16px_40px_rgba(0,0,0,0.35)]"
+            />
           </div>
         </div>
 
