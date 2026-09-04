@@ -1359,12 +1359,21 @@ export const aparencia = {
   heroFiguraAltura: 112,
 
   /**
-   * QUANTO A FIGURA DESCE, em % da própria altura.
+   * QUANTO A FIGURA SOBE OU DESCE, em % da própria altura.
+   * Negativo sobe, positivo desce.
    *
-   * Empurra a foto para baixo, jogando o pé dela para fora da dobra.
-   * É o corte sem tesoura: para mostrar o Ribeiro da cintura para
-   * cima, aumente a altura e desça o quanto for preciso — o excedente
-   * some no pé da seção, que já tem `overflow: hidden`.
+   * ⚠️ ACEITAR NEGATIVO É O QUE FAZ O PAR FUNCIONAR. A figura é
+   *    ancorada pelo TOPO da dobra (`items-start` no invólucro) e o
+   *    conteúdo assenta no pé da própria caixa (`object-bottom`).
+   *    Consequência: aumentar o tamanho já empurra a figura para
+   *    baixo sozinho. Com o controle indo só de 0 para cima, quem
+   *    aumentava para ver melhor o rosto via o rosto AFUNDAR, e não
+   *    havia como trazer de volta.
+   *
+   *    A receita que a campanha vai usar: aumentar o tamanho e depois
+   *    subir (negativo) até o rosto voltar ao lugar. O que passa do pé
+   *    da seção é cortado — ela já tem `overflow: hidden` — e o
+   *    arquivo da foto continua intacto, em alta.
    */
   heroFiguraDescida: 0,
 

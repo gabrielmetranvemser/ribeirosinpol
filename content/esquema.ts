@@ -961,13 +961,19 @@ export const ESQUEMA: Record<string, SecaoEsquema> = {
       },
       heroFiguraDescida: {
         tipo: 'deslizante',
-        rotulo: 'Descer a figura',
-        min: 0,
-        max: 60,
+        rotulo: 'Subir ou descer a figura',
+        // ⚠️ COMEÇA EM NEGATIVO, e essa é a correção que fez o par de
+        //    controles fazer sentido. Ia de 0 a 60, só para baixo — e a
+        //    figura é ancorada pelo TOPO da dobra, então aumentar o
+        //    tamanho já a empurra para baixo sozinha. Só descer piorava:
+        //    a pessoa aumentava para ver melhor o rosto e o rosto
+        //    afundava. Faltava o lado que resolve, que é subir.
+        min: -60,
+        max: 40,
         passo: 2,
         sufixo: '%',
         ajuda:
-          'Empurra a foto para baixo e joga o pé dela para fora da dobra. Junto com o tamanho, é o corte sem tesoura: para mostrar da cintura para cima, aumente o tamanho e desça até enquadrar.',
+          'Negativo sobe, positivo desce. A figura é ancorada pelo topo da dobra, então aumentar o tamanho já a empurra para baixo — para deixar o Ribeiro maior E com o rosto no lugar, aumente o tamanho e depois SUBA (valor negativo) até enquadrar. É o corte sem tesoura: o que passa do pé da seção é cortado, e o arquivo da foto não é tocado.',
       },
       textura: {
         tipo: 'escolha',
