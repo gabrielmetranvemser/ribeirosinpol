@@ -24,6 +24,13 @@ build/
 dist/
 *.tsbuildinfo
 
+# Gerado pelo Next a cada `dev`/`build`, e o conteúdo ALTERNA entre os
+# dois (`.next/dev/types` vs `.next/types`). Versionado, ele aparece
+# como alteração pendente toda vez que alguém troca de comando — ruído
+# permanente num repositório de campanha, onde quem edita não é
+# necessariamente quem programa. O Next regenera na primeira execução.
+next-env.d.ts
+
 # ═══════════════════════════════════════════════════════════════
 # FERRAMENTAS E SISTEMA
 # ═══════════════════════════════════════════════════════════════
