@@ -60,6 +60,8 @@ export async function Provas() {
    *    nunca fica quebrado na tela.
    */
   const temRegistro = provas.documento.link.trim() !== ''
+  /** Sem print, o bloco do registro perde a coluna da direita. */
+  const temPrint = Boolean(slots['provas.documento'])
 
   return (
     <Secao id="provas" fundo="azul-profundo" espaco="solto" className="overflow-hidden">
@@ -174,7 +176,9 @@ export async function Provas() {
             sozinho, agora, sem confiar em nós — e por isso é a peça
             mais valiosa dela. O print entra clicável: quem duvida
             clica, e quem clica já não duvidava do mesmo jeito. */}
-        <div className="mt-8 grid items-center gap-8 chanfro-lg border border-white/10 bg-white/[0.06] p-7 md:grid-cols-[1fr_1.1fr] md:p-9">
+        <div className={`mt-8 grid items-center gap-8 chanfro-lg border border-white/10 bg-white/[0.06] p-7 md:p-9 ${
+            temPrint ? 'md:grid-cols-[1fr_1.1fr]' : ''
+          }`}>
           <div>
             <h3 className="titulo-secao text-white">{provas.documento.titulo}</h3>
             <p className="mt-4 text-base text-white/70">{provas.documento.texto}</p>
@@ -193,37 +197,43 @@ export async function Provas() {
             ) : null}
           </div>
 
-          {/* O print continua na tela sem o link — ele é prova por si,
-              e some sozinho quando o slot está vazio. O que não pode
-              é ser clicável para lugar nenhum. */}
-          {temRegistro ? (
-            <a
-              href={provas.documento.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-revelar
-              className="block overflow-hidden chanfro-lg ring-1 ring-white/15 transition-transform duration-300 hover:scale-[1.01]"
-            >
-              <Imagem
-                slot="provas.documento"
-                slots={slots}
-                sizes="(max-width: 768px) 100vw, 45vw"
-                className="w-full object-cover"
-              />
-            </a>
-          ) : (
-            <div
-              data-revelar
-              className="block overflow-hidden chanfro-lg ring-1 ring-white/15"
-            >
-              <Imagem
-                slot="provas.documento"
-                slots={slots}
-                sizes="(max-width: 768px) 100vw, 45vw"
-                className="w-full object-cover"
-              />
-            </div>
-          )}
+          {/* ⚠️ SEM PRINT, NÃO HÁ COLUNA — e esta era a última moldura
+              cinza que sobrava na página. O `<Imagem>` desenha o quadro
+              reservado quando o espaço está vazio, o que é certo dentro
+              de uma grade de fotos (o álbum, a faixa da rua) e errado
+              aqui: um retângulo vazio ao lado de "não precisa acreditar
+              em mim, confere" é a própria seção desmentindo a frase.
+
+              Com print, ele entra; clicável só se houver endereço
+              conferido. Sem print, o bloco vira uma faixa de texto de
+              largura inteira — que continua dizendo a coisa certa. */}
+          {temPrint ? (
+            temRegistro ? (
+              <a
+                href={provas.documento.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-revelar
+                className="block overflow-hidden chanfro-lg ring-1 ring-white/15 transition-transform duration-300 hover:scale-[1.01]"
+              >
+                <Imagem
+                  slot="provas.documento"
+                  slots={slots}
+                  sizes="(max-width: 768px) 100vw, 45vw"
+                  className="w-full object-cover"
+                />
+              </a>
+            ) : (
+              <div data-revelar className="block overflow-hidden chanfro-lg ring-1 ring-white/15">
+                <Imagem
+                  slot="provas.documento"
+                  slots={slots}
+                  sizes="(max-width: 768px) 100vw, 45vw"
+                  className="w-full object-cover"
+                />
+              </div>
+            )
+          ) : null}
         </div>
       </div>
     </Secao>

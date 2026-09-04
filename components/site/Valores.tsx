@@ -37,6 +37,17 @@ const ICONES: Record<string, React.ReactNode> = {
 export async function Valores() {
   const [{ valores }, slots] = await Promise.all([lerConteudo(), lerSlots()])
 
+  /**
+   * ⚠️ A CHECAGEM É PELO SLOT, ANTES DE DESENHAR — e não é o
+   *    `<Imagem>` que decide. Ele desenharia o quadro cinza com a
+   *    proporção reservada, que é o comportamento certo dentro de uma
+   *    grade já montada (o álbum, a faixa da rua) e errado aqui, onde
+   *    a faixa INTEIRA é opcional: três molduras vazias entre as
+   *    bandeiras e o fecho leem como imagem que não carregou.
+   */
+  const emPe = ['valores.faixa.2', 'valores.faixa.3'].filter((c) => slots[c])
+  const temFaixa = Boolean(slots['valores.faixa.1']) || emPe.length > 0
+
   return (
     <Secao id="valores" fundo="verde" espaco="solto">
       <CabecalhoSecao
@@ -67,6 +78,57 @@ export async function Valores() {
           </li>
         ))}
       </ul>
+
+      {/* ⚠️ A FAIXA SÓ EXISTE SE HOUVER FOTO. Não é o `<Imagem>` que
+          decide: ele desenharia o quadro cinza reservado, que é o
+          certo dentro de uma grade já montada e errado aqui, onde a
+          faixa inteira é opcional. Duas molduras vazias entre as
+          bandeiras e o fecho leriam como imagem que não carregou.
+
+          Por isso a checagem é pelo slot, antes de desenhar: sem
+          nenhuma das duas, a seção fica exatamente como sempre esteve.
+          Com uma só, ela ocupa a largura inteira em vez de dividir a
+          fileira com um vazio. */}
+      {temFaixa ? (
+        <div className="mt-14 flex flex-col gap-5 md:gap-6">
+          {/* A deitada ocupa a fileira inteira; as duas em pé dividem a
+              de baixo. Cada uma entra com `h-auto`, sem `object-cover`:
+              é o que garante que nenhuma perca um pixel, e é a razão de
+              a faixa existir em duas fileiras em vez de três colunas
+              iguais. Fileira sem foto simplesmente não aparece. */}
+          {slots['valores.faixa.1'] ? (
+            <figure data-revelar className="overflow-hidden chanfro-lg ring-1 ring-white/15">
+              <Imagem
+                slot="valores.faixa.1"
+                slots={slots}
+                sizes="(max-width: 768px) 100vw, 72rem"
+                className="h-auto w-full"
+              />
+            </figure>
+          ) : null}
+
+          {emPe.length > 0 ? (
+            <ul
+              className={`grid gap-5 md:gap-6 ${
+                emPe.length === 1 ? 'md:grid-cols-1' : 'md:grid-cols-2'
+              }`}
+            >
+              {emPe.map((chave, i) => (
+                <li key={chave} data-revelar style={{ ['--atraso' as string]: `${i * 90}ms` }}>
+                  <figure className="overflow-hidden chanfro-lg ring-1 ring-white/15">
+                    <Imagem
+                      slot={chave}
+                      slots={slots}
+                      sizes="(max-width: 768px) 100vw, 36rem"
+                      className="h-auto w-full"
+                    />
+                  </figure>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+      ) : null}
 
       {/* A foto de apoio, com a frase que fecha a seção.
           Os ícones dizem o que ela defende; a foto diz que ela vive

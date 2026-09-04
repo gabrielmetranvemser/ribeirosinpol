@@ -123,16 +123,13 @@ export const SLOTS: Slot[] = [
     nota: 'PNG recortado, sem fundo. É a única imagem em que o recorte importa: ela fica sobre o azul. O recortador aqui só enquadra — quem tira o fundo é o editor de imagem, antes.',
   },
 
-  {
-    chave: 'hero.apoio',
-    rotulo: 'Segunda figura (padrinho político)',
-    onde: 'Primeira dobra',
-    proporcao: null,
-    larguraMin: 1200,
-    alturaMin: 1500,
-    alpha: true,
-    nota: 'Opcional, e VAZIO É O ESTADO NORMAL. É a segunda pessoa da primeira dobra — o padrinho político, o chefe do grupo, quem empresta voto. PNG recortado, sem fundo, de corpo inteiro e olhando para o mesmo lado. Sem imagem aqui a dobra fica com uma figura só, centralizada, e continua certa. ⚠️ Uso de imagem de terceiro exige autorização por escrito.',
-  },
+  // ⚠️ `hero.apoio` FOI REMOVIDO nesta campanha. Era a segunda figura
+  //    da primeira dobra — o padrinho político. O Ribeiro não tem uma,
+  //    e o espaço exigia autorização de imagem de terceiro que nunca
+  //    seria pedida. Um cartão de envio no painel que ninguém vai usar
+  //    é um convite a subir a foto errada ali.
+  //    `Hero.tsx` já renderiza a segunda figura só quando existe, então
+  //    remover o espaço não muda um pixel da dobra.
 
   // ── Quem é (origem) ────────────────────────────────────────────
   {
@@ -174,7 +171,11 @@ export const SLOTS: Slot[] = [
   //
   //    O mínimo continua baixo: é registro de celular em assembleia,
   //    não ensaio.
-  ...Array.from({ length: 8 }, (_, i) => ({
+  //    São QUATRO, e não oito: o bloco conta um capítulo só (a
+  //    assembleia de 2022), tem duas fotos, e quatro é folga
+  //    suficiente para o que a campanha ainda achar no arquivo do
+  //    sindicato. Oito cartões vazios no painel só escondem os cheios.
+  ...Array.from({ length: 4 }, (_, i) => ({
     chave: `album.${i + 1}`,
     rotulo: `Foto ${i + 1}`,
     onde: 'O álbum',
@@ -256,39 +257,77 @@ export const SLOTS: Slot[] = [
     nota: 'Captura de tela do registro público (SAPL, portal da Câmara, Diário Oficial) com o que foi aprovado. É prova documental: separa mandato de influencer. Fica clicável para o portal oficial.',
   },
 
-  // ── Prova social ───────────────────────────────────────────────
-  // Proporção livre porque print de comentário não tem proporção: os
-  // do acervo variam de 1179×335 a 1179×1074. O recortador deixa
-  // escolher a proporção, que é o que serve para aparar o "Responder"
-  // do rodapé do print.
-  ...Array.from({ length: 6 }, (_, i) => ({
-    chave: `social.comentario.${i + 1}`,
-    rotulo: `Comentário ${i + 1}`,
-    onde: 'Prova social',
-    proporcao: null,
-    larguraMin: 600,
-    alturaMin: 160,
-    nota:
-      i === 0
-        ? '⚠️ Jurídico: borre a foto de perfil. Mantenha o @ só de quem autorizou o uso.'
-        : undefined,
-  })),
+  // ⚠️ OS 8 ESPAÇOS DE PROVA SOCIAL FORAM REMOVIDOS nesta campanha.
+  //    Eram seis prints de comentário e dois de ataque. A seção nasce
+  //    desligada (`exibir.social: false`) por dois motivos que não se
+  //    resolvem com trabalho: print de comentário de terceiro exige
+  //    autorização de uso de imagem de cada pessoa, e o par de ataques
+  //    exige o jurídico assinando embaixo. Nenhuma das duas coisas
+  //    existe, e nenhuma está encaminhada.
+  //
+  //    Enquanto os espaços ficavam declarados, o painel mostrava oito
+  //    cartões de envio para uma seção que não vai ao ar — e a tela
+  //    Início contava oito pendências que não eram pendências.
+  //    A copy de `social` continua em content/copy.ts: se um dia o
+  //    jurídico liberar, é só devolver os espaços aqui.
+
+  // ── A faixa das bandeiras ──────────────────────────────────────
+  // ⚠️ ESPAÇOS NOVOS, criados a partir das FOTOS e não da vontade de
+  //    ter mais um bloco. A seção das bandeiras cobre seis temas do
+  //    documento — esporte, criança, mulher, escritura, polícia — e
+  //    tinha uma única imagem, a que fecha a seção. Sobravam duas
+  //    fotos que pertencem a esses temas e não cabiam em nenhum
+  //    espaço existente: a academia de jiu-jitsu e o apoio à
+  //    exposição de arte.
+  //
+  //    3:4 EM PÉ porque é o formato exato das duas (1536×2048). O
+  //    caminho contrário — declarar 4:3 e deixar o object-cover
+  //    resolver — é o erro que esta campanha já cometeu duas vezes.
+  //    São TRÊS, e a primeira é DEITADA enquanto as outras duas são
+  //    EM PÉ. Não é descuido de padronização: é o formato real das
+  //    fotos que a campanha tem para estes temas — o ginásio dos Jogos
+  //    dos Rondonienses é 2048×1536 (4:3), a academia de jiu-jitsu e o
+  //    apoio à exposição são 1536×2048 (3:4). Uniformizar os três num
+  //    formato só obrigaria a cortar 44% de duas delas.
+  //
+  //    O componente compõe em duas fileiras — a deitada inteira em
+  //    cima, as duas em pé embaixo — e nenhuma das três perde um pixel.
   {
-    chave: 'social.ataque.1',
-    rotulo: 'Ataque 1',
-    onde: 'Prova social',
-    proporcao: null,
-    larguraMin: 600,
-    alturaMin: 160,
-    nota: '⚠️ Aqui borre NOME e foto. Não se dá palanque a quem ataca, e o risco de ação por uso de imagem é maior justamente neste par.',
+    chave: 'valores.faixa.1',
+    rotulo: 'Foto 1 da faixa (deitada)',
+    onde: 'Minhas bandeiras',
+    proporcao: '4/3',
+    larguraMin: 1000,
+    alturaMin: 750,
+    nota: 'A bandeira acontecendo, em foto larga: o ginásio cheio, o evento, a quadra. Ocupa a fileira inteira. Sem foto aqui a faixa some e a seção fica como sempre esteve.',
   },
+  ...Array.from({ length: 2 }, (_, i) => ({
+    chave: `valores.faixa.${i + 2}`,
+    rotulo: `Foto ${i + 2} da faixa (em pé)`,
+    onde: 'Minhas bandeiras',
+    proporcao: '3/4',
+    larguraMin: 700,
+    alturaMin: 930,
+    nota: undefined,
+  })),
+
+  // ⚠️ NÃO CRIE ESPAÇO DE FOTO EM "O QUE JÁ FOI FEITO".
+  //    Cheguei a criar um e desfiz: `Provas.tsx` registra, por
+  //    extenso, que os cartões já tiveram foto e a perderam de
+  //    propósito — cada cartão é uma LEI, não existe foto de uma lei,
+  //    e foto ilustrativa enfraquece o único bloco DOCUMENTAL da
+  //    página, que é justamente o que separa mandato de palanque.
+  //    A prova ali é o número e o registro público, não a imagem.
+
+  // ── Os grupos por município ────────────────────────────────────
   {
-    chave: 'social.ataque.2',
-    rotulo: 'Ataque 2',
-    onde: 'Prova social',
-    proporcao: null,
-    larguraMin: 600,
-    alturaMin: 160,
+    chave: 'grupos.imagem',
+    rotulo: 'Foto do interior',
+    onde: 'Grupos de WhatsApp',
+    proporcao: '4/3',
+    larguraMin: 1000,
+    alturaMin: 750,
+    nota: 'O mandato chegando no interior — visita, entrega, agenda em município pequeno. É o que dá lastro ao "meu mandato é para os 52 municípios" logo acima do buscador de grupo.',
   },
 
   // ── Chamada final ──────────────────────────────────────────────
@@ -347,7 +386,20 @@ export const SLOTS: Slot[] = [
   //    300px de largura na tela, e a origem delas é o rolo da câmera de
   //    um apoiador — muitas chegam por WhatsApp, já comprimidas. Exigir
   //    1080 aqui barraria exatamente o material que a seção quer.
-  ...Array.from({ length: 6 }, (_, i) => [
+  //
+  // ⚠️ SÃO TRÊS PARES, E ERAM SEIS. A vitrine gira entre os apoiadores
+  //    que existirem, e três já bastam para ela deixar de parecer
+  //    parada. Seis pares eram DOZE cartões de envio no painel para um
+  //    material que ainda não existe — e cartão vazio demais é o que
+  //    faz o coordenador parar de olhar a tela de Imagens, que é
+  //    justamente onde ele precisa olhar.
+  //
+  // ⚠️ ESTE NÚMERO TEM DOIS DONOS: `MAXIMO_DE_EXEMPLOS`, em
+  //    `lib/molduras.ts`, varre de 1 até ele procurando pares. Se os
+  //    dois divergirem, o excedente vira espaço que o painel oferece e
+  //    o site nunca lê — ou pior, par que existe no banco e não
+  //    aparece. Mudar aqui é mudar lá.
+  ...Array.from({ length: 3 }, (_, i) => [
     {
       chave: `filtro.exemplo.${i + 1}.story`,
       rotulo: `Apoiador ${i + 1} · story`,

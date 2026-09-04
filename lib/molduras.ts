@@ -94,7 +94,7 @@ interface ImagemDeSlot {
 }
 
 /** Quantos pares o painel oferece. Mudar aqui pede mudar em slots.ts. */
-export const MAXIMO_DE_EXEMPLOS = 6
+export const MAXIMO_DE_EXEMPLOS = 3
 
 export function resolverExemplos(
   slots: Record<string, ImagemDeSlot>,
