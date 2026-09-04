@@ -3,8 +3,10 @@ import { lerSlots } from '@/lib/midia/ler'
 import { Secao, CabecalhoSecao } from '@/components/ui/Secao'
 import { Imagem } from '@/components/ui/Imagem'
 import { BuscadorDeGrupo } from '@/components/grupos/BuscadorDeGrupo'
+import { BlocoGrupoUnico } from '@/components/grupos/BlocoGrupoUnico'
 import { MapaEstado } from '@/components/grupos/MapaEstado'
-import { TEM_MAPA } from '@/content/campanha'
+import { GRUPO_UNICO, TEM_MAPA, campanha } from '@/content/campanha'
+import { grupoDeDestino } from '@/lib/dados'
 import type { MunicipioComGrupo } from '@/lib/tipos'
 
 export async function SecaoGrupos({
@@ -14,7 +16,35 @@ export async function SecaoGrupos({
   municipios: MunicipioComGrupo[]
   sugerido?: MunicipioComGrupo | null
 }) {
-  const [{ grupos: copy }, slots] = await Promise.all([lerConteudo(), lerSlots()])
+  const [{ grupos: copy, ctas }, slots] = await Promise.all([lerConteudo(), lerSlots()])
+
+  /**
+   * ⚠️ COM UM GRUPO SÓ, A SEÇÃO É OUTRA COISA — e por isso a troca é
+   *    aqui em cima, antes de montar qualquer coisa, e não um `hidden`
+   *    no buscador. Buscador escondido continua carregando os 52
+   *    municípios, o mapa e o JavaScript da geolocalização para uma
+   *    tela que não usa nada disso.
+   */
+  if (GRUPO_UNICO) {
+    const grupo = await grupoDeDestino(campanha.slugGrupo)
+    return (
+      <Secao id="grupos" fundo="branco" espaco="solto">
+        <CabecalhoSecao
+          etiqueta={copy.etiqueta}
+          titulo={copy.titulo}
+          destaque="grifo"
+        />
+        <BlocoGrupoUnico
+          intro={copy.intro}
+          avisoEmBreve={copy.avisoEmBreve}
+          rotuloBotao={ctas.grupo}
+          status={grupo?.status ?? 'em_breve'}
+          slots={slots}
+          origem="lista"
+        />
+      </Secao>
+    )
+  }
 
   return (
     <Secao id="grupos" fundo="branco" espaco="solto">

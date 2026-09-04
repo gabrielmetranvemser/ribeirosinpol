@@ -81,7 +81,7 @@ export const meta = {
   descricao:
     `${campanha.nome}, ${campanha.numero}, ${g.candidato} a ${campanha.cargo} por ` +
     `${campanha.estado} pelo ${campanha.partido}. Policial civil e ex-presidente do ` +
-    `SINPOL. Entre no grupo da sua ${REGIAO.rotuloBusca}.`,
+    'SINPOL. Entre no grupo de WhatsApp da campanha.',
   palavrasChave: [
     campanha.nome,
     nomeComNumero,
@@ -126,12 +126,12 @@ export const paginas = {
     ogDescricao: 'Sem cadastro. Sua foto não sai do seu aparelho.',
   },
   grupos: {
-    tituloAba: `Grupos de WhatsApp por ${REGIAO.singular}`,
+    tituloAba: 'Grupo de WhatsApp da campanha',
     descricao:
-      `Encontre o grupo de WhatsApp da campanha na sua ${REGIAO.rotuloBusca}. ` +
-      `Um grupo para cada ${REGIAO.singular}.`,
-    ogTitulo: `Grupos de WhatsApp · ${nomeComNumero}`,
-    ogDescricao: `Um grupo para cada ${REGIAO.singular}.`,
+      'Entre no grupo de WhatsApp da campanha do Ribeiro do Sinpol e acompanhe agenda, ' +
+      'visita e o que estiver acontecendo em Rondônia.',
+    ogTitulo: `Grupo de WhatsApp · ${nomeComNumero}`,
+    ogDescricao: 'Um grupo, para Rondônia inteira.',
   },
   privacidade: {
     tituloAba: 'Política de Privacidade',
@@ -150,13 +150,17 @@ export const navegacao = {
   itens: [
     { id: 'nav-01', rotulo: `Quem é ${campanha.primeiroNome}`, href: '/#origem' },
     { id: 'nav-02', rotulo: 'Compromissos', href: '/#futuro' },
-    { id: 'nav-03', rotulo: 'Grupos de WhatsApp', href: '/#grupos' },
+    { id: 'nav-03', rotulo: 'Grupo de WhatsApp', href: '/#grupos' },
     { id: 'nav-04', rotulo: `Coloque o ${campanha.numero}`, href: '/filtro' },
   ],
 } as const
 
 export const ctas = {
-  grupo: `Entrar no grupo da minha ${REGIAO.rotuloBusca}`,
+  // ⚠️ "da minha cidade" SAIU DE TODO LUGAR. A campanha tem UM grupo,
+  //    e prometer o grupo da cidade de quem lê é prometer uma coisa que
+  //    não existe — a pessoa entra esperando vizinho e encontra o
+  //    estado inteiro. Ver `grupoUnico` em content/campanha.ts.
+  grupo: 'Entrar no grupo da campanha',
   grupoCurto: 'Entrar no grupo',
   filtro: `Colocar o ${campanha.numero} na minha foto`,
   filtroCurto: `Colocar o ${campanha.numero}`,
@@ -691,11 +695,31 @@ export const futuro = {
 // ─────────────────────────────────────────────────────────────
 export const grupos = {
   etiqueta: 'Entre no grupo',
-  titulo: `Tem um grupo ${g.do} ${campanha.primeiroNome} [[na sua ${REGIAO.rotuloBusca}.]]`,
+  /**
+   * ⚠️ UM GRUPO, NÃO UM POR CIDADE. O modelo nasceu com um grupo por
+   *    município e o título dizia "na sua cidade"; esta campanha
+   *    escolheu um grupo só para Rondônia inteira. Trocar só o título e
+   *    deixar o buscador de pé seria o pior dos dois mundos — por isso
+   *    a mudança é de estrutura, em `grupoUnico`, e este texto é a
+   *    parte visível dela.
+   *
+   * ⚠️ A INTRO NÃO PROMETE "PERTO DE VOCÊ". Prometia, quando havia um
+   *    grupo por município, e ali era verdade. Num grupo estadual, quem
+   *    entra esperando o vizinho encontra o estado inteiro e sai — e a
+   *    saída acontece depois do clique, que é o clique mais caro da
+   *    campanha.
+   */
+  titulo: `Um grupo. [[Rondônia inteira.]]`,
   intro:
-    'Eu nasci em Porto Velho, mas meu mandato é para os 52 municípios que confiaram em mim. Tem ' +
-    `um grupo de WhatsApp para cada ${REGIAO.singular} — é por ali que a campanha avisa de ` +
-    'agenda, visita e do que estiver acontecendo perto de você.',
+    'Meu mandato é para os 52 municípios que confiaram em mim, e o grupo é um só — de Porto ' +
+    'Velho ao último distrito. É por ali que a campanha avisa de agenda, visita e do que ' +
+    'estiver acontecendo, sem depender de rede social para chegar em você.',
+  // ── Daqui para baixo: rótulos do BUSCADOR, do MAPA e da LISTA.
+  //    Com `grupoUnico` ligado eles não aparecem em lugar nenhum — a
+  //    seção é um bloco com um botão. Ficam de propósito, e não foram
+  //    apagados por dois motivos: o esquema do painel os declara (some
+  //    daqui e o formulário quebra), e são o caminho de volta se a
+  //    campanha decidir abrir grupo por região mais para frente.
   rotuloBusca: `Digite o nome da sua ${REGIAO.rotuloBusca}`,
   placeholderBusca: 'Comece a digitar…',
   botaoGeo: 'Usar minha localização',
@@ -721,8 +745,10 @@ export const grupos = {
   emBreve: 'Em breve',
   cheio: 'Grupo cheio',
   aberto: 'Entrar',
+  // ⚠️ ESTE TEXTO ESTÁ NO AR AGORA. Enquanto o link não for colado no
+  //    painel, é ele que ocupa o lugar do botão — ver `BlocoGrupoUnico`.
   avisoEmBreve:
-    'O grupo daqui ainda não abriu. Siga o Instagram da campanha que avisamos assim que abrir.',
+    'O grupo abre em instantes. Siga o Instagram da campanha que avisamos assim que ele estiver no ar.',
 } as const
 
 // ─────────────────────────────────────────────────────────────
@@ -800,7 +826,7 @@ export const compartilhar = {
   //    Precisa fazer sentido lido sozinho, sem a página junto.
   textoWhatsapp:
     `Olha a página ${g.do} ${nomeComNumero}, ${g.candidato} a ${campanha.cargo} por ` +
-    `${campanha.estado}. Tem grupo da nossa ${REGIAO.rotuloBusca} e dá pra colocar o ` +
+    `${campanha.estado}. Dá pra entrar no grupo da campanha e colocar o ` +
     `${campanha.numero} na sua foto:`,
   botaoWhatsapp: 'Enviar no WhatsApp',
   botaoCopiar: 'Copiar o link',
@@ -853,7 +879,7 @@ export const rodape = {
    */
   assinatura: 'Juntos pela Rondônia que a gente quer.',
   links: [
-    { id: 'link-01', rotulo: 'Grupos de WhatsApp', href: '/grupos' },
+    { id: 'link-01', rotulo: 'Grupo de WhatsApp', href: '/grupos' },
     { id: 'link-02', rotulo: `Coloque o ${campanha.numero} na sua foto`, href: '/filtro' },
     { id: 'link-03', rotulo: 'Política de privacidade', href: '/politica-de-privacidade' },
   ],

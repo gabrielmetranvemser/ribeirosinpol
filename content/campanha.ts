@@ -88,6 +88,37 @@ export const campanha = {
   escopo: 'estadual' as Escopo,
 
   /**
+   * UM GRUPO SÓ PARA A CAMPANHA INTEIRA, em vez de um por município.
+   *
+   * ⚠️ ISTO NÃO É UM AJUSTE DE TEXTO. Ligado, ele desliga o buscador de
+   *    cidade, o mapa, a lista dos 52 municípios e a sugestão por
+   *    localização — e a seção de grupos vira um bloco com UM botão.
+   *    Desligar isso e escrever "o grupo da campanha" nos rótulos
+   *    deixaria a pessoa procurando a própria cidade numa lista que
+   *    leva todo mundo para o mesmo lugar, o que é pior que a lista.
+   *
+   * ⚠️ O QUE **NÃO** É DESMONTADO: a tabela `grupos`, o redirecionador
+   *    `/g/[slug]`, a contagem de cliques e a trava de silêncio
+   *    eleitoral continuam inteiros. São a peça de maior valor do
+   *    projeto — o link que vai no panfleto e no QR do carro de som, e
+   *    que se troca no painel sem republicar. Com um grupo só, eles
+   *    passam a servir a um destino em vez de 52.
+   *
+   * Voltar atrás é trocar para `false`: a lista, o mapa e a busca
+   * voltam como estavam, porque nada foi apagado.
+   */
+  grupoUnico: true,
+
+  /**
+   * O slug do grupo único — vira a URL `/g/ribeiro`, que é a que vai
+   * impressa. Não é um município: ele é registrado em
+   * `data/localidades.json`, o mecanismo que este projeto já tinha para
+   * grupo com slug próprio (ver o README de lá). Ancorado em Porto
+   * Velho só para a métrica ter onde cair.
+   */
+  slugGrupo: 'ribeiro',
+
+  /**
    * Sigla da UF.
    *
    * ⚠️ AQUI RONDÔNIA NÃO É EXEMPLO — é a campanha. O modelo do qual
@@ -263,8 +294,15 @@ export const nomeComNumero = campanha.nome.includes(campanha.numero)
 /** 'município'/'bairro' já resolvido pelo escopo. */
 export const REGIAO = campanha.regiao
 
-/** O mapa só existe em campanha estadual: não há malha de bairro. */
-export const TEM_MAPA = campanha.escopo === 'estadual'
+/** Um destino só para todo mundo. Ver `grupoUnico`, acima. */
+export const GRUPO_UNICO = campanha.grupoUnico
+
+/**
+ * O mapa só existe em campanha estadual — não há malha de bairro no
+ * IBGE — e some também quando há um grupo só: um mapa clicável de 52
+ * municípios que leva todos ao mesmo link é uma promessa falsa.
+ */
+export const TEM_MAPA = campanha.escopo === 'estadual' && !campanha.grupoUnico
 
 /**
  * O nome do cookie de sessão do painel.

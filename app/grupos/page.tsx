@@ -10,8 +10,10 @@ import { Header } from '@/components/site/Header'
 import { RodapeLegal } from '@/components/site/RodapeLegal'
 import { RegistroDePagina } from '@/components/site/RegistroDePagina'
 import { BuscadorDeGrupo } from '@/components/grupos/BuscadorDeGrupo'
+import { BlocoGrupoUnico } from '@/components/grupos/BlocoGrupoUnico'
 import { MapaEstado } from '@/components/grupos/MapaEstado'
-import { TEM_MAPA } from '@/content/campanha'
+import { GRUPO_UNICO, TEM_MAPA, campanha } from '@/content/campanha'
+import { grupoDeDestino } from '@/lib/dados'
 import { Aviso } from '@/components/ui/Aviso'
 import { TextoComDestaque } from '@/components/ui/TextoComDestaque'
 
@@ -49,6 +51,7 @@ export default async function PaginaGrupos({
     lerConteudo(),
   ])
   const { ctas, grupos: copy } = conteudo
+  const grupoUnico = GRUPO_UNICO ? await grupoDeDestino(campanha.slugGrupo) : null
 
   const sugerido = casarCidadePorHeader(
     municipios,
@@ -100,7 +103,7 @@ export default async function PaginaGrupos({
               </Aviso>
             ) : null}
 
-            {cidadeVinda && !emSilencio ? (
+            {cidadeVinda && !emSilencio && !GRUPO_UNICO ? (
               <Aviso tom={situacao === 'cheio' ? 'info' : 'alerta'} className="mb-2">
                 {situacao === 'cheio' ? (
                   <>
@@ -120,22 +123,37 @@ export default async function PaginaGrupos({
               </Aviso>
             ) : null}
 
-            {naoEncontrado ? (
+            {naoEncontrado && !GRUPO_UNICO ? (
               <Aviso tom="info" className="mb-2">
                 Não encontramos essa cidade. Procure na lista abaixo.
               </Aviso>
             ) : null}
 
-            <BuscadorDeGrupo
-              municipios={municipios}
-              sugerido={sugerido}
-              /* ⚠️ O MAPA SÓ EXISTE EM CAMPANHA ESTADUAL. Em campanha
-                 municipal o território é dividido por bairro, e não há
-                 malha oficial de bairro no IBGE para desenhar. O
-                 `BuscadorDeGrupo` aceita `mapa` nulo e se rearranja em
-                 coluna única — a busca e a lista continuam inteiras. */
-              mapa={TEM_MAPA ? <MapaEstado municipios={municipios} destacado={sugerido?.slug} /> : null}
-            />
+            {GRUPO_UNICO ? (
+              /* Com um grupo só, esta página é a mesma peça da home —
+                 e ela continua existindo por dois motivos: é para onde
+                 o redirecionador manda quem chega no silêncio eleitoral
+                 ou com o grupo cheio, e é o destino dos botões quando a
+                 seção da home está desligada no painel. */
+              <BlocoGrupoUnico
+                avisoEmBreve={copy.avisoEmBreve}
+                rotuloBotao={ctas.grupo}
+                status={grupoUnico?.status ?? 'em_breve'}
+                slots={await lerSlots()}
+                origem="grupos_pagina"
+              />
+            ) : (
+              <BuscadorDeGrupo
+                municipios={municipios}
+                sugerido={sugerido}
+                /* ⚠️ O MAPA SÓ EXISTE EM CAMPANHA ESTADUAL. Em campanha
+                   municipal o território é dividido por bairro, e não há
+                   malha oficial de bairro no IBGE para desenhar. O
+                   `BuscadorDeGrupo` aceita `mapa` nulo e se rearranja em
+                   coluna única — a busca e a lista continuam inteiras. */
+                mapa={TEM_MAPA ? <MapaEstado municipios={municipios} destacado={sugerido?.slug} /> : null}
+              />
+            )}
           </div>
         </section>
       </main>
