@@ -16,7 +16,7 @@ import { Texto } from '@/components/ui/TextoComDestaque'
  *    de 2022 carregava o número de votos, que era o único dado não
  *    confirmado da página.
  *
- *    No lugar entra o vídeo em que ela conta a história ela mesma.
+ *    No lugar entra o vídeo em que a própria pessoa conta a história.
  *    Enquanto o endereço não é colado no painel, o bloco não existe e
  *    a seção fica exatamente como estava.
  *
@@ -185,7 +185,17 @@ export async function Origem() {
           {citacao}
         </div>
 
-        <div data-revelar className="space-y-4">
+        {/* ⚠️ A COLUNA DE FOTOS ACOMPANHA A ROLAGEM. A campanha
+            apontou "muito espaço em branco" olhando exatamente para
+            aqui: a coluna de texto é bem mais alta que a de imagens, e
+            o que sobrava do lado direito era meia tela de branco.
+
+            `sticky` resolve sem inventar conteúdo para encher — as
+            fotos ficam à vista enquanto os parágrafos passam, e o
+            vazio deixa de existir porque a coluna nunca termina antes
+            da outra. `self-start` é obrigatório: item de grade estica
+            por padrão, e item esticado não gruda. */}
+        <div data-revelar className="space-y-4 lg:sticky lg:top-28 lg:self-start">
           <Imagem
             slot="origem.retrato"
             slots={slots}

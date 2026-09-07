@@ -62,13 +62,20 @@ export function BlocoGrupoUnico({
 
   return (
     <div className="mt-12">
+      {/* ⚠️ TETO DE ALTURA NA FOTO. Sem ele a imagem entra com a
+          proporção que o arquivo tiver, e uma foto de comício em
+          paisagem larga virava um bloco de 800px de altura ocupando a
+          tela inteira — a campanha apontou como "foto muito grande".
+          `object-cover` corta pelo meio em vez de encolher a largura,
+          então ela continua sangrando de ponta a ponta, que é o que a
+          faixa quer. */}
       {slots['grupos.imagem'] ? (
         <figure data-revelar className="mb-10 overflow-hidden chanfro-lg">
           <Imagem
             slot="grupos.imagem"
             slots={slots}
             sizes="(max-width: 768px) 100vw, 72rem"
-            className="h-auto w-full"
+            className="max-h-[26rem] w-full object-cover md:max-h-[30rem]"
           />
         </figure>
       ) : null}

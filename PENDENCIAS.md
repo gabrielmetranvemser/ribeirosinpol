@@ -93,9 +93,10 @@ documento não traz — e que não se inventam.
 - [ ] **Ícone do navegador**, quadrado, 512×512 (`marca.favicon`)
 - [ ] **Cartão do link**, 1200×630 (`marca.cartaoLink`). Sem ele o
       site desenha o cartão com nome e número
-- [ ] **Cinco fotos de rua** para o fundo da primeira dobra —
-      `public/fundo-1..5.webp`, em cinza no arquivo. Vêm com
-      placeholders
+- [ ] **Dez fotos de campanha** para o fundo da primeira dobra —
+      `public/fundo-1..10.webp`, em cinza no arquivo. Vêm com
+      placeholders. Elas aparecem nítidas dentro da estrela e cada vez
+      mais desfocadas em direção aos cantos
 - [ ] **Fotos do álbum** (8 espaços) — aqui o álbum **não é de
       infância**: é a trajetória, de 2001 à Assembleia. O documento da
       campanha não traz uma única cena de infância, e legenda de
@@ -120,8 +121,6 @@ documento não traz — e que não se inventam.
       uso de imagem de cada pessoa. A seção nasce **desligada**
 - [ ] **Menções a processo judicial** — ⛔ não sobe sem o jurídico
       assinando embaixo, nem para dizer que a campanha ganhou
-- [ ] **Foto do padrinho político** (`hero.apoio`) — autorização por
-      escrito
 - [ ] **Pixel da Meta**, se houver tráfego pago — e, junto dele, o
       texto novo da política de privacidade (o painel entrega pronto)
 

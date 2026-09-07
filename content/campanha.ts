@@ -134,7 +134,7 @@ export const campanha = {
   /** Código do IBGE da UF. A tabela das 27 está em scripts/ufs.mjs. */
   ufCodigoIbge: 11,
 
-  /** A cidade da pessoa. Aparece em "Vereadora em ___". */
+  /** A cidade da pessoa. Aparece em "<cargo> em ___". */
   cidadeBase: 'Porto Velho',
 
   /**
@@ -278,6 +278,8 @@ export const g = {
   do: f ? 'da' : 'do',
   /** ele · ela */
   ele: f ? 'ela' : 'ele',
+  /** dele · dela */
+  dele: f ? 'dela' : 'dele',
   /** eleito · eleita */
   eleito: f ? 'eleita' : 'eleito',
   /** pronto · pronta */

@@ -80,7 +80,7 @@ export async function CtaFinal({ silencio = false }: { silencio?: boolean }) {
             className="mt-12 flex flex-col items-center justify-center gap-3 sm:flex-row"
           >
             <CliqueGrupo origem="cta_final" href={paraOsGrupos} className="contents">
-              <span className="toque inline-flex min-h-14 items-center justify-center gap-2.5 chanfro bg-amarelo px-8 text-lg font-semibold text-azul-escuro shadow-alta transition-all duration-300 hover:bg-[color-mix(in_srgb,var(--color-amarelo)_88%,white)]">
+              <span className="toque inline-flex min-h-14 items-center justify-center gap-2.5 chanfro bg-amarelo px-8 text-lg font-semibold text-azul-escuro transition-colors duration-300 hover:bg-[color-mix(in_srgb,var(--color-amarelo)_88%,white)]">
                 {ctaFinal.ctaPrimario}
               </span>
             </CliqueGrupo>
@@ -90,7 +90,7 @@ export async function CtaFinal({ silencio = false }: { silencio?: boolean }) {
             </BotaoLink>
           </div>
         ) : (
-          <p className="mx-auto mt-10 max-w-xl chanfro bg-white/10 px-5 py-4 ring-1 ring-white/20">
+          <p className="mx-auto mt-10 max-w-xl chanfro cartao-escuro px-5 py-4">
             {ctas.silencio}
           </p>
         )}

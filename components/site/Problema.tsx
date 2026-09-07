@@ -1,8 +1,8 @@
 import { lerConteudo } from '@/lib/conteudo/ler'
 import { Secao, CabecalhoSecao } from '@/components/ui/Secao'
+import { CartaoItem } from '@/components/ui/CartaoItem'
 import { Video } from '@/components/ui/Video'
 import { emPe, formatoValido, larguraDoVideo } from '@/lib/video'
-import { Texto } from '@/components/ui/TextoComDestaque'
 
 /**
  * O teto de altura do vídeo DEITADO desta seção.
@@ -65,21 +65,13 @@ export async function Problema() {
       }`}
     >
       {problema.itens.map((item, i) => (
-        <li
+        <CartaoItem
           key={item.id}
-          data-revelar
-          style={{ ['--atraso' as string]: `${i * 80}ms` }}
-          className="cartao group h-full p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-media md:p-8"
-        >
-          <span
-            className="inline-flex size-11 items-center justify-center chanfro-sm bg-azul-escuro font-[family-name:var(--font-titulo)] text-base font-bold text-white transition-colors duration-300 group-hover:bg-amarelo group-hover:text-azul-escuro"
-            aria-hidden
-          >
-            {item.numero}
-          </span>
-          <h3 className="mt-5 text-xl md:text-2xl"><Texto>{item.titulo}</Texto></h3>
-          <p className="mt-3 text-base text-grafite"><Texto>{item.texto}</Texto></p>
-        </li>
+          atraso={i * 80}
+          marca={item.numero}
+          titulo={item.titulo}
+          texto={item.texto}
+        />
       ))}
     </ul>
   )

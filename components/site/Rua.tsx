@@ -1,7 +1,8 @@
 import { lerConteudo } from '@/lib/conteudo/ler'
 import { lerSlots } from '@/lib/midia/ler'
 import { Imagem } from '@/components/ui/Imagem'
-import { TextoComDestaque, Texto } from '@/components/ui/TextoComDestaque'
+import { Texto } from '@/components/ui/TextoComDestaque'
+import { CabecalhoSecao } from '@/components/ui/Secao'
 import { Video } from '@/components/ui/Video'
 import { emPe, formatoValido, larguraDoVideo, TETO_AO_LADO_DO_TEXTO } from '@/lib/video'
 
@@ -70,25 +71,24 @@ export async function Rua() {
               : ''
           }
         >
-          <div className="max-w-2xl">
-            <p data-revelar className="etiqueta text-white">
-              <span className="inline-block h-px w-8 bg-amarelo" aria-hidden />
-              {rua.etiqueta}
-            </p>
-            <h2
-              data-revelar
-              style={{ ['--atraso' as string]: '70ms' }}
-              className="mt-4 titulo-secao text-white"
-            >
-              <TextoComDestaque texto={rua.titulo} tom="amarelo" />
-            </h2>
-            <p
-              data-revelar
-              style={{ ['--atraso' as string]: '140ms' }}
-              className="mt-5 text-lg text-white/80 md:text-xl"
-            >
-              <Texto tom="amarelo">{rua.texto}</Texto>
-            </p>
+          {/* ⚠️ ESTA ERA A ÚNICA SEÇÃO QUE MONTAVA O CABEÇALHO À MÃO,
+              e por isso ficou de fora quando o ritmo das outras doze
+              mudou — traço curto ao lado da etiqueta, título e texto
+              empilhados, que é justamente a abertura que o site
+              abandonou. Uma seção fora do sistema não é variação, é
+              esquecimento: quem rola a página vê a costura.
+
+              Agora usa `CabecalhoSecao` como as outras. O `texto` desta
+              seção entra como `intro` — é o mesmo papel que a
+              introdução cumpre nas demais, e assim ele ganha a coluna
+              própria à direita do título. */}
+          <div>
+            <CabecalhoSecao
+              etiqueta={rua.etiqueta}
+              titulo={rua.titulo}
+              intro={rua.texto}
+              tom="escuro"
+            />
           </div>
 
           {/* O vídeo da pandemia vem ANTES das fotos. A seção existe
@@ -122,7 +122,7 @@ export async function Rua() {
                   ? { ['--largura' as string]: `calc(${larguraDoVideo(formato, teto)} + 1.5rem)` }
                   : { maxWidth: `calc(${larguraDoVideo(formato)} + 1.5rem)` }
               }
-              className={`mx-auto w-full chanfro-lg bg-white/5 p-3 ring-1 ring-white/10 ${
+              className={`mx-auto w-full chanfro-lg cartao-escuro p-3 ${
                 vertical ? 'lg:w-[var(--largura)]' : ''
               }`}
             >

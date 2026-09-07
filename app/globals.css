@@ -45,12 +45,30 @@
   --color-linha-escura: #0B3574;
 
   /* ── Tipografia ─────────────────────────────────────────────
-     O logotipo é uma grotesca condensada, pesada e itálica. Repetir
-     esse peso nos títulos da página deixa tudo pesado demais — foi o
-     problema da Tusker. A Archivo tem o mesmo esqueleto industrial,
-     mas com peso graduável: 700 nos títulos dá autoridade sem virar
-     bloco. O itálico dela ecoa a marca quando precisa. */
-  --font-titulo: var(--fonte-titulo), 'Archivo', ui-sans-serif, system-ui, sans-serif;
+     TÍTULO: Bricolage Grotesque, condensada. Ver o bloco de
+     comentário em app/layout.tsx para o porquê da troca (era Archivo,
+     e Archivo era o traço que mais entregava esta página como irmã de
+     outra saída do mesmo modelo) e para as duas tentativas reprovadas
+     no caminho.
+
+     ⚠️ A LARGURA É UM CONTROLE, e mora aqui em cima justamente para
+        não ficar espalhada por seis utilitários. `--titulo-largura` é
+        o eixo `wdth` da fonte: 100 é o desenho normal, 75 é o mais
+        estreito que ela vai. 88 é o ponto em que o título da primeira
+        dobra cabe em uma linha por entrada da copy na coluna de
+        ~570px, sem que a letra comece a parecer espremida.
+
+        Mexer neste número é mexer em quantas linhas o título ocupa —
+        ou seja, na altura da primeira dobra. Conferir a dobra depois
+        de mudar, não só o print do título.
+
+     ⚠️ A PILHA DE RESERVA IMPORTA MAIS PELA LARGURA QUE PELO DESENHO.
+        Fonte de título que não carrega cai na reserva, e cair numa
+        largura diferente muda o número de linhas — o que muda a altura
+        da dobra enquanto a fonte carrega. Por isso a reserva é uma
+        condensada de sistema, e não a grotesca padrão. */
+  --font-titulo: var(--fonte-titulo), 'Bricolage Grotesque', 'Archivo Narrow', 'Arial Narrow', ui-sans-serif, system-ui, sans-serif;
+  --titulo-largura: 88;
   --font-corpo: var(--fonte-corpo), ui-sans-serif, system-ui, sans-serif;
 
   --text-base: 1.0625rem;
@@ -119,7 +137,6 @@
   }
 
   h1, h2, h3, h4 {
-    font-family: var(--font-titulo);
     font-weight: 700;
     line-height: 1.1;
     letter-spacing: -0.025em;
@@ -127,7 +144,35 @@
     color: inherit;
   }
 
-  h1 { letter-spacing: -0.035em; line-height: 1.02; }
+  /* ⚠️ SÓ h1 E h2 RECEBEM A DISPLAY, e a divisão é o que faz a Anton
+     funcionar. Ela é uma condensada de cartaz: desenhada para ser
+     lida de longe e em corpo grande. Num h3 de cartão, a 20px, as
+     hastes encostam umas nas outras e a palavra vira mancha. Título
+     de seção é cartaz; título dentro de cartão é rótulo, e rótulo se
+     lê melhor na fonte do corpo.
+
+     Bricolage Grotesque é variável de 200 a 800, então 700 aqui é peso
+     de verdade, não sintético — mas `font-synthesis-weight: none` fica
+     como trava: se a fonte não carregar e a reserva do sistema não
+     tiver um 700 real, é melhor o título vir mais leve do que vir
+     engordado pelo navegador, que é o que borra o traço.
+
+     ⚠️ `font-stretch` E NÃO `font-variation-settings`. As duas chegam
+        no mesmo eixo `wdth`, mas `font-variation-settings` é a porta
+        de baixo: ela DESLIGA os outros eixos que não forem listados na
+        mesma declaração, então escrevê-la aqui zeraria o peso vindo de
+        `font-weight`. Com `font-stretch` os dois eixos convivem, que é
+        o ponto inteiro de ter escolhido uma fonte variável. */
+  h1, h2 {
+    font-family: var(--font-titulo);
+    font-weight: 700;
+    font-stretch: calc(var(--titulo-largura) * 1%);
+    font-synthesis-weight: none;
+  }
+
+  h3, h4 { font-family: var(--font-corpo); }
+
+  h1 { letter-spacing: -0.03em; line-height: 0.98; }
 
   p { text-wrap: pretty; }
   a { color: inherit; }
@@ -245,20 +290,72 @@
   }
 }
 
+/* ⚠️ NÃO PONHA `text-transform: uppercase` AQUI. A tentação é grande —
+   título de campanha em caixa alta parece cartaz, e uma versão
+   anterior destes utilitários fazia exatamente isso.
+
+   Não funciona por dois motivos que se somam. Maiúscula não tem
+   ascendente nem descendente, então a mancha vira um retângulo
+   uniforme e a leitura fica mais lenta, justo na frase que precisa ser
+   lida em um segundo. E maiúscula ocupa mais largura por caractere,
+   que é o problema que já derrubou uma fonte aqui.
+
+   O peso de cartaz vem do PESO (800), da largura estreita e da
+   entrelinha fechada — não da caixa.
+
+   ⚠️ 800 E NÃO 700 no cartaz. É o topo do eixo desta fonte, e é o que
+      separa "título grande" de "manchete". No título de seção o peso
+      cai para 700: a seção não disputa atenção com a primeira dobra. */
 @utility titulo-cartaz {
   font-family: var(--font-titulo);
-  font-weight: 700;
-  font-size: clamp(2.4rem, 6.2vw, 4.5rem);
-  line-height: 1.02;
-  letter-spacing: -0.036em;
+  font-weight: 800;
+  font-stretch: calc(var(--titulo-largura) * 1%);
+  font-synthesis-weight: none;
+  /* ⚠️ ESTE TETO ESTÁ BAIXO PARA UMA DOBRA DE TELA CHEIA, e é uma
+     dívida conhecida, não um descuido. A 3,25rem o título da dobra
+     (52px) fica a apenas alguns pixels do título de seção — hierarquia
+     quase nenhuma entre a manchete da página e o título de um
+     capítulo.
+
+     Subir para 4,5rem foi testado e funciona em altura: a dobra
+     continua cabendo acima da barra. O que ele quebra é a LARGURA —
+     com cinco linhas, a coluna de texto avança 38px para dentro da
+     caixa da figura. Consertar isso é mexer na grade de três colunas,
+     ou seja, na dobra inteira.
+
+     Ficou para a próxima passada na primeira dobra. Enquanto isso, a
+     hierarquia é sustentada pelo lado da seção (ver `titulo-secao`). */
+  font-size: clamp(2.15rem, 4.3vw, 3.25rem);
+  line-height: 0.98;
+  letter-spacing: -0.038em;
 }
 
 @utility titulo-secao {
   font-family: var(--font-titulo);
   font-weight: 700;
-  font-size: clamp(1.85rem, 3.8vw, 2.9rem);
-  line-height: 1.1;
-  letter-spacing: -0.03em;
+  font-stretch: calc(var(--titulo-largura) * 1%);
+  font-synthesis-weight: none;
+  /* ⚠️ SUBIU DE 3rem PARA 4rem NO TETO, e a razão é honesta: a
+     primeira leva de mudanças nas seções foi correta e IMPERCEPTÍVEL.
+     Estrela no lugar do traço, fio no topo, duas colunas — tudo isso é
+     sistema, e sistema se sente sem se notar. Quem rola a página
+     precisa VER que ela mudou, e escala de título é a alavanca mais
+     barata que existe para isso.
+
+     4rem é o teto que ainda deixa o título de seção menor que o da
+     primeira dobra (4,25rem). A hierarquia entre os dois é o que
+     impede a página de virar uma sequência de capas. */
+  /* ⚠️ 2,75rem E NÃO 3rem, e é uma redução deliberada. O título de
+     seção estava em 48px contra os 52px da primeira dobra: quatro
+     pixels de diferença não estabelecem hierarquia nenhuma, e a página
+     inteira lia como uma sequência de capas de mesmo peso.
+
+     Baixar o capítulo é o caminho disponível enquanto o teto da dobra
+     não sobe — ver o comentário em `titulo-cartaz`. 44px contra 52px
+     já é uma relação que o olho reconhece. */
+  font-size: clamp(1.9rem, 3.6vw, 2.75rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
 }
 
 @utility etiqueta {
@@ -272,12 +369,24 @@
   text-transform: uppercase;
 }
 
-/* Itálico da marca. Usado com moderação: número, selo, destaque curto. */
+/* Itálico da marca. Usado com moderação: número, selo, destaque curto.
+ *
+ * ⚠️ É OBLÍQUA SINTÉTICA, e não itálico de verdade. Bricolage Grotesque
+ *    não tem corte itálico — `font-style: italic` deixaria o navegador
+ *    inclinar sozinho, num ângulo que varia de motor para motor.
+ *    `oblique 10deg` pede a inclinação explicitamente e entrega sempre
+ *    a mesma. 10 graus porque é o ângulo do logotipo.
+ *
+ *    Aqui a caixa alta FICA, ao contrário dos títulos: `voz-marca` é
+ *    selo e número, palavra curta em corpo grande, e é o único lugar
+ *    onde a página quer o eco do logotipo em vez do desenho da fonte. */
 @utility voz-marca {
   font-family: var(--font-titulo);
   font-weight: 800;
-  font-style: italic;
-  letter-spacing: -0.03em;
+  font-stretch: calc(var(--titulo-largura) * 1%);
+  font-synthesis-weight: none;
+  font-style: oblique 10deg;
+  letter-spacing: -0.01em;
   text-transform: uppercase;
 }
 
@@ -292,6 +401,57 @@
   background-repeat: no-repeat;
   padding-inline: 0.06em;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   O PAINEL NÃO USA A FONTE DE CARTAZ
+
+   A troca de título para Anton vale para a PÁGINA. O painel é
+   ferramenta de trabalho: formulário lido por vinte minutos seguidos,
+   onde caixa alta cansa e condensada atrapalha a varredura. É o mesmo
+   critério que já deixou o painel fora da troca do chanfro (ver o
+   bloco CHANFRO abaixo: "canto cortado em formulário de administração
+   custa tempo e não vende voto").
+
+   Bastam estas regras porque `--font-titulo` é herdada: redefini-la no
+   invólucro do painel reaponta tudo que desce dali — os doze
+   `titulo-secao` das telas de administração e qualquer h1/h2 solto —
+   sem tocar em nenhum dos arquivos.
+
+   ⚠️ ESTE BLOCO FICA FORA DE `@layer`, E É O QUE O FAZ FUNCIONAR.
+      `titulo-secao` nasce de um `@utility`, ou seja, mora na camada
+      `utilities`. Regra em camada nenhuma vence regra em qualquer
+      camada, por mais específica que a outra seja — é assim que a
+      cascata de camadas funciona, e é o contrário da intuição de
+      especificidade. Enfiar isto num `@layer base` faria o painel
+      continuar em Anton, sem erro nenhum para explicar por quê.
+   ═══════════════════════════════════════════════════════════════ */
+
+[data-painel] {
+  --font-titulo: var(--font-corpo);
+}
+
+[data-painel] :is(h1, h2, h3, h4),
+[data-painel] .titulo-cartaz,
+[data-painel] .titulo-secao {
+  font-weight: 700;
+  /* Inter não tem eixo de largura: sem este `normal`, o `font-stretch`
+     dos utilitários pediria 88% de uma fonte que não sabe encolher, e
+     o navegador responde com CONDENSAÇÃO SINTÉTICA — letra achatada
+     na horizontal, que é o defeito tipográfico mais fácil de ver e o
+     mais difícil de perceber que foi você que causou. */
+  font-stretch: normal;
+  font-synthesis-weight: auto;
+  font-style: normal;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  text-transform: none;
+}
+
+/* Os títulos do painel também não precisam do corpo de cartaz: a tela
+   de administração é densa e 3.5rem de cabeçalho empurra o formulário
+   para fora da primeira tela. */
+[data-painel] .titulo-secao { font-size: clamp(1.5rem, 2.4vw, 1.875rem); }
+[data-painel] .titulo-cartaz { font-size: clamp(1.75rem, 3vw, 2.25rem); }
 
 /* ═══════════════════════════════════════════════════════════════
    CHANFRO — o canto cortado em diagonal
@@ -471,7 +631,18 @@
   @supports (corner-shape: bevel) {
     background-color: var(--color-branco);
     border: 1px solid var(--color-linha);
-    box-shadow: var(--shadow-suave);
+    /* ⚠️ A SOMBRA SAIU. Mesma decisão que tirou o degradê da primeira
+       dobra e a elevação dos botões: cartão que flutua é linguagem de
+       sistema de design genérico, e era um dos traços que este projeto
+       dividia com a página de outra candidatura saída do mesmo modelo.
+       O que separa o cartão do fundo agora é a BORDA e o canto
+       chanfrado — os dois já estavam aqui, só estavam competindo com a
+       sombra.
+
+       Também conserta uma inconsistência antiga: o caminho de reserva
+       (sem `corner-shape`) nunca teve sombra nenhuma, porque
+       `clip-path` a recortava. Os dois caminhos agora desenham a mesma
+       peça. */
     clip-path: none;
     corner-shape: bevel;
     border-radius: var(--corte) 0;
@@ -488,279 +659,459 @@
    é sempre uma terceira cor, e nunca é a que se quer. Verde e azul
    convivem, mas em seções diferentes, nunca dentro do mesmo gradiente. */
 
+/* ── O cartão sobre superfície escura ──────────────────────────
+   ⚠️ ISTO ESTAVA ESCRITO À MÃO EM SEIS LUGARES, COM QUATRO CONJUNTOS DE
+   VALORES. `Provas` usava `border-white/10` com `bg-white/[0.06]`;
+   `RodapeLegal`, `border-white/12`; `Rua`, `bg-white/5` com
+   `ring-white/10`; `CtaFinal`, `bg-white/10` com `ring-white/20`.
+   Ninguém decidiu que fossem diferentes — eles foram escritos em dias
+   diferentes.
+
+   É a mesma peça do cartão do número da primeira dobra: vidro escuro,
+   fio claro de 1px, canto chanfrado. Uma definição, seis usos.
+
+   ⚠️ BORDA E NÃO `ring`. As duas desenham igual, mas `ring` não ocupa
+   espaço no layout e `border` ocupa: numa grade em que alguns cartões
+   usavam uma e outros a outra, as caixas ficavam 2px diferentes entre
+   si sem que nada explicasse por quê. A borda é a que participa da
+   medida, então é ela que fica.
+
+   O `chanfro` continua sendo classe à parte: o tamanho do corte é
+   proporcional à ALTURA da peça, e quem sabe a altura é quem usa. */
+@utility cartao-escuro {
+  border: 1px solid rgb(255 255 255 / 0.12);
+  background-color: rgb(255 255 255 / 0.06);
+}
+
+/* ⚠️ ERA O ÚLTIMO DEGRADÊ DIAGONAL DO ARQUIVO, e hoje não é usado por
+   componente nenhum — confirmado por busca. Ficou alinhado com os
+   outros fundos em vez de removido justamente por estar sem uso: uma
+   utilidade órfã com a linguagem antiga é uma armadilha esperando a
+   próxima pessoa que precisar de um fundo azul e reintroduzir o
+   degradê sem saber que ele foi aposentado. */
 @utility fundo-azul {
-  background-image: linear-gradient(168deg, #0A55D6 0%, var(--color-azul) 30%, var(--color-azul-escuro) 78%, var(--color-azul-noite) 100%);
+  background-color: var(--color-azul-escuro);
+  background-image: radial-gradient(
+    72% 62% at 88% 0%,
+    color-mix(in srgb, #0A55D6 62%, transparent) 0%,
+    transparent 70%
+  );
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   A PRIMEIRA DOBRA — SEIS ESQUEMAS DE COR
+   A PRIMEIRA DOBRA
 
-   ⚠️ A REGRA QUE SUSTENTA TODOS ELES: o lado do TEXTO é sempre o lado
-   ESCURO do degradê.
+   ⚠️ ESTA DOBRA FOI REPROVADA TRÊS VEZES. As lições estão todas no
+   desenho atual, e vale ler antes de mexer porque as três tentações
+   voltam sozinhas.
 
-   Não é preferência estética, é o que torna o sistema possível. Com
-   essa garantia, o texto é branco nos seis esquemas, a foto recortada
-   tem sempre fundo com contraste, e a única coisa que precisa mudar de
-   esquema para esquema é o REALCE e o BOTÃO. Sem ela, cada esquema
-   precisaria de uma versão escura da marca, de outra cor de texto e de
-   outra sombra — seis desenhos em vez de um sistema.
+   1ª — DEGRADÊ DIAGONAL, DUAS COLUNAS. Era o desenho herdado do
+        modelo, e a página de outra candidatura da MESMA CIDADE saiu
+        dele. Não era feio; era igual.
 
-   Em números: o lado do texto fica sempre abaixo de ~25% de
-   luminância, o que dá pelo menos 8:1 contra branco. O teto da WCAG
-   para texto grande é 3:1, e para corpo é 4,5:1.
+   2ª — PLACAS RETAS ATRAVESSADAS POR UMA FAIXA DIAGONAL. "Sensação de
+        desalinhado, empilhado de qualquer jeito, não tem regra."
+        Duas famílias de ângulo competindo, coordenadas medidas no olho
+        e quatro cores em quatro planos.
 
-   ⚠️ O REALCE E O BOTÃO SÃO COR AUSENTE DO PRÓPRIO DEGRADÊ. É a regra
-   que faz os dois saltarem em vez de afundar: amarelo sobre um fundo
-   que termina em amarelo vira camuflagem. Por isso o botão é azul nos
-   esquemas com amarelo, e amarelo nos que não têm.
+   3ª — DEGRADÊ MONOCROMÁTICO LIMPO, figura à direita. Arrumado, e
+        "sem graça": fundo chapado não tem profundidade nenhuma, e um
+        retrato colado num lado só deixa a metade oposta vazia.
 
-   ⚠️ VERDE E AZUL NUNCA SE ENCOSTAM sem o amarelo no meio. O caminho
-   direto entre os dois passa por verde-água, que não existe na marca —
-   é o erro que esta dobra já cometeu duas vezes. No esquema
-   "azul e verde" os dois ficam em pontas opostas, com a transição
-   acontecendo no escuro, onde o matiz intermediário não aparece.
+   O QUE MANDA AGORA:
+
+     · A FIGURA FICA NO CENTRO, com informação dos dois lados. À
+       esquerda a mensagem (etiqueta, título, subtítulo); à direita o
+       pedido (número e botão). Cada lado tem uma função só.
+     · O FUNDO É FOTOGRÁFICO, e não pintado. Uma foto de rua bem
+       escurecida atrás de tudo é o que dá profundidade que degradê
+       nenhum dá. Ela nunca compete: fica abaixo de 22% e sob uma
+       vinheta.
+     · UMA CURVA SÓ — o arco atrás da figura. O resto é reto, e a única
+       diagonal da página continua sendo o chanfro de 45°.
+     · UM ACENTO SÓ — o amarelo aparece no botão, no fio da célula do
+       número e no destaque do título. Em nenhum outro lugar.
+     · QUATRO PROFUNDIDADES QUE ANDAM EM VELOCIDADES DIFERENTES na
+       rolagem. É o que faz a dobra ter dimensão em vez de ser um
+       cartaz plano.
+
+   ⚠️ O CONTRASTE DO TÍTULO É GARANTIDO PELA VINHETA, e não por
+   medição: o escurecimento é radial, centrado na figura, então as duas
+   pontas — onde moram o texto e o cartão — são sempre as mais escuras
+   da dobra. Nada nas pontas se move, então não existe estado da
+   animação em que elas clareiem.
    ═══════════════════════════════════════════════════════════════ */
 
 @layer components {
   .capa {
     /* Padrões, sobrescritos por cada esquema abaixo.
 
-       ⚠️ O FUNDO TAMBÉM TEM PADRÃO, e não é zelo: se o valor gravado
-       não casar com nenhum esquema — nome antigo, dado adulterado — a
-       dobra ficaria sem degradê nenhum, com título branco sobre branco.
-       Melhor cair na capa oficial do que sumir. */
+       ⚠️ O PADRÃO EXISTE PORQUE VALOR GRAVADO SOBREVIVE A RENOMEAÇÃO
+       DE CÓDIGO, e a lição custou uma dobra sem fundo nenhum: o
+       esquema "verde e amarelo" já se chamou `capa`, o nome mudou no
+       código, o valor no banco não, e `[data-capa='capa']` não casou
+       com regra alguma. Melhor cair na capa oficial do que sumir. */
     --capa-realce: var(--color-amarelo);
-    --capa-botao: var(--color-azul-escuro);
-    --capa-botao-texto: #fff;
-    background-color: var(--color-verde-escuro);
-    background-image: linear-gradient(
-      104deg,
-      #004E1E 0%,
-      var(--color-verde-escuro) 18%,
-      var(--color-verde) 46%,
-      #7FB800 66%,
-      var(--color-amarelo) 92%,
-      #F5D400 100%
-    );
+    --capa-botao: var(--color-amarelo);
+    --capa-botao-texto: var(--color-azul-escuro);
+
+    --dobra-fundo: var(--color-azul-noite);
+    --dobra-brilho: var(--color-azul);
+    --arco: rgb(255 255 255 / 0.09);
+
+    background-color: var(--dobra-fundo);
   }
 
-  /* O trecho em destaque do título, na cor que o esquema pede. */
   .realce-capa {
     color: var(--capa-realce);
   }
 }
 
-/* ── 1. Azul ──────────────────────────────────────────────── */
+/* ── Os sete esquemas ─────────────────────────────────────────
+   Cada um define só duas cores de superfície: o fundo (o mais escuro,
+   onde o texto mora) e o brilho (o clarão atrás da figura). O resto
+   sai delas.
+
+   ⚠️ NENHUM ESQUEMA CLAREIA AS PONTAS. É a regra que sustenta o
+   contraste do título sem depender de medição: o clarão é radial e
+   centrado, então as bordas ficam sempre no valor de `--dobra-fundo`.
+   Um esquema que ponha cor clara em `--dobra-fundo` quebra a dobra
+   inteira. */
+
 [data-capa='azul'] {
   --capa-realce: var(--color-amarelo);
   --capa-botao: var(--color-amarelo);
   --capa-botao-texto: var(--color-azul-escuro);
-  background-color: var(--color-azul-noite);
-  background-image: linear-gradient(
-    104deg,
-    var(--color-azul-noite) 0%,
-    var(--color-azul-escuro) 30%,
-    var(--color-azul) 66%,
-    #0A55D6 100%
-  );
+  --dobra-fundo: #000c22;
+  --dobra-brilho: var(--color-azul);
 }
 
-/* ── 2. Verde ─────────────────────────────────────────────── */
 [data-capa='verde'] {
   --capa-realce: var(--color-amarelo);
   --capa-botao: var(--color-amarelo);
   --capa-botao-texto: var(--color-azul-escuro);
-  background-color: #004E1E;
-  background-image: linear-gradient(
-    104deg,
-    #003B17 0%,
-    var(--color-verde-escuro) 28%,
-    var(--color-verde) 68%,
-    #33B45F 100%
-  );
+  --dobra-fundo: #001406;
+  --dobra-brilho: var(--color-verde);
 }
 
-/* ── 3. Amarelo ───────────────────────────────────────────────
-   Do âmbar fechado ao amarelo da bandeira. O âmbar É amarelo, só
-   escuro: mantém a família da cor e devolve o contraste que o
-   amarelo puro não tem. O realce vira AZUL — única cor viva que não
-   está no degradê. */
+/* ⚠️ O FUNDO NÃO FICA AMARELO, e não é timidez: título branco sobre
+   #FFDF00 dá 1,33:1. Aqui o matiz é âmbar escuro e o amarelo puro
+   segue sendo só o acento. O realce vira azul-claro porque amarelo
+   sobre âmbar não salta. */
 [data-capa='amarelo'] {
   --capa-realce: #5BB8FF;
-  --capa-botao: var(--color-azul-escuro);
-  --capa-botao-texto: #fff;
-  background-color: #5A4E00;
-  background-image: linear-gradient(
-    104deg,
-    #463C00 0%,
-    #7A6A00 26%,
-    #C7AE00 62%,
-    var(--color-amarelo) 88%,
-    #FFF08F 100%
-  );
+  --capa-botao: var(--color-amarelo);
+  --capa-botao-texto: var(--color-azul-escuro);
+  --dobra-fundo: #171200;
+  --dobra-brilho: #8A7700;
 }
 
-/* ── 4. Verde e amarelo — a capa oficial ──────────────────── */
 [data-capa='verde-amarelo'] {
   --capa-realce: var(--color-amarelo);
   --capa-botao: var(--color-azul-escuro);
   --capa-botao-texto: #fff;
-  background-color: var(--color-verde-escuro);
-  background-image: linear-gradient(
-    104deg,
-    #004E1E 0%,
-    var(--color-verde-escuro) 18%,
-    var(--color-verde) 46%,
-    #7FB800 66%,
-    var(--color-amarelo) 92%,
-    #F5D400 100%
-  );
+  --dobra-fundo: #001406;
+  --dobra-brilho: #6FA300;
 }
 
-/* ── 5. Azul e verde ──────────────────────────────────────────
-   Os dois em pontas opostas e a transição no escuro: é onde o
-   verde-água do meio do caminho não aparece. */
+/* ⚠️ O ESQUEMA QUE JÁ DEU ERRADO DUAS VEZES: no degradê, o caminho
+   entre o azul e o verde passava por verde-água, que não existe na
+   marca. Aqui não há caminho — o fundo é azul e o verde entra só no
+   arco, que é uma superfície separada, com aresta dura. */
 [data-capa='azul-verde'] {
   --capa-realce: var(--color-amarelo);
   --capa-botao: var(--color-amarelo);
   --capa-botao-texto: var(--color-azul-escuro);
-  background-color: var(--color-azul-noite);
-  background-image: linear-gradient(
-    104deg,
-    var(--color-azul-noite) 0%,
-    var(--color-azul-escuro) 26%,
-    #004A6B 48%,
-    var(--color-verde-escuro) 66%,
-    var(--color-verde) 90%,
-    #33B45F 100%
-  );
+  --dobra-fundo: #000c22;
+  --dobra-brilho: var(--color-azul);
+  --arco: color-mix(in srgb, var(--color-verde) 45%, transparent);
 }
 
-/* ── 6. Amarelo e azul ────────────────────────────────────────
-   Invertido em relação ao nome, e de propósito: o azul fica onde o
-   texto está. Amarelo à esquerda deixaria o título ilegível. */
 [data-capa='amarelo-azul'] {
   --capa-realce: var(--color-amarelo);
   --capa-botao: var(--color-amarelo);
   --capa-botao-texto: var(--color-azul-escuro);
-  background-color: var(--color-azul-noite);
-  background-image: linear-gradient(
-    104deg,
-    var(--color-azul-noite) 0%,
-    var(--color-azul-escuro) 24%,
-    var(--color-azul) 46%,
-    #6FA300 72%,
-    var(--color-amarelo) 92%,
-    #FFF08F 100%
-  );
+  --dobra-fundo: #000c22;
+  --dobra-brilho: #0A55D6;
+  --arco: color-mix(in srgb, var(--color-amarelo) 26%, transparent);
 }
 
-/* ── 7. A bandeira — azul, verde e amarelo ────────────────────
-   As três cores da bandeira de Rondônia num degradê só, na ordem em
-   que a arte de rua desta campanha as usa. É a capa desta campanha.
-
-   É o único dos sete que atravessa as três, e é por isso que ele é o
-   que mais depende da regra do topo deste bloco: o azul fica no lado
-   do TEXTO e o amarelo no canto da foto. Invertido, o título ficaria
-   sobre amarelo e não haveria cor de texto que salvasse.
-
-   O encontro entre o azul e o verde acontece no PETRÓLEO (#004A6B) e
-   acontece no escuro — mesma solução do esquema 5, e pelo mesmo
-   motivo: o caminho direto entre os dois passa por verde-água, que não
-   existe na marca e aparece na hora em que a mistura clareia. Do verde
-   para o amarelo o caminho é natural e não precisa de ponte.
-
-   ⚠️ O REALCE É AMARELO AQUI, e isso parece violar a regra de que
-      realce é cor AUSENTE do degradê. Não é: a regra existe contra
-      camuflagem, e camuflagem depende de distância. O amarelo deste
-      degradê vive nos últimos 12% da diagonal, do outro lado da tela;
-      o realce fica sobre o azul-noite dos primeiros 22%, onde ele dá
-      10,2:1. É a mesma escolha que a arte de rua faz — o número
-      25197 é amarelo sobre o azul. */
 [data-capa='bandeira'] {
   --capa-realce: var(--color-amarelo);
   --capa-botao: var(--color-amarelo);
   --capa-botao-texto: var(--color-azul-escuro);
-  background-color: var(--color-azul-noite);
-  /* As paradas foram empurradas para a esquerda em relação ao primeiro
-     desenho: o azul segurava metade da diagonal e o amarelo sobrava
-     numa faixa de 10% colada na borda, o que lê como "azul com um
-     risco amarelo" e não como a bandeira. A coluna de texto termina
-     por volta de 46% da largura, então o escuro só precisa chegar até
-     ali — o resto da diagonal é onde a arte respira. */
-  background-image: linear-gradient(
-    104deg,
-    var(--color-azul-noite) 0%,
-    var(--color-azul-escuro) 17%,
-    #004A6B 32%,
-    var(--color-verde-escuro) 46%,
-    var(--color-verde) 66%,
-    #7FB800 84%,
-    var(--color-amarelo) 100%
-  );
+  --dobra-fundo: #000c22;
+  --dobra-brilho: var(--color-azul);
+  --arco: color-mix(in srgb, var(--color-verde) 42%, transparent);
 }
 
-/* ── O brilho atrás das figuras ───────────────────────────────
-   Existe na arte oficial: o claro do fundo não é chapado, é luz
-   saindo de trás das pessoas. Vale para os seis. */
-.capa {
-  position: relative;
-}
-.capa::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background-image: radial-gradient(
-    52% 60% at 76% 36%,
-    rgb(255 255 255 / 0.16) 0%,
-    transparent 72%
-  );
-}
+/* ═══════════════════════════════════════════════════════════════
+   AS CAMADAS DO FUNDO
+   ═══════════════════════════════════════════════════════════════ */
 
-/* ── Celular ──────────────────────────────────────────────────
-   A coluna de texto ocupa a largura inteira, então não existe canto
-   para onde empurrar a cor clara. A diagonal vira quase vertical: o
-   escuro em cima, atrás do texto; o claro embaixo, atrás delas. */
-@media (max-width: 1023px) {
-  [data-capa] {
-    background-image: linear-gradient(
-      168deg,
-      var(--capa-topo, #00250F) 0%,
-      var(--capa-meio, #006627) 42%,
-      var(--capa-pe, #F5D400) 100%
-    );
-  }
-  [data-capa='azul'] { --capa-topo: #000E2E; --capa-meio: var(--color-azul-escuro); --capa-pe: #0A55D6; }
-  [data-capa='verde'] { --capa-topo: #003B17; --capa-meio: #006627; --capa-pe: #33B45F; }
-  [data-capa='amarelo'] { --capa-topo: #463C00; --capa-meio: #7A6A00; --capa-pe: #FFF08F; }
-  [data-capa='verde-amarelo'] { --capa-topo: #004E1E; --capa-meio: #006627; --capa-pe: #F5D400; }
-  [data-capa='azul-verde'] { --capa-topo: #000E2E; --capa-meio: #004A6B; --capa-pe: #33B45F; }
-  [data-capa='amarelo-azul'] { --capa-topo: #000E2E; --capa-meio: var(--color-azul); --capa-pe: #FFF08F; }
-
-  /* A bandeira é o único esquema que NÃO cabe nos três encaixes acima,
-     e não é preciosismo: com topo/meio/pé o salto do azul para o verde
-     seria feito em um passo só, e é justamente esse passo que precisa
-     da ponte de petróleo para não virar verde-água no meio do caminho.
-     Cinco paradas, então, e a regra inteira escrita aqui. */
-  [data-capa='bandeira'] {
-    background-image: linear-gradient(
-      168deg,
-      var(--color-azul-noite) 0%,
-      var(--color-azul-escuro) 22%,
-      #004A6B 44%,
-      var(--color-verde-escuro) 64%,
-      var(--color-verde) 84%,
-      var(--color-amarelo) 100%
-    );
+@layer components {
+  .painel-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background-color: var(--dobra-fundo);
   }
 
-  .capa::before {
+  .placas {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    /* ⚠️ `z-index: 0` E NÃO `-1`. Com -1 iria para trás do fundo do
+       próprio painel e sumiria — foi o que aconteceu com o brilho
+       radial que morava aqui. */
+    z-index: 0;
+  }
+
+  .placas > * {
+    position: absolute;
+  }
+
+  /* ── 1. A galeria, inteira e nítida ──
+     ⚠️ ELA VOLTOU, E DESTA VEZ COMO FUNDO DE VERDADE. Uma versão
+     anterior desta dobra tinha as mesmas fitas de foto correndo por
+     trás de um degradê e virou ruído: a 42% de opacidade e em
+     `soft-light`, foto vira textura abstrata e ninguém identifica que
+     é gente na rua.
+
+     A diferença agora é o FOCO. A galeria fica nítida no miolo da
+     estrela — onde dá para ver que são pessoas, comício, delegacia —
+     e vai borrando em direção aos cantos, onde ela é só atmosfera. É
+     a mesma foto contando duas coisas em dois lugares.
+
+     Ela não é borrada aqui: quem borra são as duas camadas de cima,
+     com `backdrop-filter`. Uma cópia nítida e duas máscaras custam
+     muito menos que três cópias da galeria com desfoques diferentes —
+     e a galeria tem sessenta ladrilhos. */
+  /* ⚠️ A GALERIA APARECE SÓ ATRÁS DA FIGURA, e a máscara é o que faz
+     isso. Ela já foi de tela cheia, com desfoque por fora recortado
+     por uma estrela — reprovada nas duas pontas: a estrela lia como
+     adesivo, e desfocar uma colagem de sessenta fotos não produz
+     atmosfera, produz mancha.
+
+     Agora é o contrário. Em vez de borrar o que sobra, o que sobra não
+     existe: a máscara é uma oval centrada onde a figura está, e fora
+     dela a dobra é cor chapada limpa.
+
+     ⚠️ ISSO DEVOLVEU DOIS `backdrop-filter` DE TELA CHEIA ao orçamento.
+     Cada um obrigava o navegador a reler a árvore inteira por quadro,
+     na seção do LCP e com teto de 3s em 4G. Máscara é composição pura:
+     não relê nada. */
+  .dobra-galeria {
+    inset: -6%;
+    opacity: 0.6;
+    mask-image: radial-gradient(
+      42% 52% at 56% 46%,
+      #000 0%,
+      #000 30%,
+      rgb(0 0 0 / 0.35) 62%,
+      transparent 84%
+    );
+  }
+
+  /* ⚠️ A GALERIA PERDE A MÁSCARA E A MISTURA QUE TINHA. Ela nasceu para
+     correr atrás de um degradê, e trazia consigo `soft-light` mais uma
+     máscara que a apagava do lado do texto. Nenhum dos dois serve
+     aqui: `soft-light` a dissolveria no fundo justamente onde ela
+     precisa ser reconhecível, e a máscara lateral brigaria com a
+     máscara da estrela — duas máscaras querendo mandar no mesmo pixel.
+
+     Quem protege a leitura agora é a vinheta, que escurece as pontas
+     por cima de tudo. Uma responsabilidade, um elemento. */
+  .dobra-galeria .fundo-vivo {
+    opacity: 1;
+    mix-blend-mode: normal;
+    mask-image: none;
+    justify-content: center;
+    padding-bottom: 0;
+  }
+
+  /* ── 2. O clarão de cor e a vinheta ──
+     ⚠️ AS DUAS JUNTAS SÃO O QUE GARANTE O CONTRASTE DO TÍTULO. O
+     clarão é radial e centrado na figura; a vinheta escurece as duas
+     pontas. Como as duas são centradas e nada nas pontas se move, o
+     texto à esquerda e o cartão à direita estão sempre sobre o valor
+     mais escuro da dobra — por construção, não por medição. */
+  .dobra-brilho {
+    inset: 0;
     background-image: radial-gradient(
-      80% 26% at 62% 88%,
-      rgb(255 255 255 / 0.14) 0%,
+      58% 74% at 56% 46%,
+      color-mix(in srgb, var(--dobra-brilho) 62%, transparent) 0%,
+      color-mix(in srgb, var(--dobra-brilho) 22%, transparent) 44%,
       transparent 74%
     );
+  }
+
+  .dobra-vinheta {
+    inset: 0;
+    background-image:
+      linear-gradient(
+        90deg,
+        var(--dobra-fundo) 0%,
+        var(--dobra-fundo) 22%,
+        color-mix(in srgb, var(--dobra-fundo) 82%, transparent) 32%,
+        color-mix(in srgb, var(--dobra-fundo) 35%, transparent) 42%,
+        transparent 52%,
+        transparent 62%,
+        color-mix(in srgb, var(--dobra-fundo) 55%, transparent) 82%,
+        color-mix(in srgb, var(--dobra-fundo) 92%, transparent) 100%
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--dobra-fundo) 72%, transparent) 0%,
+        transparent 22%,
+        transparent 66%,
+        color-mix(in srgb, var(--dobra-fundo) 92%, transparent) 100%
+      );
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   A BARRA DE NÚMEROS DO PÉ
+
+   Células separadas por fio, como a faixa de indicadores da
+   referência. É onde o número da urna, a linha de apoio e o lema
+   deixaram de andar soltos pela coluna de texto.
+
+   ⚠️ NENHUMA CÉLULA INVENTA DADO. A tentação numa faixa de
+   indicadores é preencher com "20 anos de polícia", "52 municípios",
+   "9.751 votos" — e número de campanha inventado é problema jurídico,
+   não erro de digitação. As células mostram só o que existe em
+   `content/copy.ts` e é editável no painel. Célula sem campo
+   preenchido não aparece.
+   ═══════════════════════════════════════════════════════════════ */
+
+@layer components {
+  .barra-hero {
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+    background-color: rgb(0 0 0 / 0.32);
+    backdrop-filter: blur(6px);
+  }
+
+  .barra-hero .celula + .celula {
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+  }
+
+  @media (min-width: 640px) {
+    .barra-hero .celula + .celula {
+      border-top: 0;
+      border-left: 1px solid rgb(255 255 255 / 0.12);
+    }
+  }
+
+  /* ⚠️ ALTURA EXPLÍCITA NO SVG DO NÚMERO. Sem ela a célula sai vazia:
+     `Numero` é um `<svg>` com `viewBox`, e dentro de um contêiner flex
+     a proporção intrínseca do viewBox não basta para o navegador dar
+     altura a ele — o item nasce com altura zero e some, sem erro
+     nenhum no console. A conta é a do viewBox, 700×188. */
+  .barra-numero svg {
+    height: auto;
+    aspect-ratio: 700 / 188;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   O CARTÃO DO NÚMERO
+
+   ⚠️ ELE SUBSTITUI O LOCKUP DEITADO, que ficava sobre o tronco da
+   figura. Com a camisa branca desta campanha, os algarismos amarelos
+   caíam em cima de branco: 1,33:1. Era a informação com peso jurídico
+   da página aparecendo duas vezes, uma delas ilegível.
+
+   ⚠️ O CARTÃO É ESCURO E OS ALGARISMOS AMARELOS, e não o contrário.
+   `Numero` pinta os algarismos com amarelo cravado quando desenha o
+   SVG, e o PNG que o painel pode subir no espaço `marca.numero` — que
+   é o caso desta campanha — também é amarelo. Cartão amarelo apagaria
+   os dois, sem erro nenhum no console. Já aconteceu aqui.
+   ═══════════════════════════════════════════════════════════════ */
+
+@keyframes cartao-entra {
+  from { opacity: 0; transform: translate3d(1.25rem, 0.5rem, 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+@layer components {
+  .cartao-numero {
+    background-color: color-mix(in srgb, var(--dobra-fundo) 72%, transparent);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgb(255 255 255 / 0.14);
+    animation: cartao-entra 0.6s var(--ease-suave) both;
+    animation-delay: 420ms;
+  }
+
+  .cartao-numero svg {
+    height: auto;
+    aspect-ratio: 700 / 188;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   O MOVIMENTO NA ROLAGEM
+
+   Quatro profundidades, quatro velocidades. É o que dá dimensão à
+   dobra em vez de deixá-la um cartaz plano — e o pedido explícito foi
+   "com interação no scroll".
+
+     foto ....... 0,3×   (o mais longe anda menos)
+     arco ....... 0,7×
+     figura ..... escala 1,06, sem deslocar
+     laterais ... 1,0×   (texto e cartão sobem juntos)
+
+   ⚠️ AS LATERAIS SOBEM, MAS NÃO ATRAVESSAM NADA. É o que mantém a
+   garantia de contraste: elas se deslocam em Y, e o escurecimento das
+   pontas é vertical-invariante (a vinheta lateral não muda com a
+   altura). Movimento em X aqui quebraria a garantia.
+
+   `scroll(root block)` e não `view()`: a dobra JÁ está visível quando
+   a página abre, então uma linha do tempo de entrada começaria com o
+   efeito no meio do caminho.
+
+   ⚠️ A POSIÇÃO BASE EM CSS JÁ É O ESTADO FINAL. A animação parte dele
+   e desloca — não existe um `from` que esconda nada. É o que faz
+   `prefers-reduced-motion`, navegador sem `animation-timeline` e
+   ausência de JavaScript caírem todos no mesmo lugar: a dobra parada e
+   COMPLETA, sem caminho alternativo a manter.
+   ═══════════════════════════════════════════════════════════════ */
+
+@keyframes dobra-galeria-anda { to { translate: 0 calc(var(--curso) * -0.3); scale: 1.06; } }
+@keyframes dobra-lado-anda { to { translate: 0 calc(var(--curso) * -1); opacity: 0.55; } }
+
+@layer components {
+  .placas,
+  .lado-dobra {
+    /* Sai do painel (`aparencia.heroProfundidade`), 0 a 100.
+       0 deixa a dobra parada. */
+    --curso: calc(var(--hero-profundidade, 60) * 0.13svh);
+  }
+
+  /* ⚠️ O MOVIMENTO NÃO EXISTE ABAIXO DE 1024px. Três razões que se
+     somam: o teto do projeto é 3s até o botão clicável num celular
+     mediano em 4G, e camada composta rolando é o que come quadro ali;
+     no celular a composição empilha, então "os lados" deixam de ser
+     lados e o deslocamento passa a empurrar conteúdo sobre conteúdo;
+     e a dobra já é obrigada a ser bonita PARADA, então o celular
+     ganhando o cartaz é o desenho, não degradação. */
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) and (min-width: 1024px) {
+      .dobra-galeria,
+      .lado-dobra {
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: scroll(root block);
+        /* `svh` e não `vh`: com `vh` a barra do navegador entra na
+           conta e a peça passa do pé da seção. */
+        animation-range: 0 100svh;
+        will-change: transform;
+      }
+
+      .dobra-galeria { animation-name: dobra-galeria-anda; }
+      .lado-dobra { animation-name: dobra-lado-anda; }
+    }
   }
 }
 
@@ -985,8 +1336,54 @@
   }
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   AS SUPERFÍCIES ESCURAS
+
+   ⚠️ ERAM DEGRADÊS DE 168°, e é o mesmo motivo pelo qual a primeira
+   dobra deixou de ser um: degradê diagonal era a assinatura que este
+   site dividia com a página de outra candidatura da mesma cidade,
+   saída do mesmo modelo. A dobra trocou por superfície chapada com
+   clarão radial; se as seções continuassem em degradê, a página
+   voltaria a ser a antiga a partir da segunda tela.
+
+   Agora as três repetem a receita da dobra: cor CHAPADA como base, e
+   um clarão radial por cima. Chapado é o que dá aresta; o clarão é o
+   que impede a superfície de ler como bloco de tinta.
+
+   ⚠️ O CLARÃO É DE CANTO, E NÃO CENTRADO. Na dobra ele é centrado
+   porque marca o candidato; aqui, centrado, ele viraria uma auréola
+   atrás do texto de cada seção. Empurrado para o alto à direita, ele
+   dá a mesma profundidade sem chamar atenção para si.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ⚠️ A ESTRELA ENTRA PELAS UTILIDADES DE FUNDO, E NÃO POR COMPONENTE.
+   É o que faz a marca aparecer nas nove superfícies escuras do site de
+   uma vez: as que passam por `Secao` e também as que montam a própria
+   `<section>` e nunca veriam um componente compartilhado — `Rua`,
+   `Trilha`, `CtaFinal`, a citação de `Origem`, o cartão de cidade
+   sugerida. Fosse um elemento em `Secao.tsx`, metade ficaria de fora e
+   a página teria costura à vista — o erro que `Rua` já cometeu com o
+   cabeçalho.
+
+   ⚠️ A OPACIDADE MORA DENTRO DO SVG, porque `background-image` não
+   aceita opacidade por CSS. Como a estrela só é usada sobre fundo
+   escuro, um valor cravado no arquivo resolve sem uma camada extra.
+
+   ⚠️ A ORDEM DAS CAMADAS: a estrela vem ANTES do degradê na lista, e
+   em CSS a primeira camada é a de cima. Invertido, o clarão radial
+   passaria por cima dela e ela sumiria nos cantos claros. */
 @utility fundo-azul-profundo {
-  background-image: linear-gradient(168deg, var(--color-azul-escuro) 0%, var(--color-azul-noite) 100%);
+  background-color: var(--color-azul-noite);
+  background-image:
+    url('/estrela.svg'),
+    radial-gradient(
+      72% 62% at 88% 0%,
+      color-mix(in srgb, var(--color-azul) 62%, transparent) 0%,
+      transparent 70%
+    );
+  background-repeat: no-repeat, no-repeat;
+  background-position: right -7rem top -9rem, 0 0;
+  background-size: 34rem auto, auto;
 }
 
 /* ⚠️ NENHUMA PARADA DESTES DOIS DEGRADÊS CHEGA AO VERDE DA BANDEIRA, e
@@ -1001,11 +1398,26 @@
    A paleta anterior errava o mesmo — #509c47 dava 3,39:1, pior —, então
    isto não é regressão: é o conserto que a troca de paleta expôs. */
 @utility fundo-verde {
-  background-image: linear-gradient(168deg, #008532 0%, #007A2E 34%, var(--color-verde-escuro) 100%);
+  background-color: var(--color-verde-escuro);
+  background-image:
+    url('/estrela.svg'),
+    radial-gradient(
+      72% 62% at 88% 0%,
+      color-mix(in srgb, #008532 78%, transparent) 0%,
+      transparent 70%
+    );
+  background-repeat: no-repeat, no-repeat;
+  background-position: right -7rem top -9rem, 0 0;
+  background-size: 34rem auto, auto;
 }
 
 @utility fundo-verde-profundo {
-  background-image: linear-gradient(168deg, #007A2E 0%, var(--color-verde-escuro) 100%);
+  background-color: #00330F;
+  background-image: radial-gradient(
+    72% 62% at 88% 0%,
+    color-mix(in srgb, var(--color-verde-escuro) 82%, transparent) 0%,
+    transparent 70%
+  );
 }
 
 /* Brilho suave sobre fundo claro. */
@@ -1067,6 +1479,122 @@
   [data-revelar][data-visivel='true'] { opacity: 1; transform: none; }
 
   .sem-js [data-revelar] { opacity: 1; transform: none; }
+
+  /* ═══════════════════════════════════════════════════════════
+     TÍTULO PALAVRA A PALAVRA
+
+     ⚠️ TODO O SITE REVELAVA COM `sobe-suave` — opacidade mais 20px de
+     subida, em noventa elementos. É o reveal mais genérico que existe:
+     está em qualquer tema comprado, e num projeto que passou semanas
+     tentando não parecer um tema comprado, era o último lugar onde a
+     origem ainda aparecia.
+
+     ⚠️ ISTO JÁ FOI UMA CORTINA DE BLOCO — `clip-path` subindo no
+     título inteiro — e o registro fica porque a armadilha é ótima:
+     `clip-path` ZERA A ÁREA DE INTERSEÇÃO do elemento, e a revelação
+     depende do IntersectionObserver. O título só apareceria depois de
+     revelado, e só seria revelado depois de aparecer. Os onze títulos
+     da página ficaram invisíveis. Medido: `ratio: 0` num título de
+     132px a 432px do topo, em janela de 900px. Opacidade o observador
+     ignora; recorte, não.
+
+     A onda de palavras não tem esse problema — quem é observado é o
+     `<h2>`, e o que anima são os filhos.
+
+     ⚠️ E O PADRÃO É VISÍVEL. Mesma regra do grifo e da cortina: o
+     estado final é o padrão, a animação é quem esconde
+     temporariamente. Sem contêiner revelável, sem JavaScript ou com o
+     gancho esquecido, o título aparece inteiro — a perda é a
+     animação, nunca o texto. Este projeto já perdeu conteúdo para o
+     erro inverso duas vezes numa tarde.
+     ═══════════════════════════════════════════════════════════ */
+  [data-revelar='titulo'] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .pal {
+    display: inline-block;
+    transition:
+      opacity 0.5s var(--ease-suave),
+      transform 0.5s var(--ease-suave);
+    /* ⚠️ 38ms POR PALAVRA, e o teto é de propósito. Um título de doze
+       palavras a 60ms leva 720ms só para terminar de entrar, e a
+       manchete passa a ser lida em câmera lenta. A 38ms a onda ainda
+       se vê e a frase inteira chega em menos de meio segundo. */
+    transition-delay: calc(var(--atraso, 0ms) + var(--i, 0) * 38ms);
+  }
+
+  [data-revelar]:not([data-visivel]) .pal {
+    opacity: 0;
+    /* Meia altura de linha: o bastante para o olho ver movimento,
+       pouco o bastante para não parecer que a frase caiu. */
+    transform: translateY(0.42em);
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     O DESTAQUE ACENDE DEPOIS
+
+     ⚠️ ESTE É O ÚNICO MOVIMENTO DA PÁGINA QUE NENHUM OUTRO SITE TEM,
+     e é por isso que ele existe. Toda string editável deste projeto
+     passa por um interpretador de marcação, e `[[colchetes duplos]]`
+     pintam a frase-chave de cada título. É vocabulário próprio, e
+     estava parado.
+
+     A ordem importa: a frase inteira chega primeiro, e só então o
+     trecho marcado acende. Quem lê recebe a sentença e depois vê qual
+     parte dela é o argumento — que é exatamente o que a marcação
+     significa na copy.
+
+     ⚠️ SÓ OPACIDADE, NUNCA `transform`. Um destaque pode ter várias
+     palavras ("sabe o que falta na lei"), e `transform` exige
+     `display: inline-block`, que impede a quebra de linha no meio da
+     frase. O título passaria a estourar a coluna em vez de quebrar. */
+  .realce {
+    transition: opacity 0.5s var(--ease-suave);
+    transition-delay: calc(var(--atraso, 0ms) + 420ms);
+  }
+
+  [data-revelar]:not([data-visivel]) .realce { opacity: 0; }
+  .sem-js .realce { opacity: 1; }
+
+  /* O grifo — o traço amarelo sob a palavra — se desenha da esquerda
+     para a direita em vez de aparecer pronto. Mesma ideia do fio que
+     abre a seção, na escala da palavra. */
+  /* ⚠️ O PADRÃO É DESENHADO, E O ESCONDIDO É QUE É A EXCEÇÃO. A
+     primeira versão fazia o contrário — `0%` como padrão, `100%` ao
+     revelar — e um grifo que não estivesse dentro de um `[data-revelar]`
+     ficava com o traço em zero PARA SEMPRE. Aconteceu: existe título
+     com grifo fora de contêiner revelável, e o destaque amarelo
+     simplesmente sumiu da página, sem erro nenhum.
+
+     A regra geral, para qualquer animação de revelação daqui em
+     diante: o estado final é o padrão, e a animação é quem esconde
+     temporariamente. Assim, esquecer o gancho custa uma animação a
+     menos — nunca conteúdo invisível. */
+  .grifo {
+    background-size: 100% 100%;
+    transition: background-size 0.6s var(--ease-suave);
+    transition-delay: calc(var(--atraso, 0ms) + 480ms);
+  }
+
+  [data-revelar]:not([data-visivel]) .grifo { background-size: 0% 100%; }
+
+  /* ⚠️ NA PRIMEIRA DOBRA O CAMINHO É OUTRO, e tem de ser. Lá o título
+     não usa `data-revelar`: ele já está na tela quando a página abre,
+     e depender do IntersectionObserver significaria título invisível
+     até o JavaScript hidratar. Por isso o realce da capa acende por
+     quadro-chave, com atraso próprio. */
+  .capa .realce {
+    animation: realce-acende 0.55s var(--ease-suave) both;
+    animation-delay: 760ms;
+    transition: none;
+  }
+}
+
+@keyframes realce-acende {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 /* ───────────────────────────────────────────────────────────────
@@ -1093,6 +1621,84 @@
       animation: desliza-parallax linear both;
       animation-timeline: view();
       animation-range: entry 0% exit 100%;
+      will-change: transform;
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   O FIO QUE ABRE CADA SEÇÃO SE DESENHA
+
+   O fio de largura total do `CabecalhoSecao` não aparece pronto: ele
+   cresce da esquerda para a direita conforme a seção entra na tela. É
+   a mesma ideia da barra de progresso do cabeçalho, e é o que estende
+   a "interação no scroll" da primeira dobra para o resto da página —
+   sem JavaScript e sem uma animação nova por seção.
+
+   ⚠️ `view()` E NÃO `scroll(root)`, ao contrário da primeira dobra. Lá
+   a dobra JÁ está visível quando a página abre, então uma linha do
+   tempo de entrada começaria no meio. Aqui é o oposto: o fio SÓ existe
+   quando a seção entra, e é exatamente a entrada que se quer medir.
+
+   ⚠️ O ESTADO SEM SUPORTE É O FIO INTEIRO, e é por isso que não há
+   `transform: scaleX(0)` fora do `@supports`. Navegador sem
+   `animation-timeline` ignora o bloco todo e mostra o fio pronto —
+   degradação sem nada a manter em paralelo. Pôr o estado inicial do
+   lado de fora deixaria a página sem nenhum fio nesses navegadores.
+   ═══════════════════════════════════════════════════════════════ */
+
+@keyframes fio-desenha {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   O NÚMERO DO CAPÍTULO
+
+   Cada seção da página ganha um número na ponta direita do fio que a
+   abre. Dá à página uma espinha editorial: quem rola sabe em que parte
+   está e quantas faltam, sem um índice ocupando tela.
+
+   ⚠️ É CONTADOR DE CSS, E NÃO PROP. Metade das seções pode ser
+   desligada no painel, e número passado por parâmetro daria uma de
+   duas coisas: renumeração à mão a cada interruptor, ou a página
+   mostrando "01, 03, 07". O contador conta o que existe no documento,
+   então desligar uma seção renumera as outras sozinho.
+
+   ⚠️ `decimal-leading-zero` PORQUE 01 E 09 TÊM DE TER A MESMA LARGURA.
+   Sem o zero, a numeração salta de posição na passagem do 9 para o 10
+   — e como o número é ancorado à direita, o salto apareceria como o
+   fio mudando de comprimento.
+   ═══════════════════════════════════════════════════════════════ */
+
+main { counter-reset: capitulo; }
+
+@layer components {
+  main header { counter-increment: capitulo; }
+
+  .fio-capitulo::after {
+    content: counter(capitulo, decimal-leading-zero);
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 0.55rem);
+    font-family: var(--font-titulo);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    font-variant-numeric: tabular-nums;
+    color: currentColor;
+    opacity: 0.42;
+  }
+}
+
+@utility fio-secao {
+  transform-origin: 0 50%;
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      animation: fio-desenha linear both;
+      animation-timeline: view();
+      animation-range: entry 6% entry 52%;
       will-change: transform;
     }
   }
@@ -1170,7 +1776,20 @@
     transition-duration: 0.01ms !important;
   }
 
+  /* ⚠️ CADA ANIMAÇÃO NOVA PRECISA DE UMA LINHA AQUI. Zerar a duração
+     de uma transição NÃO devolve o estado final — devolve o estado
+     INICIAL instantaneamente. Sem estas quatro linhas, quem pede menos
+     movimento veria as palavras do título em opacidade zero, o
+     destaque apagado e o grifo sem traço, para sempre.
+
+     É a armadilha que a regra do plano existe para evitar, e ela já
+     mordeu este projeto: o conteúdo fica no estado final, nunca
+     escondido. Quem acrescentar animação de revelação acrescenta a
+     contrapartida aqui, no mesmo commit. */
   [data-revelar] { opacity: 1 !important; transform: none !important; }
+  .pal { opacity: 1 !important; transform: none !important; }
+  .realce { opacity: 1 !important; }
+  .grifo { background-size: 100% 100% !important; }
 }
 
 /* O palco do filtro: a prévia que não muda de lugar entre as etapas.
@@ -1602,7 +2221,12 @@
   .cena-painel-1 {
     align-items: center;
     color: var(--color-branco);
-    --cena-out: clamp(0, calc((var(--palco-p) - 0.22) / 0.08), 1);
+    /* ⚠️ A SAÍDA DESTE CASA COM A ENTRADA DO SEGUINTE. Antes ele saía
+       de 0,22 a 0,30 e o painel 2 só entrava em 0,28: em 0,25 os dois
+       estavam quase invisíveis ao mesmo tempo (0,23 e 0,02) e a cena
+       dava uma piscada. Cruzamento de opacidade só é cruzamento se as
+       janelas coincidirem. */
+    --cena-out: clamp(0, calc((var(--palco-p) - 0.24) / 0.08), 1);
   }
 
   /* 2 · no amarelo, centrado nos três quartos que ele tomou. Texto
@@ -1612,8 +2236,18 @@
     align-items: center;
     padding-top: 22svh;
     color: var(--color-azul-escuro);
-    --cena-in: clamp(0, calc((var(--palco-p) - 0.28) / 0.08), 1);
-    --cena-out: clamp(0, calc((var(--palco-p) - 0.50) / 0.06), 1);
+    /* ⚠️ ELE FICA ATÉ 0,70, E NEM UM PONTO ALÉM. Medido no navegador:
+       o que está atrás deste texto é AMARELO até p≈0,68 e VERDE a
+       partir de 0,74. O texto é azul-escuro — 10,2:1 sobre o amarelo,
+       ilegível sobre o verde. A saída tem de terminar antes da virada
+       de cor, e é isso que o 0,70 significa.
+
+       Antes ele saía em 0,56, e o painel 3 só entrava em 0,86: eram
+       trinta por cento da cena — uns 650px de rolagem — com a bandeira
+       na tela e NENHUM texto. Era o "bug feio" relatado, e não era
+       bug de código: era um buraco na coreografia. */
+    --cena-in: clamp(0, calc((var(--palco-p) - 0.24) / 0.08), 1);
+    --cena-out: clamp(0, calc((var(--palco-p) - 0.64) / 0.06), 1);
   }
 
   /* 3 · DENTRO DA ESTRELA, depois que ela tomou a tela. É o único
@@ -1633,7 +2267,16 @@
     padding-top: 5.5rem;
     padding-bottom: 20svh;
     color: var(--color-azul-escuro);
-    --cena-in: clamp(0, calc((var(--palco-p) - 0.86) / 0.06), 1);
+    /* ⚠️ 0,76 É O PRIMEIRO PONTO EM QUE A ESTRELA COBRE O CENTRO —
+       medido: ela tem 333px em p=0,62, 442px em 0,74 e 969px em 0,80,
+       numa tela de 1440×900. Entrar antes disso poria texto
+       azul-escuro sobre a bandeira, não sobre o branco da estrela.
+
+       Entrava em 0,86, o que deixava um vão de trinta por cento da
+       cena sem texto nenhum depois que o painel 2 saía. Agora o vão é
+       de seis centésimos — o tempo de a estrela terminar de abrir, que
+       é uma pausa da coreografia e não um buraco. */
+    --cena-in: clamp(0, calc((var(--palco-p) - 0.76) / 0.06), 1);
   }
 
 
@@ -1848,29 +2491,42 @@
    Crescendo as duas, com a da frente crescendo MAIS, o grupo inteiro
    parece vir na direção de quem lê — e a diferença entre 1.07 e 1.03
    é o que mantém a profundidade entre elas. */
-@keyframes hero-cresce  { to { transform: scale(1.07); } }
-@keyframes hero-cresce-atras { to { transform: scale(1.03); } }
+/* ⚠️ ANIMA `scale`, E NÃO `transform`. ISTO ERA UM BUG EM PRODUÇÃO, e
+   dos silenciosos: a figura recebe `transform: translateY(N%)` inline,
+   vindo do controle "subir ou descer a figura" do painel. Este quadro
+   animava `transform: scale(...)` no MESMO elemento, com
+   `fill-mode: both` — e como o `to` não repetia o `translateY`, o
+   ajuste de enquadramento ia sendo CANCELADO conforme a pessoa rolava.
+   A campanha centralizava o rosto, ficava certo no topo da página e
+   desandava sozinho na descida.
+
+   `scale` é propriedade independente: ela COMPÕE com o `transform`
+   inline em vez de substituí-lo. A regra para quem mexer aqui: o
+   paralaxe usa `translate`/`scale`, o painel usa `transform` — nunca
+   os dois no mesmo canal.
+
+   ⚠️ `hero-cresce-atras` SAIU. Era a segunda figura (o padrinho
+   político), e o espaço `hero.apoio` não existe mais no inventário. */
+@keyframes hero-cresce { to { scale: 1.07; } }
 
 @layer components {
-  .hero-foto,
-  .hero-fundo {
-    /* Plantadas no chão: o pé não se mexe, só o topo. */
+  .hero-foto {
+    /* Plantada no chão: o pé não se mexe, só o topo. */
     transform-origin: 50% 100%;
   }
 
   @supports (animation-timeline: scroll()) {
     @media (prefers-reduced-motion: no-preference) {
-      .hero-foto,
-      .hero-fundo {
+      .hero-foto {
+        animation-name: hero-cresce;
         animation-timing-function: linear;
         animation-fill-mode: both;
         animation-timeline: scroll(root block);
-        animation-range: 0 72vh;
+        /* `svh`, e não `vh`: com `vh` a barra do navegador entra na
+           conta e a escala termina fora de hora no celular. */
+        animation-range: 0 72svh;
         will-change: transform;
       }
-
-      .hero-foto  { animation-name: hero-cresce; }
-      .hero-fundo { animation-name: hero-cresce-atras; }
     }
   }
 }

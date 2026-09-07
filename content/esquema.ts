@@ -13,7 +13,7 @@
  *    perde o trabalho do editor.
  */
 
-import { campanha } from './campanha'
+import { campanha, g } from './campanha'
 
 export interface Base {
   rotulo: string
@@ -280,10 +280,16 @@ export const ESQUEMA: Record<string, SecaoEsquema> = {
         ajuda: 'Um parágrafo por entrada.',
       },
       citacao: { tipo: 'longo', rotulo: 'Frase em destaque', max: 180, linhas: 2 },
+      // ⚠️ O GÊNERO SAI DO HELPER, E NÃO CRAVADO. Estes dois rótulos
+      //    diziam "história dela" e "ela conta" — resto de a primeira
+      //    campanha montada neste modelo ter sido de uma mulher. Não é
+      //    detalhe: rótulo de painel é lido por quem edita, e um
+      //    coordenador abrindo "Vídeo da história dela" numa campanha
+      //    masculina conclui, com razão, que o site é de outra pessoa.
       video: videoSolto(
-        'Vídeo da história dela',
+        `Vídeo da história ${g.dele}`,
         `Seção "Quem é ${campanha.primeiroNome}" — logo abaixo do título, antes do primeiro parágrafo. É a primeira coisa depois do título.`,
-        'É o vídeo em que ela conta a própria história.',
+        `É o vídeo em que ${g.ele} conta a própria história.`,
       ),
     },
   },
@@ -948,6 +954,16 @@ export const ESQUEMA: Record<string, SecaoEsquema> = {
         ],
         ajuda:
           'Em todos, o lado escuro fica sob o texto e o claro atrás das fotos — é o que mantém o título legível. A cor do destaque e a do botão mudam sozinhas para continuar saltando do fundo.',
+      },
+      heroProfundidade: {
+        tipo: 'deslizante',
+        rotulo: 'Movimento da primeira dobra',
+        min: 0,
+        max: 100,
+        passo: 5,
+        sufixo: '%',
+        ajuda:
+          'Quanto as camadas do fundo se deslocam conforme a página desce. Zero deixa a dobra parada. Quem marcou "reduzir movimento" no próprio celular não vê o efeito de qualquer forma.',
       },
       heroFiguraAltura: {
         tipo: 'deslizante',

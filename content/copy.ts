@@ -1356,6 +1356,24 @@ export const aparencia = {
    * flutuar. Combinado com `heroFiguraDescida`, é assim que se "corta"
    * a foto na altura que a campanha quiser sem editar o arquivo.
    */
+  /**
+   * QUANTO AS CAMADAS DA PRIMEIRA DOBRA ANDAM NA ROLAGEM, de 0 a 100.
+   *
+   * A dobra tem quatro planos que se deslocam em velocidades
+   * diferentes — a galeria, a estrela, o texto e o cartão. Este número
+   * é o quanto o mais rápido deles percorre ao longo de uma tela de
+   * rolagem; os outros são frações dele.
+   *
+   * ⚠️ ZERO DEIXA A DOBRA PARADA, e é para isso que o controle existe.
+   *    Movimento de fundo incomoda parte das pessoas, e nem toda
+   *    campanha vai querer a dobra se mexendo. Poder desligar sem
+   *    publicar de novo é a diferença entre um ajuste e um chamado.
+   *
+   *    Quem marca "reduzir movimento" no próprio aparelho já não vê o
+   *    efeito, independentemente deste número — isso é tratado no CSS.
+   */
+  heroProfundidade: 60,
+
   heroFiguraAltura: 112,
 
   /**

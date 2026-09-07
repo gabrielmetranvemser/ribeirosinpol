@@ -89,7 +89,7 @@ export function VitrineFiltro({
       {molduras.map((m, i) => (
         <div
           key={m.id}
-          className={`relative overflow-hidden chanfro-lg bg-azul-suave shadow-alta ring-1 ring-white/25 ${
+          className={`relative overflow-hidden chanfro-lg bg-azul-suave ring-1 ring-white/25 ${
             i === 1 ? 'mt-10' : ''
           }`}
           style={{ aspectRatio: `${m.largura} / ${m.altura}` }}

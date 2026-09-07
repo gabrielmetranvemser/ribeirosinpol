@@ -1,8 +1,8 @@
 import { lerConteudo } from '@/lib/conteudo/ler'
 import { lerSlots } from '@/lib/midia/ler'
 import { Secao, CabecalhoSecao } from '@/components/ui/Secao'
+import { CartaoItem } from '@/components/ui/CartaoItem'
 import { Imagem } from '@/components/ui/Imagem'
-import { Texto } from '@/components/ui/TextoComDestaque'
 
 const ICONES: Record<string, React.ReactNode> = {
   familia: (
@@ -59,23 +59,18 @@ export async function Valores() {
 
       <ul className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {valores.itens.map((item, i) => (
-          <li
+          <CartaoItem
             key={item.id}
-            data-revelar
-            style={{ ['--atraso' as string]: `${i * 70}ms` }}
-            className="group chanfro-lg bg-white p-7 shadow-suave transition-transform duration-300 hover:-translate-y-1 hover:shadow-alta"
-          >
-            <span
-              className="inline-flex size-12 items-center justify-center chanfro-lg bg-verde-escuro text-white"
-              aria-hidden
-            >
-              <svg viewBox="0 0 24 24" fill="currentColor" className="size-6">
+            tom="verde"
+            atraso={i * 70}
+            marca={
+              <svg viewBox="0 0 24 24" fill="currentColor" className="size-7">
                 {ICONES[item.chave]}
               </svg>
-            </span>
-            <h3 className="mt-5 text-xl text-tinta"><Texto>{item.titulo}</Texto></h3>
-            <p className="mt-2 text-base text-grafite"><Texto>{item.texto}</Texto></p>
-          </li>
+            }
+            titulo={item.titulo}
+            texto={item.texto}
+          />
         ))}
       </ul>
 

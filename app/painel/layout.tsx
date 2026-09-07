@@ -14,9 +14,25 @@ export const metadata = {
  *    campanha está conectado ou não. Quem sabe a rota é o componente
  *    de cliente, que tem o caminho na mão.
  */
+/**
+ * ⚠️ `data-painel` NÃO É GANCHO DE ESTILO SOLTO — é a fronteira entre a
+ *    peça de campanha e a ferramenta de trabalho.
+ *
+ *    A página usa uma display condensada de cartaz (Anton) nos títulos,
+ *    em caixa alta. Ela existe para ser lida de longe por quem passa o
+ *    dedo no Instagram. O painel é o oposto disso: um coordenador de
+ *    campanha lendo formulário por vinte minutos seguidos, onde caixa
+ *    alta cansa e condensada atrapalha a varredura.
+ *
+ *    Sem esta marca a troca de fonte vazaria para cá sozinha, porque o
+ *    painel usa o utilitário `titulo-secao` em doze telas. A regra que
+ *    devolve a fonte do corpo está em globals.css, ancorada neste
+ *    atributo — uma linha lá, um atributo aqui, e nenhuma das doze
+ *    telas precisou ser tocada.
+ */
 export default function LayoutPainel({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-areia">
+    <div data-painel className="min-h-screen bg-areia">
       <MenuLateral modoLocal={!config.supabaseAtivo}>
         <div className="mx-auto max-w-6xl">{children}</div>
       </MenuLateral>

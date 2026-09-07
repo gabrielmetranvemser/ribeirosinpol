@@ -29,13 +29,24 @@ export async function SecaoGrupos({
     const grupo = await grupoDeDestino(campanha.slugGrupo)
     return (
       <Secao id="grupos" fundo="branco" espaco="solto">
+        {/* ⚠️ A INTRODUÇÃO VEM PARA O CABEÇALHO, e não mais para
+            dentro do bloco. Antes ela ficava depois da foto, num
+            quadro centralizado — e o resultado era o que a campanha
+            apontou: título sozinho com a coluna da direita vazia,
+            foto gigante, e só então o texto. Três problemas de uma
+            decisão só.
+
+            No cabeçalho ela preenche a segunda coluna, encurta o
+            caminho até o botão e some do quadro de baixo, que passa a
+            ser só o pedido. A página `/grupos` continua passando a
+            introdução para o bloco, porque lá o cabeçalho é outro. */}
         <CabecalhoSecao
           etiqueta={copy.etiqueta}
           titulo={copy.titulo}
+          intro={copy.intro}
           destaque="grifo"
         />
         <BlocoGrupoUnico
-          intro={copy.intro}
           avisoEmBreve={copy.avisoEmBreve}
           rotuloBotao={ctas.grupo}
           status={grupo?.status ?? 'em_breve'}
