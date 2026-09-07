@@ -1,7 +1,7 @@
 import { lerConteudo } from '@/lib/conteudo/ler'
 import { CabecalhoSecao } from '@/components/ui/Secao'
+import { CartaoItem } from '@/components/ui/CartaoItem'
 import { PalcoMotor } from '@/components/animacao/PalcoMotor'
-import { Texto } from '@/components/ui/TextoComDestaque'
 
 /**
  * Compromissos — palco: a tela prende e a fita de cartões anda de lado
@@ -23,7 +23,13 @@ export async function Futuro() {
   const { futuro } = await lerConteudo()
 
   return (
-    <section id="futuro" data-palco className="relative bg-white text-tinta">
+    // ⚠️ `areia` E NÃO `branco`. Os cartões desta seção são brancos, e
+    //    cartão branco sobre seção branca só se lê pela borda de 1px —
+    //    virou problema quando a sombra saiu, porque era ela que os
+    //    separava antes. A seção anterior também é areia, e isso deixou
+    //    de ser conflito: quem separa uma seção da outra agora é o fio
+    //    de largura total do cabeçalho, não a troca de tom do fundo.
+    <section id="futuro" data-palco className="relative bg-areia text-tinta">
       <div
         className="palco-trilho"
         // Passos definem a duração. Menos que o número de cartões de
@@ -45,19 +51,16 @@ export async function Futuro() {
 
           <ol className="palco-fita gap-5">
             {futuro.itens.map((item) => (
-              <li
+              <CartaoItem
                 key={item.id}
-                className="flex w-[80vw] flex-col chanfro-lg border border-linha bg-white p-7 shadow-suave sm:w-[23rem] md:p-8"
-              >
-                <span
-                  className="inline-flex size-12 shrink-0 items-center justify-center chanfro-sm bg-verde-escuro font-[family-name:var(--font-titulo)] text-base font-bold text-white"
-                  aria-hidden
-                >
-                  {item.numero}
-                </span>
-                <h3 className="mt-6 text-xl text-tinta md:text-2xl"><Texto>{item.titulo}</Texto></h3>
-                <p className="mt-3 text-base text-grafite"><Texto>{item.texto}</Texto></p>
-              </li>
+                tom="verde"
+                marca={item.numero}
+                titulo={item.titulo}
+                texto={item.texto}
+                // A fita do palco anda sozinha: o cartão precisa de
+                // largura própria, senão a grade o encolhe até caber.
+                className="w-[80vw] shrink-0 sm:w-[23rem]"
+              />
             ))}
           </ol>
         </div>

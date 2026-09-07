@@ -83,7 +83,7 @@ export async function RodapeLegal() {
             que a identificação aparece em material eleitoral, tudo
             junto, separado por barras. A grade de rótulos que existia
             aqui era mais bonita e menos parecida com o que a lei pede. */}
-        <div className="mt-14 chanfro-lg border border-white/12 bg-white/[0.06] p-7 md:p-8">
+        <div className="mt-14 chanfro-lg cartao-escuro p-7 md:p-8">
           <h2 className="text-sm font-semibold tracking-[0.08em] text-amarelo uppercase">
             {rodape.legalRotulo}
           </h2>

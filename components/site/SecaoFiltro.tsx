@@ -52,7 +52,17 @@ export async function SecaoFiltro() {
                 style={{ ['--atraso' as string]: `${i * 70}ms` }}
                 className="flex gap-4"
               >
-                <span className="flex size-9 shrink-0 items-center justify-center chanfro-sm bg-amarelo text-sm font-bold text-azul-escuro">
+                {/* ⚠️ ERA UM QUADRADO AMARELO COM O NÚMERO DENTRO, e
+                    era o último lugar da página com esse padrão. Os
+                    cartões de Bandeiras, Desafios e Compromissos já
+                    tinham trocado o crachá pelo número tipográfico;
+                    manter o quadrado aqui deixava a mesma informação
+                    com duas caras a duas seções de distância.
+
+                    Aqui o amarelo pode ser a cor do número porque a
+                    superfície é escura — sobre os cartões brancos ele
+                    daria 1,33:1, que é a regra mais antiga do projeto. */}
+                <span className="voz-marca w-7 shrink-0 text-xl leading-tight text-amarelo" aria-hidden>
                   {p.numero}
                 </span>
                 <span className="min-w-0">
@@ -67,8 +77,10 @@ export async function SecaoFiltro() {
               pequeno aqui trabalha contra. Ver lib/apoios.ts. */}
           {apoios ? (
             <p data-revelar className="mt-8 flex items-center gap-2.5 text-base text-white">
-              <span className="inline-flex size-9 items-center justify-center chanfro-sm bg-amarelo text-azul-escuro" aria-hidden>
-                <svg viewBox="0 0 24 24" className="size-5" fill="currentColor">
+              {/* Pelo mesmo motivo do número acima: ícone na cor de
+                  acento, sem caixinha em volta. */}
+              <span className="inline-flex shrink-0 text-amarelo" aria-hidden>
+                <svg viewBox="0 0 24 24" className="size-6" fill="currentColor">
                   <path d="M16 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm-8 0a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-2.7 0-8 1.3-8 4v3h9.5v-2.5c0-1.4.7-2.6 1.8-3.5A14 14 0 0 0 8 13Zm8 0c-.9 0-1.9.1-2.8.3 1.3.9 2.3 2.1 2.3 3.7V20H24v-3c0-2.7-5.3-4-8-4Z" />
                 </svg>
               </span>

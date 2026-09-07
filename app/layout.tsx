@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Archivo, Inter } from 'next/font/google'
+import { Bricolage_Grotesque, Inter } from 'next/font/google'
 import { candidato } from '@/content/copy'
 import { campanha } from '@/content/campanha'
 import { config } from '@/lib/config'
@@ -13,24 +13,62 @@ import { Trafego } from '@/components/trafego/Trafego'
 import './globals.css'
 
 /**
- * TÍTULO — Archivo.
+ * TÍTULO — Bricolage Grotesque, condensada pelo eixo de largura.
  *
- * O logotipo da campanha é uma grotesca condensada, pesada e itálica.
- * Repetir esse peso nos títulos da página deixa tudo pesado demais:
- * é o problema da Tusker. A Archivo tem o mesmo esqueleto industrial
- * e o mesmo ar de campanha, mas com peso graduável — 700 dá autoridade
- * sem virar bloco, e o itálico dela ecoa a marca nos destaques curtos.
+ * ⚠️ ERA ARCHIVO, E A TROCA NÃO FOI DE GOSTO. Este projeto é um modelo,
+ *    e a página da Sofia Andrade saiu do mesmo tema — mesma cidade,
+ *    mesma eleição. Archivo 700 nos títulos era o traço que mais
+ *    entregava os dois sites como irmãos. Fonte é metade da impressão
+ *    digital de um layout; trocar a família é o que separa as duas
+ *    páginas por menos código.
  *
- * CORPO — Inter. Público de 35 a 64 anos lendo 18px no celular.
+ * ⚠️ DUAS TENTATIVAS FORAM REPROVADAS ANTES DESTA, e ficam
+ *    registradas porque as duas tentações vão voltar.
+ *
+ *    ANTON ("é o que a campanha imprime: condensada pesada"). Tem um
+ *    peso só e nenhum contraste de haste. Em corpo de cartaz não lê
+ *    como autoridade, lê como TIJOLO — e as contra-formas do "a" e do
+ *    "e" fecham. Reprovada na tela, não no papel.
+ *
+ *    SPACE GROTESK ("moderna e diferentona"). O desenho é bom, mas ela
+ *    é LARGA: cada linha da copy quebrava em duas, o bloco de título
+ *    crescia para baixo e comia a dobra. Numa primeira dobra o que
+ *    manda é quantos caracteres cabem por linha, não o quanto a letra
+ *    é bonita isolada.
+ *
+ * ⚠️ A LARGURA É A VARIÁVEL QUE IMPORTA, e é por isso que esta é a
+ *    escolha certa: Bricolage Grotesque é variável em PESO e em
+ *    LARGURA. Podemos condensar (`wdth`) até o título caber na coluna
+ *    sem baixar o corpo da letra — que é exatamente o problema que
+ *    derrubou as outras duas. Cartaz precisa de letra ALTA e ESTREITA,
+ *    e essas são duas manoplas independentes aqui.
+ *
+ *    O `axes` não é opcional: sem pedir 'wdth' explicitamente, o
+ *    Google serve só o eixo de peso e o `font-stretch` do CSS não faz
+ *    nada — em silêncio, sem erro nenhum.
+ *
+ *    'opsz' fica de fora de propósito. É mais um eixo para baixar, e o
+ *    tamanho óptico automático brigaria com o ajuste manual de largura
+ *    que a dobra depende.
+ *
+ * ⚠️ NÃO TEM ITÁLICO. A `voz-marca`, que é o itálico da marca, é
+ *    oblíqua sintética (`font-style: oblique`). Aceitável porque ela
+ *    só aparece em corpo grande e em palavra curta.
+ *
+ *    Não declaramos `weight`: é variável (200–800), e omitir a lista é
+ *    o que entrega o eixo inteiro num arquivo só.
+ *
+ * CORPO — Inter. Público de 35 a 64 anos lendo 18px no celular. Não
+ * mudou: o corpo é onde se lê, e ali neutro é qualidade, não falta de
+ * personalidade. A personalidade fica toda no título.
  *
  * `display: swap` porque o teto do plano é 3 segundos até o botão
  * principal ficar clicável — texto invisível esperando fonte é o
  * jeito mais barato de estourar esse teto.
  */
-const titulo = Archivo({
+const titulo = Bricolage_Grotesque({
   subsets: ['latin'],
-  weight: ['500', '600', '700', '800'],
-  style: ['normal', 'italic'],
+  axes: ['wdth'],
   variable: '--fonte-titulo',
   display: 'swap',
 })
@@ -187,6 +225,10 @@ export default async function LayoutRaiz({ children }: { children: React.ReactNo
             '--color-amarelo': campanha.cores.acao,
             '--color-azul-noite': campanha.cores.noite,
             '--textura-forca': aparencia.texturaForca / 100,
+            // Sem unidade: o CSS da primeira dobra multiplica por
+            // `svh`. Mandar já em `svh` daqui prenderia a conta ao
+            // JavaScript, e ela pertence à folha de estilo.
+            '--hero-profundidade': aparencia.heroProfundidade,
           } as React.CSSProperties
         }
         data-textura={

@@ -40,17 +40,63 @@ const CLASSES: Record<Tom, string> = {
 export function TextoComDestaque({
   texto,
   tom = 'azul',
+  porPalavra = false,
 }: {
   texto: string
   /** Cor do trecho destacado. Sobre fundo escuro use 'amarelo'. */
   tom?: Tom
+  /**
+   * Quebra o texto em palavras, cada uma com seu índice de entrada.
+   * Só para TÍTULO — ver o comentário de `emPalavras`.
+   */
+  porPalavra?: boolean
 }): ReactNode {
   const trechos = interpretar(texto)
-  // Nada marcado: devolve a string, sem embrulhar em nó nenhum.
-  if (trechos.length === 1 && trechos[0].marcas.length === 0) return trechos[0].texto
+
+  // Nada marcado e sem animação: devolve a string, sem nó nenhum.
+  if (!porPalavra && trechos.length === 1 && trechos[0].marcas.length === 0) {
+    return trechos[0].texto
+  }
   if (trechos.length === 0) return texto
 
-  return trechos.map((t, i) => <span key={i}>{vestir(t.texto, t.marcas, tom)}</span>)
+  // ⚠️ O CONTADOR ATRAVESSA OS TRECHOS, e é isso que faz a onda ser uma
+  //    só. Se cada trecho recomeçasse do zero, o destaque no meio do
+  //    título reiniciaria a contagem e as palavras depois dele entrariam
+  //    ANTES das anteriores — a frase montaria fora de ordem.
+  const contador = { n: 0 }
+
+  return trechos.map((t, i) => (
+    <span key={i}>{vestir(t.texto, t.marcas, tom, porPalavra ? contador : null)}</span>
+  ))
+}
+
+/**
+ * Uma palavra, um nó, um índice.
+ *
+ * ⚠️ `inline-block` EM CADA PALAVRA, e é o que permite `transform` sem
+ *    quebrar a linha errada. Palavra é a menor unidade que pode virar
+ *    bloco sem consequência: a quebra de linha acontece ENTRE palavras,
+ *    então torná-las blocos não impede a frase de quebrar. Fazer o
+ *    mesmo com o trecho destacado inteiro impediria — foi por isso que
+ *    o destaque anima só opacidade.
+ *
+ * ⚠️ O ESPAÇO FICA FORA DO `<span>`. Dentro, ele vira parte de um bloco
+ *    inline e o navegador para de colapsá-lo: duas palavras seguidas
+ *    ganhariam espaço duplo, e a quebra de linha passaria a acontecer
+ *    em lugares estranhos.
+ */
+function emPalavras(texto: string, contador: { n: number }): ReactNode {
+  const partes = texto.split(/(\s+)/)
+  return partes.map((parte, i) => {
+    if (!parte) return null
+    if (/^\s+$/.test(parte)) return parte
+    const indice = contador.n++
+    return (
+      <span key={i} className="pal" style={{ ['--i' as string]: indice }}>
+        {parte}
+      </span>
+    )
+  })
 }
 
 /**
@@ -59,14 +105,25 @@ export function TextoComDestaque({
  * <strong> e <em>, e não <b>/<i>: a diferença é semântica e chega ao
  * leitor de tela, que muda a ênfase da voz.
  */
-function vestir(texto: string, marcas: Marca[], tom: Tom): ReactNode {
-  let no: ReactNode = texto
+function vestir(
+  texto: string,
+  marcas: Marca[],
+  tom: Tom,
+  contador: { n: number } | null,
+): ReactNode {
+  let no: ReactNode = contador ? emPalavras(texto, contador) : texto
   // De dentro para fora, para o destaque (que carrega a cor) terminar
   // por último e valer sobre o conjunto.
   for (const marca of [...marcas].reverse()) {
     if (marca === 'italico') no = <em>{no}</em>
     else if (marca === 'negrito') no = <strong>{no}</strong>
-    else no = <span className={CLASSES[tom]}>{no}</span>
+    /* ⚠️ `realce` VEM JUNTO COM A COR, sempre. A classe de cor diz
+       QUAL é o destaque; `realce` é o gancho que o faz acender depois
+       do título (ver globals.css). Separá-las em dois lugares seria
+       garantir que um dia alguém acrescente um tom novo em `CLASSES` e
+       o movimento não aconteça nele — sem erro nenhum, só um destaque
+       que não acende. */
+    else no = <span className={`realce ${CLASSES[tom]}`}>{no}</span>
   }
   return no
 }

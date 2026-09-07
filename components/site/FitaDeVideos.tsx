@@ -237,7 +237,7 @@ function Seta({
       onClick={onClick}
       disabled={!ativa}
       aria-label={proximo ? 'Próximos vídeos' : 'Vídeos anteriores'}
-      className="toque flex size-11 items-center justify-center rounded-full border border-white/25 text-white transition-all duration-300 hover:border-amarelo hover:bg-amarelo hover:text-azul-escuro disabled:pointer-events-none disabled:opacity-25"
+      className="toque flex size-11 items-center justify-center rounded-full border border-white/25 text-white transition-colors duration-300 hover:border-amarelo hover:bg-amarelo hover:text-azul-escuro disabled:pointer-events-none disabled:opacity-25"
     >
       <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
         <path d={proximo ? 'm9 5 7 7-7 7' : 'm15 5-7 7 7 7'} />

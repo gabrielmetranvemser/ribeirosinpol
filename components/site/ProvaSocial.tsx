@@ -58,7 +58,7 @@ export async function ProvaSocial() {
             key={legenda.id}
             data-revelar
             style={{ ['--atraso' as string]: `${i * 60}ms` }}
-            className="overflow-hidden chanfro-lg border border-linha bg-white shadow-suave"
+            className="overflow-hidden chanfro-lg border border-linha bg-white"
           >
             <Imagem
               slot={`social.comentario.${i + 1}`}
@@ -173,7 +173,7 @@ export async function ProvaSocial() {
                 //    diferentes, que é o degrau que aparecia na tela.
                 //    Presos ao pé, os dois compartilham a mesma linha
                 //    de base e o mesmo topo, porque têm a mesma largura.
-                className={`chanfro-lg border border-white/10 bg-white/[0.06] p-6 ${
+                className={`chanfro-lg cartao-escuro p-6 ${
                   temEmPe ? 'flex flex-col' : ''
                 }`}
               >

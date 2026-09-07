@@ -147,7 +147,7 @@ export async function Provas() {
               key={e.id}
               data-revelar
               style={{ ['--atraso' as string]: `${i * 80}ms` }}
-              className="flex flex-col chanfro-lg border border-white/10 bg-white/[0.06] p-6"
+              className="flex flex-col chanfro-lg cartao-escuro p-6"
             >
               <span className="text-sm font-medium text-amarelo">{e.municipio}</span>
               <h3 className="mt-2 text-xl text-white"><Texto tom="amarelo">{e.titulo}</Texto></h3>
@@ -164,7 +164,7 @@ export async function Provas() {
             seção tem dado real e esta linha é a CONTINUAÇÃO da lista —
             as leis que não couberam nos três cartões. Alerta amarelo
             em cima de prestação de contas lia como problema. */}
-        <div className="mt-8 flex items-start gap-3 chanfro bg-white/[0.06] px-5 py-4 text-base text-white/80 ring-1 ring-white/10">
+        <div className="mt-8 flex items-start gap-3 chanfro cartao-escuro px-5 py-4 text-base text-white/80">
           <svg viewBox="0 0 24 24" className="mt-0.5 size-5 shrink-0 text-amarelo" fill="currentColor" aria-hidden>
             <path d="M4 6h2v2H4V6Zm4 0h12v2H8V6ZM4 11h2v2H4v-2Zm4 0h12v2H8v-2Zm-4 5h2v2H4v-2Zm4 0h12v2H8v-2Z" />
           </svg>
@@ -176,7 +176,7 @@ export async function Provas() {
             sozinho, agora, sem confiar em nós — e por isso é a peça
             mais valiosa dela. O print entra clicável: quem duvida
             clica, e quem clica já não duvidava do mesmo jeito. */}
-        <div className={`mt-8 grid items-center gap-8 chanfro-lg border border-white/10 bg-white/[0.06] p-7 md:p-9 ${
+        <div className={`mt-8 grid items-center gap-8 chanfro-lg cartao-escuro p-7 md:p-9 ${
             temPrint ? 'md:grid-cols-[1fr_1.1fr]' : ''
           }`}>
           <div>
@@ -214,7 +214,7 @@ export async function Provas() {
                 target="_blank"
                 rel="noopener noreferrer"
                 data-revelar
-                className="block overflow-hidden chanfro-lg ring-1 ring-white/15 transition-transform duration-300 hover:scale-[1.01]"
+                className="block overflow-hidden chanfro-lg ring-1 ring-white/15"
               >
                 <Imagem
                   slot="provas.documento"

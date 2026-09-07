@@ -22,18 +22,34 @@ import type { ComponentProps, ReactNode } from 'react'
 type Variante = 'acao' | 'azul' | 'verde' | 'contorno' | 'claro' | 'suave' | 'texto'
 type Tamanho = 'sm' | 'md' | 'lg'
 
+/**
+ * ⚠️ AS SOMBRAS BORRADAS SAÍRAM, e é a mesma decisão que tirou o
+ *    degradê da primeira dobra. `shadow-media` sob um botão amarelo é
+ *    a linguagem de sistema de design genérico — aparece igual em
+ *    qualquer site, e era um dos traços que este projeto dividia com a
+ *    página de outra candidatura saída do mesmo modelo.
+ *
+ *    No lugar entrou o que a dobra já faz: cor chapada, aresta
+ *    chanfrada e resposta por COR no hover, não por elevação. Botão de
+ *    campanha é placa, não cartão flutuante.
+ *
+ * ⚠️ O `contorno` GANHOU FUNDO NO HOVER e perdeu a mudança de borda
+ *    sozinha. Sobre a dobra escura, borda clareando de 30% para 70% é
+ *    um movimento que quase não se vê num celular ao sol; um fundo de
+ *    12% se vê.
+ */
 const VARIANTES: Record<Variante, string> = {
   // ação principal — amarelo da marca, texto azul-escuro (6.4:1)
   acao:
-    'bg-amarelo text-azul-escuro shadow-media hover:bg-[color-mix(in_srgb,var(--color-amarelo)_88%,white)] hover:shadow-alta',
+    'bg-amarelo text-azul-escuro hover:bg-[color-mix(in_srgb,var(--color-amarelo)_86%,white)]',
   azul:
-    'bg-azul text-white shadow-suave hover:bg-azul-escuro hover:shadow-media',
+    'bg-azul text-white hover:bg-azul-escuro',
   verde:
-    'bg-verde text-white shadow-suave hover:bg-verde-escuro hover:shadow-media',
+    'bg-verde text-white hover:bg-verde-escuro',
   contorno:
-    'border border-current/30 bg-transparent hover:border-current/70 hover:bg-current/8',
+    'border border-current/35 bg-transparent hover:border-current/70 hover:bg-current/12',
   claro:
-    'bg-white text-azul-escuro border border-linha shadow-suave hover:border-azul/40 hover:text-azul',
+    'bg-white text-azul-escuro border border-linha hover:border-azul/50 hover:text-azul',
   suave:
     'bg-azul-suave text-azul-escuro hover:bg-azul hover:text-white',
   texto:
@@ -64,7 +80,7 @@ const forma = (variante: Variante) => (SEM_FORMA.has(variante) ? '' : 'chanfro')
 const BASE =
   'toque inline-flex items-center justify-center gap-2.5 font-semibold ' +
   'leading-none tracking-[-0.01em] text-center duration-300 ease-out ' +
-  'transition-[background-color,border-color,color,box-shadow,filter,opacity] ' +
+  'transition-[background-color,border-color,color,opacity] ' +
   'disabled:pointer-events-none disabled:opacity-45'
 
 interface Comuns {

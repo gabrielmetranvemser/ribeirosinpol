@@ -51,11 +51,27 @@ export function Header({
     <header className="fixed inset-x-0 top-0 z-50 pt-3 md:pt-4">
       <div className="container-lp">
         <div
-          className={`relative flex h-16 items-center justify-between gap-4 chanfro px-3 pl-5 transition-all duration-300 ${
+          /* ⚠️ NO TOPO DA PÁGINA ELE NÃO É UMA PÍLULA, e isso é
+             deliberado. A primeira dobra sangra até a borda da tela, e
+             o cabeçalho é a PRIMEIRA LINHA dela — não uma barra de
+             vidro flutuando por cima. Pílula sobre a dobra cria uma
+             segunda moldura concorrendo com a do navegador, que foi
+             parte do que fazia a dobra parecer empilhada.
+
+             Por isso, parado no topo: sem fundo, sem borda, sem
+             chanfro, e um fio embaixo separando do conteúdo. O recuo
+             lateral (`pl-5 md:pl-8`) é o mesmo do conteúdo da dobra,
+             senão o logotipo nasce desalinhado do título por 0,75rem —
+             desalinho pequeno o bastante para ninguém saber nomear e
+             grande o bastante para incomodar.
+
+             Assim que a página rola, ele VOLTA a ser pílula branca:
+             fora do painel não há moldura nenhuma para acompanhar, e aí
+             a pílula é o que separa o cabeçalho do conteúdo. */
+          className={`relative flex h-16 items-center justify-between gap-4 transition-all duration-300 ${
             rolou || aberto
-              ? 'border border-linha bg-white/92 text-tinta shadow-suave backdrop-blur-xl'
-              : // sobre o azul do hero, a barra é vidro e o texto é branco
-                'border border-white/20 bg-white/10 text-white backdrop-blur-md'
+              ? 'chanfro border border-linha bg-white/92 px-3 pl-5 text-tinta shadow-suave backdrop-blur-xl'
+              : 'border-b border-white/12 px-3 pl-5 text-white md:pr-4 md:pl-8'
           }`}
         >
           <Link href="/" className="flex items-center gap-3" aria-label={`${candidato.nome} — início`}>
@@ -95,7 +111,7 @@ export function Header({
               <Link
                 href={paraOsGrupos}
                 onClick={() => evento('clicou_cta', { origem: 'topo' })}
-                className="toque hidden min-h-11 items-center chanfro bg-amarelo px-5 text-[0.9375rem] font-semibold text-azul-escuro shadow-suave transition-all hover:bg-[color-mix(in_srgb,var(--color-amarelo)_88%,white)] sm:inline-flex"
+                className="toque hidden min-h-11 items-center chanfro bg-amarelo px-5 text-[0.9375rem] font-semibold text-azul-escuro transition-colors hover:bg-[color-mix(in_srgb,var(--color-amarelo)_88%,white)] sm:inline-flex"
               >
                 {ctas.grupoCurto}
               </Link>

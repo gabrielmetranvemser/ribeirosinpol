@@ -223,15 +223,16 @@ Imagens, sem deploy:
 | `marca.lockupDeitado` | nome + número em faixa (desktop) |
 | `marca.cartaoLink` | a imagem do link no WhatsApp, 1200×630 |
 | `hero.retrato` | a foto principal, PNG recortado sem fundo |
-| `hero.apoio` | a segunda figura — o padrinho político. Opcional |
 
 Os arquivos que ficam em `/public` e não passam pelo painel:
 
-- **`public/fundo-1..5.webp`** — as cinco fotos de rua que correm
-  atrás das figuras na primeira dobra. O modelo vem com placeholders
-  cinza. Troque por fotos reais, em preto e branco, já convertidas
-  para cinza no arquivo (filtro em runtime custa repaint a cada
-  quadro);
+- **`public/fundo-1..10.webp`** — as dez fotos de campanha que
+  correm atrás da figura na primeira dobra, dentro da estrela. O
+  modelo vem com placeholders cinza. Troque por fotos reais, já
+  convertidas para cinza no arquivo (filtro em runtime custa repaint a
+  cada quadro). As proporções ficam gravadas em `PROPORCOES`, em
+  `components/site/FundoVivo.tsx`: trocar uma foto por outra de
+  proporção diferente sem remedir estica o ladrilho, e nada avisa;
 - **`app/icon.svg`** — o ícone padrão da aba. Tem as cores fixas
   dentro dele, porque o navegador serve esse arquivo isolado e ele não
   enxerga o CSS da página. Ou troque os três hex, ou envie o ícone

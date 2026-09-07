@@ -84,7 +84,17 @@ export async function Album() {
           >
             {/* A moldura branca é a margem da foto revelada. Sem ela a
                 imagem encosta no fundo areia e perde a leitura de papel. */}
-            <figure className="rounded-[3px] bg-white p-2.5 pb-3 shadow-media">
+            {/* ⚠️ A MARGEM BRANCA E O RAIO DE 3px FICAM; A SOMBRA SAI.
+                A distinção importa: o papel e o canto quase reto são a
+                metáfora da foto revelada — foto impressa não tem canto
+                chanfrado, e é a única peça da página em que o raio se
+                justifica. A sombra borrada, não: era elevação
+                decorativa, a mesma que saiu dos botões e dos cartões.
+
+                O que separa a foto do fundo agora é o próprio papel
+                branco contra a areia, que já era o argumento original
+                da moldura. */}
+            <figure className="rounded-[3px] bg-white p-2.5 pb-3">
               <Imagem
                 slot={`album.${i + 1}`}
                 slots={slots}
