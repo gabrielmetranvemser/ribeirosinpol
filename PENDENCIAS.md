@@ -76,6 +76,12 @@ documento não traz — e que não se inventam.
       mas ninguém garantiu ainda que a foto é daquela cena
 - [ ] **Data da política de privacidade** (`privacidade.atualizadoEm`)
       — em branco até alguém revisar o texto e assumir a data
+- [ ] **Encurtar o parágrafo da primeira dobra** (`hero.subtitulo`,
+      Painel ▸ Primeira dobra). Hoje tem 260 caracteres e sai em cinco
+      linhas ao lado da foto; a dobra foi redesenhada para ~150 (três
+      linhas). A biografia inteira já está em "Quem é Ribeiro" — aqui
+      basta a frase que apresenta. É decisão de texto da campanha, não
+      de código: o site fica de pé com qualquer tamanho
 
 ---
 

@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { lerConteudo } from '@/lib/conteudo/ler'
 import { lerSlots } from '@/lib/midia/ler'
 import { Imagem } from '@/components/ui/Imagem'
@@ -7,6 +8,7 @@ import { BotaoLink } from '@/components/ui/Botao'
 import { destinoGrupo } from '@/lib/conteudo/secoes'
 import { CliqueGrupo } from './CliqueGrupo'
 import { PlacasHero } from './PlacasHero'
+import { PedidoFixo } from './PedidoFixo'
 
 /**
  * Os esquemas que o CSS conhece. Ver `.capa` em globals.css.
@@ -46,12 +48,42 @@ const ESQUEMA_PADRAO = 'bandeira'
  *         colado num lado só deixa a metade oposta vazia.
  *
  *    O que manda agora — uma regra por defeito corrigido:
- *      · A FIGURA NO CENTRO, com informação dos dois lados. À esquerda
- *        a mensagem; à direita o pedido. Cada lado com uma função só,
- *        e nenhuma metade vazia.
+ *      · A FIGURA DE UM LADO, A INFORMAÇÃO DO OUTRO. À esquerda a
+ *        foto, com metade da largura; à direita a mensagem e, abaixo
+ *        dela, o pedido. Nenhuma metade vazia. (Já foi "figura no
+ *        centro, informação dos dois lados" — ver a 5ª tentativa.)
  *      · FUNDO FOTOGRÁFICO, não pintado. Ver PlacasHero.
  *      · UMA CURVA SÓ (o arco) e UM ACENTO SÓ (o amarelo, em três
- *        lugares contados: botão, realce do título e fio da barra).
+ *        lugares contados: botão, realce do título e fio do cartão).
+ *        O botão amarelo do cabeçalho some enquanto a dobra está na
+ *        tela — ver Header — senão eram dois botões iguais a 40px de
+ *        distância.
+ *
+ *    4ª — A FOTO TROCOU E A COMPOSIÇÃO NÃO. A dobra foi desenhada para
+ *         um recorte estreito, de braço erguido; entrou um de braços
+ *         cruzados, largo, com `max-width: none` na imagem — e o
+ *         cotovelo avançou 46px para dentro do parágrafo, por cima do
+ *         texto. Junto vieram os sintomas de "amador": foto de 45% da
+ *         tela contra título de 52px, mosaico de fotos com borda
+ *         cortando atrás da cabeça, recorte sem sombra cortado por uma
+ *         barra de vidro, seis amarelos numa tela. A regra que saiu
+ *         disso: A FIGURA É CERCADA PELA PRÓPRIA COLUNA (ver o
+ *         `max-w-full` + `object-contain` na imagem). Recorte largo
+ *         encolhe; nunca invade. Vale para qualquer foto que a campanha
+ *         subir, que é a regra do modelo.
+ *
+ *    5ª — CERCADA NA COLUNA DO MEIO, A FIGURA FICOU PEQUENA. Três
+ *         colunas dão ~460px para a foto; um recorte largo cabe ali
+ *         com 800px de altura e a cabeça nasce ABAIXO do topo do
+ *         título — "menor e mais baixo que a headline". A resposta foi
+ *         a que o cliente pediu: DUAS COLUNAS. A figura à esquerda, com
+ *         a metade da largura; título, parágrafo e pedido empilhados à
+ *         direita. Mais largura para a foto é mais altura para a foto.
+ *         A 3ª tentativa também era "figura de um lado só" e foi
+ *         reprovada por deixar a outra metade vazia — a diferença é
+ *         que agora a outra metade tem a mensagem E o pedido, e o
+ *         fundo fotográfico continua atrás da figura (o clarão e o
+ *         mosaico foram para 30% da largura, ver globals.css).
  *      · QUATRO VELOCIDADES na rolagem — era o pedido explícito de
  *        "interação no scroll", e é o que dá dimensão em vez de cartaz.
  *
@@ -104,13 +136,39 @@ export async function Hero({ silencio = false }: { silencio?: boolean }) {
               — sem esta reserva a etiqueta nasceria por baixo dele. */}
           <div className="h-20 shrink-0 md:h-24" aria-hidden />
 
-          {/* ⚠️ TRÊS COLUNAS, E A DO MEIO É A MAIOR. A figura é o
-              assunto da dobra; texto e cartão a emolduram. No celular a
-              grade some e tudo empilha na ordem do DOM — mensagem,
-              figura, pedido —, que é a ordem de leitura certa. */}
-          <div className="container-lp grid flex-1 items-end gap-6 lg:grid-cols-[0.98fr_1.28fr_0.84fr] lg:items-center lg:gap-8">
-            {/* ── Esquerda: a mensagem ── */}
-            <div className="lado-dobra relative z-20 order-1 pb-2 text-center lg:pb-14 lg:text-left">
+          {/* ⚠️ DUAS COLUNAS: A FIGURA À ESQUERDA, TUDO O MAIS À DIREITA.
+              Eram três, com a figura no meio, e a figura ficou pequena
+              (ver a 5ª tentativa no topo). A coluna da foto é a maior
+              porque a foto é o assunto; a da direita empilha mensagem e
+              pedido, nessa ordem.
+
+              ⚠️ A ORDEM DO DOM É A DO CELULAR: mensagem, pedido, figura.
+              Era mensagem, figura, pedido — "a ordem de leitura" — e o
+              resultado era uma dobra de 1.200px numa tela de 812: a
+              cabeça da foto subia por trás do parágrafo e o número com
+              o botão só apareciam depois de rolar. Com o pedido antes
+              da foto, número e botão cabem na primeira tela e a foto
+              fecha a dobra, fundindo com o fundo (ver `.dobra-pe`). No
+              desktop a figura vai para a coluna 1 por `col-start`, e
+              não por `order`: posição explícita, sem depender de
+              contagem.
+
+              ⚠️ NO CELULAR O PEDIDO NÃO FICA NO FLUXO: é uma barra fixa
+              no pé da tela (`PedidoFixo`). A ordem visível vira
+              título, texto, foto — e o botão sempre à mão.
+
+              ⚠️ `dobra-grade`, E NÃO `container-lp`. A dobra é a única
+              peça da página que sangra: a coluna da foto começa a 3rem
+              da borda da tela, e não na margem do contêiner de 75rem —
+              com a margem, sobravam 150px vazios de cada lado da figura
+              e ela parecia pequena em qualquer tamanho. A coluna do
+              texto continua alinhada à direita do contêiner, que é
+              onde o cabeçalho e a barra do pé terminam; só a foto
+              avança. A conta está em `@utility dobra-grade`. */}
+          <div className="dobra-grade grid flex-1 items-end gap-5 lg:grid-cols-[1.35fr_1fr] lg:items-center lg:gap-12">
+            {/* ── Direita (no desktop): a mensagem e o pedido ── */}
+            <div className="flex flex-col gap-5 lg:col-start-2 lg:row-start-1 lg:gap-9 lg:self-center lg:pb-12">
+            <div className="lado-dobra relative z-20 pb-2 text-center lg:pb-0 lg:text-left">
               {/* Três barrinhas em vez da pílula com bolinha. A pílula
                   era forma de sistema de design, não da campanha:
                   aparecia igual em qualquer site. As barras são a
@@ -139,25 +197,53 @@ export async function Hero({ silencio = false }: { silencio?: boolean }) {
                 ))}
               </h1>
 
+              {/* ⚠️ O PARÁGRAFO É A PARTE QUE COLIDIA COM A FIGURA, e a
+                  largura dele é o que decide se a dobra lê como manchete
+                  ou como texto corrido. 26rem em 15px dá ~4 linhas para
+                  ~150 caracteres. O texto de fábrica tem 260 e sai em
+                  seis: encurtá-lo é decisão de campanha (PENDENCIAS.md),
+                  e a dobra fica de pé com qualquer tamanho — a figura
+                  não invade mais. */}
               <p
-                className="anima-hero mx-auto mt-4 max-w-[19.5rem] text-[0.9375rem] leading-relaxed text-white/70 lg:mx-0"
+                className="anima-hero mx-auto mt-4 max-w-[26rem] text-[0.9375rem] leading-[1.6] text-white/75 lg:mx-0"
                 style={{ animationDelay: '440ms' }}
               >
                 <Texto tom="capa">{hero.subtitulo}</Texto>
               </p>
             </div>
 
-            {/* ── Centro: a figura ──
-                ⚠️ `max-w-none` É OBRIGATÓRIO. O reset do Tailwind põe
-                `max-width: 100%` em toda imagem; como esta é
-                dimensionada pela ALTURA, sem isso a largura seria
-                espremida de volta para dentro da caixa e a figura
-                apareceria achatada. */}
+              <Pedido
+                ctas={ctas}
+                hero={hero}
+                slots={slots}
+                paraOsGrupos={paraOsGrupos}
+                silencio={silencio}
+              />
+            </div>
+
+            {/* ── Esquerda (no desktop): a figura ──
+                ⚠️ `max-w-full` + `object-contain`, E NÃO `max-w-none`.
+                Era `max-w-none`, com a justificativa de que a imagem é
+                dimensionada pela altura e o teto de largura a
+                "achataria". Não achata: com `object-contain` o que
+                encolhe é a CAIXA da imagem, e o desenho se reacomoda
+                dentro dela na proporção certa, ancorado no pé. O
+                efeito é que um recorte largo (braços cruzados) fica
+                menor em vez de sair da coluna e passar por cima do
+                parágrafo — que foi exatamente o que aconteceu quando a
+                foto trocou. A figura é cercada pela própria coluna, e o
+                controle de tamanho do painel continua valendo até esse
+                limite. */}
+            {/* `max-lg:overflow-hidden`: no celular a figura é cortada
+                pelo busto (ver a regra de `.hero-foto` abaixo de 1024px
+                em globals.css), e o corte tem de ser na borda desta
+                caixa — sem isto o excedente escorreria por baixo da
+                barra fixa. */}
             <div
-              className="anima-surge relative order-2 flex items-end justify-center self-end lg:-mb-[12.5rem]"
+              className="anima-surge relative flex items-end justify-center self-end max-lg:overflow-hidden lg:col-start-1 lg:row-start-1 lg:-mb-[12.5rem]"
               style={{ animationDelay: '260ms' }}
             >
-              <div className="relative h-[24rem] w-full sm:h-[31rem] lg:h-[47rem]">
+              <div className="relative h-[26rem] w-full sm:h-[32rem] lg:h-[47rem]">
                 {/* ⚠️ `items-end`, E A RAZÃO É O BRAÇO ERGUIDO.
                     Este recorte tem o punho no alto, então o TOPO DA
                     IMAGEM NÃO É A CABEÇA — é a mão, uns 22% acima
@@ -219,67 +305,20 @@ export async function Hero({ silencio = false }: { silencio?: boolean }) {
                       height: `${aparencia.heroFiguraAltura}%`,
                       transform: `translateY(${aparencia.heroFiguraDescida}%)`,
                     }}
-                    className="hero-foto pointer-events-none relative z-20 w-auto max-w-none shrink-0 object-contain object-bottom"
+                    className="hero-foto pointer-events-none relative z-20 w-auto max-w-full shrink-0 object-contain object-bottom"
                   />
                 </div>
-              </div>
-            </div>
 
-            {/* ── Direita: o pedido ──
-                ⚠️ O CARTÃO É ESCURO E OS ALGARISMOS AMARELOS, e não o
-                contrário. `Numero` pinta os algarismos com amarelo
-                cravado quando desenha o SVG, e o PNG que o painel pode
-                subir no espaço `marca.numero` — que é o caso desta
-                campanha — também é amarelo. Cartão amarelo apagaria os
-                dois, sem erro nenhum no console. Já aconteceu aqui. */}
-            {/* ⚠️ `z-20` PARA EMPATAR COM A FIGURA. A caixa da figura passa
-                7px por baixo do cartão (é o retângulo transparente dela,
-                não o desenho), e como ela está em `z-20` e o cartão em
-                nenhum andar, era a figura que pintava por cima. Empatando
-                o andar, quem decide é a ordem do documento — e o cartão
-                vem depois. Não use `order` para resolver isto: neste
-                projeto `order` já inverteu ordem de pintura uma vez. */}
-            <div className="lado-dobra relative z-20 order-3 pb-4 lg:pb-14">
-              <div className="cartao-numero chanfro mx-auto max-w-sm px-6 py-6 lg:mx-0">
-                <Numero
-                  url={slots['marca.numero']?.url ?? null}
-                  className="w-24 sm:w-28"
-                />
-
-                {hero.numeroLegenda ? (
-                  <p className="mt-3 text-[0.75rem] leading-snug font-semibold tracking-[0.06em] text-white/80 uppercase">
-                    {hero.numeroLegenda}
-                  </p>
-                ) : null}
-
-                {!silencio ? (
-                  <div className="mt-5 flex flex-col gap-2.5">
-                    {/* ⚠️ O BOTÃO É UM DOS TRÊS ÚNICOS AMARELOS DA
-                        DOBRA, e essa contagem é a regra do desenho. Cor
-                        de ação que aparece em todo lugar deixa de
-                        apontar para lugar nenhum — foi o que fez uma
-                        versão anterior ler como "cores aleatórias". */}
-                    <CliqueGrupo origem="hero" href={paraOsGrupos} className="block">
-                      <span className="toque flex min-h-13 items-center justify-center gap-2.5 chanfro bg-(--capa-botao) px-5 text-base font-semibold text-(--capa-botao-texto) transition-[background-color,color,filter] duration-300 hover:bg-[color-mix(in_srgb,var(--capa-botao)_88%,white)]">
-                        {ctas.grupoCurto}
-                        <svg viewBox="0 0 24 24" className="size-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                          <path d="M5 12h14M13 6l6 6-6 6" />
-                        </svg>
-                      </span>
-                    </CliqueGrupo>
-
-                    <BotaoLink
-                      href="/filtro"
-                      variante="contorno"
-                      tamanho="md"
-                      className="w-full text-white"
-                    >
-                      {ctas.filtroCurto}
-                    </BotaoLink>
-                  </div>
-                ) : (
-                  <p className="mt-5 text-sm text-white/80">{ctas.silencio}</p>
-                )}
+                {/* ⚠️ O PÉ DA FIGURA FUNDE COM O FUNDO, e é isto que
+                    tirou a cara de "recorte colado". Sem o degradê, a
+                    foto terminava numa linha reta em cima da barra do
+                    pé, que por sua vez tinha fundo de vidro fosco para
+                    esconder as pernas — parecia gente atrás de um
+                    balcão. Agora a barra é só um fio, e quem some com
+                    as pernas é este degradê, dentro da coluna da
+                    figura (não cobre texto nem cartão). A conta do
+                    ponto onde ele fica sólido está em `.dobra-pe`. */}
+                <div className="dobra-pe" aria-hidden />
               </div>
             </div>
           </div>
@@ -303,7 +342,13 @@ export async function Hero({ silencio = false }: { silencio?: boolean }) {
             ⚠️ `z-30` E NÃO `z-10`: a figura é `z-20` e é cortada pelo pé
             do painel, então os últimos pixels do corte caem em cima
             desta faixa. Com a barra em 10, as pernas apareciam POR CIMA
-            das células. Ela também tem fundo próprio por isso. */}
+            das células.
+
+            ⚠️ ELA NÃO TEM MAIS FUNDO PRÓPRIO. Tinha vidro fosco para
+            esconder as pernas; o vidro cortava a figura numa linha reta
+            e lia como balcão. Agora quem apaga as pernas é o degradê
+            `.dobra-pe`, dentro da coluna da figura, e a barra é só um
+            fio sobre a cor chapada. */}
         {hero.rodapeHero || hero.lema ? (
           <div className="barra-hero relative z-30">
             <div className="container-lp flex flex-col sm:flex-row sm:items-stretch">
@@ -326,5 +371,122 @@ export async function Hero({ silencio = false }: { silencio?: boolean }) {
         ) : null}
       </div>
     </section>
+  )
+}
+
+/**
+ * O bloco do número, abaixo da mensagem na coluna da direita.
+ *
+ * É componente à parte por causa da ORDEM DO DOM: no celular ele vem
+ * antes da figura e no desktop divide a coluna com a mensagem. Deixá-lo
+ * inline obrigaria a coluna da direita a virar uma parede de 120
+ * linhas de JSX. Não é reutilizado em lugar nenhum.
+ */
+function Pedido({
+  ctas,
+  hero,
+  slots,
+  paraOsGrupos,
+  silencio,
+}: {
+  ctas: Awaited<ReturnType<typeof lerConteudo>>['ctas']
+  hero: Awaited<ReturnType<typeof lerConteudo>>['hero']
+  slots: Awaited<ReturnType<typeof lerSlots>>
+  paraOsGrupos: string
+  silencio: boolean
+}) {
+  return (
+    <PedidoFixo>
+            {/* ── O pedido ──
+                ⚠️ O CARTÃO É ESCURO E OS ALGARISMOS AMARELOS, e não o
+                contrário. `Numero` pinta os algarismos com amarelo
+                cravado quando desenha o SVG, e o PNG que o painel pode
+                subir no espaço `marca.numero` — que é o caso desta
+                campanha — também é amarelo. Cartão amarelo apagaria os
+                dois, sem erro nenhum no console. Já aconteceu aqui. */}
+            {/* ⚠️ `z-20`, O MESMO ANDAR DA FIGURA. Quando os dois se
+                sobrepunham, quem decidia era a ordem do documento. Hoje
+                não se sobrepõem — a figura é cercada pela própria coluna
+                — mas a sombra dela vaza 3rem para o lado, e este bloco
+                precisa continuar no mesmo andar para a sombra não cair
+                por cima do número. */}
+            {/* ⚠️ O CARTÃO DEIXOU DE SER CAIXA. Era vidro fosco com borda
+                de 14%, flutuando desalinhado do título e com dois botões
+                do mesmo peso — a peça que mais fazia a dobra ler como
+                template. Virou bloco editorial: um fio amarelo à
+                esquerda, o número, UM botão, e o segundo pedido como
+                link sublinhado. O fio é o terceiro amarelo contado da
+                dobra. No celular o fio sai e o bloco centra (ver
+                `.cartao-numero` em globals.css). */}
+            {/* ⚠️ DUAS DIAGRAMAÇÕES NO MESMO HTML. No celular é uma LINHA
+                (número e link à esquerda, botão à direita) de ~72px,
+                porque é barra fixa e cada pixel dela é pixel a menos de
+                página. No desktop é uma COLUNA com fio amarelo. O link
+                "Colocar o número" aparece duas vezes no HTML, uma para
+                cada lado (`lg:hidden` / `hidden lg:block`): é um `<a>`
+                a mais no DOM em troca de não depender de `order`. */}
+            <div className="lado-dobra relative z-20">
+              <div className="cartao-numero mx-auto flex max-w-xl items-center justify-between gap-4 lg:mx-0 lg:block lg:max-w-sm">
+                <div className="shrink-0 text-left">
+                  <Numero
+                    url={slots['marca.numero']?.url ?? null}
+                    className="w-20 sm:w-24 lg:w-28"
+                  />
+
+                  {hero.numeroLegenda ? (
+                    <p className="mt-1.5 hidden text-[0.75rem] leading-snug font-semibold tracking-[0.06em] text-white/80 uppercase sm:block lg:mt-3">
+                      {hero.numeroLegenda}
+                    </p>
+                  ) : null}
+
+                  {/* Link cru, e não `BotaoLink`: na barra de 72px o
+                      link precisa de 12px, e o menor tamanho do botão
+                      é 15px. Mesmo sublinhado da variante `texto`. */}
+                  {!silencio ? (
+                    <Link
+                      href="/filtro"
+                      className="mt-1.5 inline-block text-xs font-semibold whitespace-nowrap text-white/85 underline decoration-1 decoration-white/35 underline-offset-[5px] hover:decoration-white lg:hidden"
+                    >
+                      {ctas.filtroCurto}
+                    </Link>
+                  ) : null}
+                </div>
+
+                {!silencio ? (
+                  <div className="flex shrink-0 flex-col items-stretch gap-4 lg:mt-6 lg:items-start">
+                    {/* ⚠️ O BOTÃO É UM DOS TRÊS ÚNICOS AMARELOS DA
+                        DOBRA, e essa contagem é a regra do desenho. Cor
+                        de ação que aparece em todo lugar deixa de
+                        apontar para lugar nenhum — foi o que fez uma
+                        versão anterior ler como "cores aleatórias". */}
+                    <CliqueGrupo origem="hero" href={paraOsGrupos} className="block lg:self-stretch">
+                      <span className="toque flex min-h-12 items-center justify-center gap-2.5 chanfro bg-(--capa-botao) px-5 text-[0.9375rem] font-semibold whitespace-nowrap text-(--capa-botao-texto) transition-[background-color,color,filter] duration-300 hover:bg-[color-mix(in_srgb,var(--capa-botao)_88%,white)] lg:min-h-13 lg:text-base">
+                        {ctas.grupoCurto}
+                        <svg viewBox="0 0 24 24" className="size-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                          <path d="M5 12h14M13 6l6 6-6 6" />
+                        </svg>
+                      </span>
+                    </CliqueGrupo>
+
+                    {/* Link, e não segundo botão: dois botões do mesmo
+                        tamanho dividem o clique, e o de contorno era o
+                        quarto amarelo-ou-branco da tela. */}
+                    <span className="hidden lg:block">
+                      <BotaoLink
+                        href="/filtro"
+                        variante="texto"
+                        tamanho="sm"
+                        className="min-h-0 py-1 text-white/85"
+                      >
+                        {ctas.filtroCurto}
+                      </BotaoLink>
+                    </span>
+                  </div>
+                ) : (
+                  <p className="text-sm text-white/80 lg:mt-5">{ctas.silencio}</p>
+                )}
+              </div>
+            </div>
+    </PedidoFixo>
   )
 }
