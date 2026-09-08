@@ -1106,7 +1106,6 @@
         /* `svh` e não `vh`: com `vh` a barra do navegador entra na
            conta e a peça passa do pé da seção. */
         animation-range: 0 100svh;
-        will-change: transform;
       }
 
       .dobra-galeria { animation-name: dobra-galeria-anda; }
@@ -1203,7 +1202,6 @@
     width: max-content;
     gap: 0.6rem;
     animation: fundo-vivo-corre var(--fita-duracao) linear infinite;
-    will-change: transform;
   }
 
   @media (min-width: 1024px) {
@@ -1440,6 +1438,36 @@
      · revelação simples ... [data-revelar], o padrão
      · palco ............... preso na tela, pintado pelo scroll
      · movimento por scroll  animation-timeline, zero JS
+
+   ⚠️ `will-change` SÓ ONDE O NAVEGADOR NÃO PROMOVERIA SOZINHO — e a
+      página já pagou caro por não seguir esta regra.
+
+      O hint estava escrito em oito lugares (a galeria e os lados da
+      dobra, as três fitas do fundo vivo, o parallax, os onze fios de
+      seção, a figura da dobra, a faixa corrida, os três textos da cena
+      e o invólucro da bandeira). `will-change` numa folha de estilo
+      NUNCA É REMOVIDO: cada um daqueles seletores prendia uma camada
+      de composição na memória da GPU pela vida inteira da página, o
+      elemento estando na tela ou dez dobras abaixo. Medido numa janela
+      de 1280×720 com dpr 2: 25 camadas, 185,7 MB de raster — 114 MB só
+      nas três fitas do fundo vivo, que têm 9171px de largura cada.
+
+      O sintoma era sair da aba e voltar. Aba em segundo plano tem os
+      tiles descartados; ao voltar, tudo aquilo precisa ser
+      rasterizado de novo, e a rolagem seguinte disputa o quadro com a
+      reconstrução. F5 "resolvia" porque a página recomeçava do zero.
+
+      E quase tudo aquilo era REDUNDANTE. Transform e opacidade
+      animados por `animation-timeline` ou por `@keyframes` já são
+      compostos pelo navegador enquanto a animação está viva — o hint
+      não acrescentava nada, só impedia a camada de morrer depois.
+      Sobrou UM: `.palco-fita`, onde o deslocamento sai de --palco-p e
+      não existe animação para o navegador reconhecer.
+
+      Ao acrescentar movimento aqui: primeiro sem `will-change`. Só
+      ponha se medir, e nunca numa escala grande — ver o registro na
+      `.cena-bandeira`, onde o hint borrava a bandeira ou estourava o
+      teto de textura.
    ═══════════════════════════════════════════════════════════════ */
 
 @keyframes sobe-suave {
@@ -1621,7 +1649,6 @@
       animation: desliza-parallax linear both;
       animation-timeline: view();
       animation-range: entry 0% exit 100%;
-      will-change: transform;
     }
   }
 }
@@ -1699,7 +1726,6 @@ main { counter-reset: capitulo; }
       animation: fio-desenha linear both;
       animation-timeline: view();
       animation-range: entry 6% entry 52%;
-      will-change: transform;
     }
   }
 }
@@ -1964,7 +1990,28 @@ main { counter-reset: capitulo; }
     --cena-z: calc(var(--cena-zoom) * var(--cena-zoom));
     transform: scale(calc(1 + 13 * var(--cena-z)));
     transform-origin: 50% calc(50svh - 0.20902 * var(--astro-tam));
-    will-change: transform;
+
+    /* ⚠️ AQUI HAVIA `will-change: transform`, E ERA O PIOR DA PÁGINA.
+       Ele não é só desperdício neste lugar: ele TRABALHA CONTRA. O
+       hint diz ao navegador "guarde a textura, eu só vou transformar"
+       — que é certo para deslocamento e errado para uma escala que vai
+       de 1 a 14. Ou a bandeira era rasterizada em 1× e esticada 14
+       vezes (borrada), ou o navegador tentava rasterizar a camada no
+       tamanho de destino: medido, 35840×20160 pixels de dispositivo no
+       fim do zoom, contra um teto de textura de 8192 ou 16384. A conta
+       estoura por volta de --palco-p 0,83.
+
+       Sem o hint, quem decide a escala de raster é o navegador, quadro
+       a quadro, e o `overflow: hidden` da `.palco-fixa` volta a podar
+       o que está fora da tela. O repinte é barato: no trecho do zoom
+       (--palco-p acima de 0,74) as três formas e a estrela já
+       terminaram de se montar — só a escala do invólucro muda, e o
+       conteúdo são quatro polígonos de cor chapada.
+
+       O sintoma era sair da aba e voltar: aba em segundo plano tem os
+       tiles descartados, e ao voltar a cena tinha de reconstruir essa
+       superfície ao vivo, durante a rolagem. F5 resolvia porque as
+       camadas voltavam a nascer na ordem incremental normal. */
   }
 
   .palco-fixa {
@@ -2212,7 +2259,6 @@ main { counter-reset: capitulo; }
   .cena-texto {
     --cena-d: calc((1 - var(--cena-in)) * 6svh - var(--cena-out) * 6svh);
     transform: translate3d(0, var(--cena-d), 0);
-    will-change: transform;
   }
 
   /* 1 · no azul, no meio da tela. Sem rampa de entrada: já está lá
@@ -2303,6 +2349,15 @@ main { counter-reset: capitulo; }
       0,
       0
     );
+    /* ⚠️ O ÚNICO `will-change` QUE SOBROU NA PÁGINA, e sobrou porque
+       aqui o navegador NÃO promove sozinho. A regra que ficou depois
+       da limpeza está no cabeçalho da seção ANIMAÇÃO; este caso é o
+       lado bom dela: o deslocamento sai de --palco-p, que é
+       propriedade personalizada e portanto muda no thread principal,
+       sem animação registrada para o navegador reconhecer. E é
+       DESLOCAMENTO, não escala — a textura rasterizada continua
+       valendo em qualquer quadro, que é exatamente o que o hint
+       promete. */
     will-change: transform;
   }
 
@@ -2525,7 +2580,6 @@ main { counter-reset: capitulo; }
         /* `svh`, e não `vh`: com `vh` a barra do navegador entra na
            conta e a escala termina fora de hora no celular. */
         animation-range: 0 72svh;
-        will-change: transform;
       }
     }
   }
@@ -2545,7 +2599,6 @@ main { counter-reset: capitulo; }
     width: max-content;
     align-items: center;
     animation: faixa-correr 38s linear infinite;
-    will-change: transform;
   }
 
   /* Parar com o ponteiro em cima é acessibilidade, não enfeite: texto
