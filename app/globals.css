@@ -225,6 +225,26 @@
   @media (min-width: 768px) { padding-inline: 2rem; }
 }
 
+/* A grade da primeira dobra. É o `container-lp` com um lado solto: no
+   desktop a borda ESQUERDA fica a 3rem da tela, para a coluna da foto
+   sangrar, e a DIREITA continua exatamente onde o contêiner de 75rem
+   terminaria — que é onde o cabeçalho e a barra do pé terminam. A
+   conta `(100% - 75rem) / 2 + 2rem` é a margem do contêiner mais o
+   seu padding, em percentual do pai e não em `vw`, senão a barra de
+   rolagem do Windows entra na conta e o texto desalinha 15px do
+   cabeçalho. `max(2rem, …)` segura em tela mais estreita que 75rem,
+   onde a conta dá negativo. */
+@utility dobra-grade {
+  width: 100%;
+  padding-inline: 1.25rem;
+
+  @media (min-width: 768px) { padding-inline: 2rem; }
+  @media (min-width: 1024px) {
+    padding-left: 3rem;
+    padding-right: max(2rem, calc((100% - 75rem) / 2 + 2rem));
+  }
+}
+
 /* A trilha do álbum. Sangra até a borda da tela no celular e volta a
    ser grade comum a partir de 768px — onde existe trackpad, barra
    rolável horizontal rouba o scroll vertical da página.
@@ -311,20 +331,18 @@
   font-weight: 800;
   font-stretch: calc(var(--titulo-largura) * 1%);
   font-synthesis-weight: none;
-  /* ⚠️ ESTE TETO ESTÁ BAIXO PARA UMA DOBRA DE TELA CHEIA, e é uma
-     dívida conhecida, não um descuido. A 3,25rem o título da dobra
-     (52px) fica a apenas alguns pixels do título de seção — hierarquia
-     quase nenhuma entre a manchete da página e o título de um
-     capítulo.
+  /* ⚠️ ESTE É O TETO DAS PÁGINAS INTERNAS (/grupos, /filtro, CtaFinal).
+     A primeira dobra sobe para 3,75rem por uma regra própria, logo
+     abaixo de `[data-painel] .titulo-cartaz` — e não aqui, porque a
+     utilitária é compartilhada e o título de /grupos não tem uma
+     figura ao lado para justificar cartaz maior.
 
-     Subir para 4,5rem foi testado e funciona em altura: a dobra
-     continua cabendo acima da barra. O que ele quebra é a LARGURA —
-     com cinco linhas, a coluna de texto avança 38px para dentro da
-     caixa da figura. Consertar isso é mexer na grade de três colunas,
-     ou seja, na dobra inteira.
-
-     Ficou para a próxima passada na primeira dobra. Enquanto isso, a
-     hierarquia é sustentada pelo lado da seção (ver `titulo-secao`). */
+     A dobra ficou um tempo em 3,25rem como dívida conhecida: a 52px a
+     manchete da página ficava a alguns pixels do título de seção. Subir
+     quebrava a LARGURA — a coluna de texto avançava 38px para dentro
+     da caixa da figura. Foi pago quando a figura passou a ser cercada
+     pela própria coluna (ver Hero.tsx) e a grade mudou para 1/1,4/0,8:
+     não existe mais caixa para invadir. */
   font-size: clamp(2.15rem, 4.3vw, 3.25rem);
   line-height: 0.98;
   letter-spacing: -0.038em;
@@ -452,6 +470,21 @@
    para fora da primeira tela. */
 [data-painel] .titulo-secao { font-size: clamp(1.5rem, 2.4vw, 1.875rem); }
 [data-painel] .titulo-cartaz { font-size: clamp(1.75rem, 3vw, 2.25rem); }
+
+/* O cartaz da primeira dobra tem regra própria, fora de camada como a
+   do painel logo acima, para vencer a utilitária pela ordem de camadas
+   e não pela especificidade.
+
+   ⚠️ CHEGOU A 3,75rem E VOLTOU. Com a figura no meio, o título grande
+   era o que segurava a hierarquia. Com a figura à esquerda ocupando
+   metade da tela, a foto já é a peça grande; a 3,75rem o título
+   competia com ela e empurrava o bloco do número para baixo da dobra.
+   3,25rem no desktop e 2,4rem no celular, onde o título é a peça mais
+   alta da tela antes do botão. */
+.painel-hero .titulo-cartaz {
+  font-size: clamp(2.4rem, 3.6vw, 3.25rem);
+  line-height: 0.96;
+}
 
 /* ═══════════════════════════════════════════════════════════════
    CHANFRO — o canto cortado em diagonal
@@ -902,15 +935,25 @@
      Cada um obrigava o navegador a reler a árvore inteira por quadro,
      na seção do LCP e com teto de 3s em 4G. Máscara é composição pura:
      não relê nada. */
+  /* ⚠️ 0,3 E NÃO 0,6, E A OVAL ENCOLHEU. A 60% cada ladrilho do
+     mosaico aparecia com borda nítida, e as bordas cortavam atrás da
+     cabeça da figura — a dobra lia como colagem de template, não como
+     atmosfera. Em 30%, centrada no tronco e não na cabeça, a galeria
+     diz "tem gente ali" sem competir com o rosto. Ela continua nítida
+     (não é blur; ver a nota acima): só está mais longe. */
+  /* ⚠️ CENTRADA EM 30% DA LARGURA, E NÃO EM 56%: a figura foi para a
+     coluna da esquerda (5ª tentativa, Hero.tsx). Clarão, mosaico e
+     vinheta apontam todos para o mesmo lugar; se a figura mudar de
+     lado de novo, os três mudam juntos. */
   .dobra-galeria {
     inset: -6%;
-    opacity: 0.6;
+    opacity: 0.3;
     mask-image: radial-gradient(
-      42% 52% at 56% 46%,
+      38% 50% at 30% 54%,
       #000 0%,
-      #000 30%,
-      rgb(0 0 0 / 0.35) 62%,
-      transparent 84%
+      #000 24%,
+      rgb(0 0 0 / 0.5) 50%,
+      transparent 80%
     );
   }
 
@@ -940,7 +983,7 @@
   .dobra-brilho {
     inset: 0;
     background-image: radial-gradient(
-      58% 74% at 56% 46%,
+      52% 78% at 30% 54%,
       color-mix(in srgb, var(--dobra-brilho) 62%, transparent) 0%,
       color-mix(in srgb, var(--dobra-brilho) 22%, transparent) 44%,
       transparent 74%
@@ -950,16 +993,21 @@
   .dobra-vinheta {
     inset: 0;
     background-image:
+      /* ⚠️ A PONTA ESCURA É A DIREITA, onde o texto e o número moram
+         desde que a figura foi para a esquerda. A esquerda escurece só
+         um pouco na borda, para dar profundidade atrás do ombro. A
+         garantia de contraste continua a mesma: a coluna do texto
+         começa em ~55% da largura e dali para a direita a vinheta só
+         escurece. */
       linear-gradient(
         90deg,
-        var(--dobra-fundo) 0%,
-        var(--dobra-fundo) 22%,
-        color-mix(in srgb, var(--dobra-fundo) 82%, transparent) 32%,
-        color-mix(in srgb, var(--dobra-fundo) 35%, transparent) 42%,
-        transparent 52%,
-        transparent 62%,
-        color-mix(in srgb, var(--dobra-fundo) 55%, transparent) 82%,
-        color-mix(in srgb, var(--dobra-fundo) 92%, transparent) 100%
+        color-mix(in srgb, var(--dobra-fundo) 60%, transparent) 0%,
+        transparent 16%,
+        transparent 44%,
+        color-mix(in srgb, var(--dobra-fundo) 40%, transparent) 56%,
+        color-mix(in srgb, var(--dobra-fundo) 82%, transparent) 68%,
+        var(--dobra-fundo) 82%,
+        var(--dobra-fundo) 100%
       ),
       linear-gradient(
         to bottom,
@@ -968,6 +1016,48 @@
         transparent 66%,
         color-mix(in srgb, var(--dobra-fundo) 92%, transparent) 100%
       );
+  }
+
+  /* ── 3. O pé da figura ──
+     Mora DENTRO da caixa da figura (Hero.tsx), acima da imagem
+     (`z-index` 30 contra 20), e só na largura da coluna dela — não
+     toca texto nem cartão. É o que funde as pernas com o fundo e
+     dispensa o vidro fosco que a barra do pé tinha.
+
+     ⚠️ A CONTA DO PONTO SÓLIDO. No desktop a caixa da figura desce
+     12,5rem além do pé da grade (`lg:-mb-[12.5rem]` em Hero.tsx), e o
+     pé da grade é o topo da barra. Então o degradê precisa estar
+     sólido a 12,5rem do próprio pé — daí `--sobra`. No celular a caixa
+     termina no pé da grade e a sobra é zero. Se alguém mudar aquela
+     margem negativa, esta variável tem de acompanhar.
+
+     A largura vaza para a esquerda por causa da sombra da figura
+     (`drop-shadow` em `.hero-foto`), que passa da caixa da imagem. Para
+     a direita vaza só o tanto da sombra: ali começa a coluna do texto,
+     e o degradê não pode escurecer o parágrafo. */
+  .dobra-pe {
+    --sobra: 0rem;
+    position: absolute;
+    left: -10%;
+    right: -1.5rem;
+    bottom: 0;
+    height: 62%;
+    z-index: 30;
+    pointer-events: none;
+    background-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      color-mix(in srgb, var(--dobra-fundo) 70%, transparent) calc(100% - var(--sobra) - 3rem),
+      var(--dobra-fundo) calc(100% - var(--sobra)),
+      var(--dobra-fundo) 100%
+    );
+  }
+
+  @media (min-width: 1024px) {
+    .dobra-pe {
+      --sobra: 12.5rem;
+      height: calc(var(--sobra) + 19rem);
+    }
   }
 }
 
@@ -987,10 +1077,13 @@
    ═══════════════════════════════════════════════════════════════ */
 
 @layer components {
+  /* ⚠️ SEM FUNDO E SEM VIDRO. Tinha `rgb(0 0 0 / 0.32)` com blur de
+     6px para esconder as pernas da figura, que passam por baixo dela.
+     O vidro cortava o retrato numa linha reta e lia como balcão — e
+     era mais um `backdrop-filter` na seção do LCP. Quem apaga as
+     pernas agora é `.dobra-pe`; a barra é um fio sobre a cor chapada. */
   .barra-hero {
-    border-top: 1px solid rgb(255 255 255 / 0.12);
-    background-color: rgb(0 0 0 / 0.32);
-    backdrop-filter: blur(6px);
+    border-top: 1px solid rgb(255 255 255 / 0.1);
   }
 
   .barra-hero .celula + .celula {
@@ -1028,6 +1121,15 @@
    SVG, e o PNG que o painel pode subir no espaço `marca.numero` — que
    é o caso desta campanha — também é amarelo. Cartão amarelo apagaria
    os dois, sem erro nenhum no console. Já aconteceu aqui.
+
+   ⚠️ ELE NÃO É MAIS UMA CAIXA. Era vidro fosco (`backdrop-filter`) com
+   borda de 14% e chanfro, flutuando no meio da coluna direita. Foi a
+   peça apontada como "cara de template": caixa translúcida com borda
+   fina é a assinatura de todo kit de landing page. Virou bloco
+   editorial — um fio amarelo à esquerda e o conteúdo solto sobre a cor
+   chapada da dobra, que já é escura o bastante para os algarismos. O
+   fio é o terceiro amarelo contado da dobra (botão, realce, fio). No
+   celular o fio sai: bloco centrado com fio à esquerda lê torto.
    ═══════════════════════════════════════════════════════════════ */
 
 @keyframes cartao-entra {
@@ -1037,11 +1139,52 @@
 
 @layer components {
   .cartao-numero {
-    background-color: color-mix(in srgb, var(--dobra-fundo) 72%, transparent);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgb(255 255 255 / 0.14);
     animation: cartao-entra 0.6s var(--ease-suave) both;
     animation-delay: 420ms;
+  }
+
+  @media (min-width: 1024px) {
+    .cartao-numero {
+      border-left: 2px solid var(--capa-realce);
+      padding: 0.25rem 0 0.25rem 1.5rem;
+    }
+  }
+
+  /* ── A barra fixa do celular ──
+     Abaixo de 1024px o bloco do número deixa o fluxo e cola no pé da
+     tela. `PedidoFixo` (componente cliente) só acrescenta
+     `.pedido-fixo-passou` depois de 560px de rolagem — o mesmo limiar
+     em que o `BotaoFlutuante` entra, para os dois não coexistirem.
+
+     ⚠️ `--dobra-fundo` CHEGA POR HERANÇA: o elemento é `fixed`, mas
+        continua descendente da `<section class="capa">`, que é quem
+        define a variável. Mover esta barra para fora da seção a deixa
+        transparente, sem erro nenhum.
+
+     ⚠️ `z-index: 40`, o mesmo do flutuante e acima da textura de papel
+        (30): interface não recebe textura. O `padding-bottom` inclui a
+        área segura do iPhone pelo mesmo motivo do flutuante — sem isso
+        o botão cai debaixo do indicador de home. */
+  @media (max-width: 1023px) {
+    .pedido-fixo {
+      position: fixed;
+      inset-inline: 0;
+      bottom: 0;
+      z-index: 40;
+      padding: 0.75rem 1.25rem max(0.75rem, env(safe-area-inset-bottom));
+      background-color: color-mix(in srgb, var(--dobra-fundo) 92%, transparent);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid rgb(255 255 255 / 0.1);
+      transition:
+        transform 0.4s var(--ease-suave),
+        opacity 0.4s var(--ease-suave);
+    }
+
+    .pedido-fixo-passou {
+      transform: translateY(110%);
+      opacity: 0;
+      pointer-events: none;
+    }
   }
 
   .cartao-numero svg {
@@ -2568,6 +2711,45 @@ main { counter-reset: capitulo; }
   .hero-foto {
     /* Plantada no chão: o pé não se mexe, só o topo. */
     transform-origin: 50% 100%;
+    /* ⚠️ A SOMBRA É O QUE DESCOLA O RECORTE DO FUNDO. Sem ela, PNG
+       recortado sobre cor chapada lê como adesivo. É UM drop-shadow,
+       numa imagem só, rasterizado uma vez: a animação de rolagem usa
+       `scale` no compositor e não refaz o filtro por quadro. Não
+       acrescente um segundo passe aqui — dois blurs numa imagem de
+       ~900px é o que já ficou caro em outra parte da página. */
+    filter: drop-shadow(0 1.75rem 3rem rgb(0 0 0 / 0.55));
+  }
+
+  /* ⚠️ NO CELULAR OS DOIS CONTROLES DO PAINEL (tamanho e descida) SÃO
+     IGNORADOS, e o `!important` é para vencer o estilo inline que os
+     aplica. Eles foram pensados para a dobra de desktop, onde a caixa
+     da figura tem 47rem e o excedente sai por cima, no braço. No
+     celular a caixa tem 20rem e a figura vem DEPOIS do bloco do
+     número: os mesmos 118% com −8% de descida empurravam a cabeça
+     60px para dentro do link "Colocar o número". A 100%, ancorada no
+     pé, a cabeça encosta no topo da caixa e o bloco fica livre. */
+  /* ⚠️ 145% E 32% DE DESCIDA, E NÃO 100%/0: é o corte pelo BUSTO. No
+     celular a figura fecha a dobra e a barra fixa cobre o pé da tela;
+     o que interessa é o rosto grande. Com 145% de altura e 32% dela
+     empurrada para baixo, a cabeça nasce encostada no topo da caixa e o
+     terço de baixo (braços cruzados) sai pelo pé — cortado pelo
+     `overflow-hidden` da coluna, em Hero.tsx.
+
+     ⚠️ `max-width: none` AQUI, E SÓ AQUI. No desktop a figura é cercada
+        pela coluna (`max-w-full`), e é isso que impede a foto de
+        invadir o texto. No celular não há texto ao lado: a coluna é a
+        tela inteira, e a cerca faria a foto encolher para 335px de
+        largura — cabeça pequena e 120px de vazio entre o parágrafo e
+        ela, que foi o que aconteceu na primeira tentativa. Sem cerca
+        ela cresce pela altura e os braços saem pelos lados, cortados
+        pela mesma caixa. O `!important` vence a utilitária do Tailwind,
+        que mora numa camada posterior a esta. */
+  @media (max-width: 1023px) {
+    .hero-foto {
+      height: 145% !important;
+      max-width: none !important;
+      transform: translateY(32%) !important;
+    }
   }
 
   @supports (animation-timeline: scroll()) {

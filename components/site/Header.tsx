@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useConteudo } from '@/lib/conteudo/contexto'
 import { evento } from '@/lib/eventos'
@@ -32,6 +33,15 @@ export function Header({
 
   const [rolou, setRolou] = useState(false)
   const [aberto, setAberto] = useState(false)
+
+  // ⚠️ O BOTÃO AMARELO SOME ENQUANTO A PRIMEIRA DOBRA ESTÁ NA TELA. Na
+  //    página inicial, parado no topo, ele ficava a 40px do botão
+  //    idêntico do cartão do número — dois "Entrar no grupo" amarelos
+  //    na mesma tela, que era um dos seis amarelos que faziam a dobra
+  //    ler como amadora. Assim que a página rola, o cartão sai de cena
+  //    e o botão do cabeçalho volta. Nas outras páginas (/grupos,
+  //    /filtro) não há cartão, então ele fica sempre.
+  const semBotaoNoTopo = usePathname() === '/' && !rolou
 
   useEffect(() => {
     const aoRolar = () => setRolou(window.scrollY > 16)
@@ -111,7 +121,9 @@ export function Header({
               <Link
                 href={paraOsGrupos}
                 onClick={() => evento('clicou_cta', { origem: 'topo' })}
-                className="toque hidden min-h-11 items-center chanfro bg-amarelo px-5 text-[0.9375rem] font-semibold text-azul-escuro transition-colors hover:bg-[color-mix(in_srgb,var(--color-amarelo)_88%,white)] sm:inline-flex"
+                className={`toque hidden min-h-11 items-center chanfro bg-amarelo px-5 text-[0.9375rem] font-semibold text-azul-escuro transition-colors hover:bg-[color-mix(in_srgb,var(--color-amarelo)_88%,white)] ${
+                  semBotaoNoTopo ? '' : 'sm:inline-flex'
+                }`}
               >
                 {ctas.grupoCurto}
               </Link>
